@@ -1,0 +1,245 @@
+/* 🌑 FULL PAGE BACKGROUND */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #23242d;
+  font-family: "Inter", sans-serif;
+}
+
+/* MAIN AUTH CONTAINER */
+.auth-container {
+  width: 900px;
+  height: 520px;
+  max-width: 95%;
+  border-radius: 22px;
+  overflow: hidden;
+  position: relative;
+
+  background: #2b2d38;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* FORM CONTAINER */
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transition: all 0.6s ease-in-out;
+  z-index: 20;
+}
+
+/* FORM CONTENT */
+.form-container form {
+  height: 100%;
+  background: #303241;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 55px;
+  gap: 14px;
+}
+
+.form-container h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+}
+
+/* ERROR */
+.error {
+  color: #f28b82;
+  font-size: 13px;
+}
+
+/* SIDE STRIP (FIXED, NO GLITCH) */
+.side-strip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+}
+
+.side-strip.blue {
+  background: #4ba9ff;
+}
+
+.side-strip.purple {
+  background: #b9a6ff;
+}
+
+/* INPUT FIELD BOX */
+.field-box {
+  position: relative;
+  width: 100%;
+}
+
+.field-box input {
+  width: 100%;
+  padding: 14px 14px 14px 18px;
+  border-radius: 14px;
+  background: #23242d;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: white;
+  font-size: 14px;
+}
+
+.field-box input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Accent strip inside inputs */
+.field-box::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12%;
+  height: 76%;
+  width: 4px;
+  border-radius: 10px;
+}
+
+.accent-mint::before {
+  background: #7fe6c5;
+}
+
+.accent-blue::before {
+  background: #4ba9ff;
+}
+
+.accent-yellow::before {
+  background: #f5c76a;
+}
+
+.accent-purple::before {
+  background: #b9a6ff;
+}
+
+/* TEXTAREA */
+textarea {
+  background: #23242d;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: white;
+  resize: none;
+}
+
+/* BUTTON */
+button {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+
+  background: #4ba9ff;
+  color: white;
+  transition: 0.25s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(75, 169, 255, 0.35);
+}
+
+/* GHOST BUTTON */
+button.ghost {
+  background: transparent;
+  border: 1px solid rgba(75, 169, 255, 0.8);
+  color: #4ba9ff;
+}
+
+button.ghost:hover {
+  background: rgba(75, 169, 255, 0.15);
+}
+
+/* SLIDING PANELS */
+.sign-in {
+  left: 0;
+  z-index: 2;
+}
+
+.sign-up {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.auth-container.right-panel-active .sign-in {
+  transform: translateX(100%);
+}
+
+.auth-container.right-panel-active .sign-up {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+}
+
+/* OVERLAY */
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 10;
+}
+
+.overlay {
+  position: relative;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(135deg, #1c1d25, #303241);
+  color: white;
+  transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 50px;
+  text-align: center;
+}
+
+.overlay-panel h1 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.overlay-panel p {
+  font-size: 14px;
+  opacity: 0.85;
+  margin: 12px 0 20px;
+}
+
+.overlay-left {
+  left: 0;
+}
+
+.overlay-right {
+  right: 0;
+}
+
+/* OVERLAY SLIDE */
+.auth-container.right-panel-active .overlay-container {
+  transform: translateX(-100%);
+}
+
+.auth-container.right-panel-active .overlay {
+  transform: translateX(50%);
+}

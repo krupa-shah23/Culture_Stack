@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  background-color: #1C1D25;
+  /* Removes white background */
+  font-family: "Inter", sans-serif;
+}
+
+/*
+  Global full-screen ambient edge glow (iOS Lock Screen Style)
+  - Soft diffused color bleed from edges
+  - No hard border
+*/
+#screen-glow-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  will-change: opacity, transform;
+
+  /* Conic gradient for colorful edge bleed */
+  background: conic-gradient(from 180deg at 50% 50%,
+      #FF2E93 0deg,
+      /* Pink */
+      #00F0FF 120deg,
+      /* Cyan/Blue */
+      #8A2BE2 240deg,
+      /* Purple */
+      #FF2E93 360deg
+      /* Pink Loop */
+    );
+
+  /* Heavy blur for soft atmospheric effect */
+  filter: blur(100px) saturate(1.5);
+
+  /* Mask center to keep it clear, show only edges */
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 40%, black 100%);
+  mask-image: radial-gradient(ellipse at center, transparent 40%, black 100%);
+
+  transform: scale(1.1);
+  /* Slight scale to push colors to edges */
+  transition: opacity 1.5s ease-out;
+  /* Smooth fade out by default */
+}
+
+/* Active state: Fade in and gently pulse */
+.screen-glow-active {
+  animation: ambientGlowFade 2s ease-out forwards;
+}
+
+@keyframes ambientGlowFade {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+
+  20% {
+    opacity: 0.6;
+    /* Peak opacity */
+    transform: scale(1.1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+    /* Drift outward */
+  }
+}
+
+/* Reduced motion: disable */
+@media (prefers-reduced-motion: reduce) {
+  #screen-glow-overlay {
+    display: none;
+  }
+
+  .screen-glow-active {
+    animation: none;
+  }
+}
