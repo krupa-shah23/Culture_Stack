@@ -5,6 +5,12 @@ import api from "../api/axios";
 import PostCard from "../components/layout/PostCard";
 import PodcastCard from "../components/layout/PodcastCard";
 
+
+
+
+
+
+
 export default function Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
