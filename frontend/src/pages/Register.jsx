@@ -10,6 +10,8 @@ export default function Register() {
     department: '',
     organizationName: '',
   });
+
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
