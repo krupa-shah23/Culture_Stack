@@ -176,14 +176,14 @@ export default function Meet() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1C1D25] text-white px-6 py-10">
+    <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
       <div className="max-w-5xl mx-auto">
         {!meetingStarted ? (
           <>
             {/* Page Header */}
             <div className="mb-12 text-center">
-              <h1 className="text-4xl font-bold mb-3">🎥 CultureStack Meetings</h1>
-              <p className="text-gray-400 text-lg">
+              <h1 className="text-4xl font-bold mb-3">CultureStack Meetings</h1>
+              <p className="text-[#4A4A4A] text-lg">
                 Create or join a video meeting powered by Jitsi Meet
               </p>
             </div>
@@ -194,18 +194,13 @@ export default function Meet() {
               {/* CREATE A MEET */}
               <div
                 className="
-                  bg-[#2B2D38]
-                  border border-white/10
-                  rounded-2xl
-                  p-8
-                  shadow-lg
-                  hover:border-[#7FE6C5]/30
-                  transition
+                  bg-white border border-black/5 rounded-2xl shadow-sm
+                  p-8 transition-all duration-300
                 "
               >
-                <div className="text-5xl mb-4">✨</div>
+                <div className="text-5xl mb-4"></div>
                 <h2 className="text-2xl font-bold mb-4">Create a New Meet</h2>
-                <p className="text-gray-400 text-sm mb-6">
+                <p className="text-[#4A4A4A] text-sm mb-6">
                   Start a new meeting with a unique room name. Share the name with others so they can join.
                 </p>
 
@@ -223,7 +218,7 @@ export default function Meet() {
                   <div>
                     <label
                       htmlFor="createRoom"
-                      className="block text-sm font-medium text-gray-300 mb-2"
+                      className="block text-sm font-medium text-[#4A4A4A] mb-2"
                     >
                       Room Name
                     </label>
@@ -234,22 +229,15 @@ export default function Meet() {
                       onChange={(e) => setRoomName(e.target.value)}
                       placeholder="e.g., team-standup"
                       className="
-                        w-full
-                        px-4 py-3
-                        bg-[#1C1D25]
-                        border border-white/20
-                        rounded-lg
-                        text-white
-                        placeholder-gray-500
-                        focus:outline-none
-                        focus:border-[#7FE6C5]
-                        focus:ring-1
-                        focus:ring-[#7FE6C5]
-                        transition
+                        w-full px-4 py-3
+                        bg-[#F5F5F0] border border-black/5 rounded-xl
+                        text-charcoal placeholder-[#4A4A4A]/50
+                        focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20
+                        transition-colors shadow-sm
                       "
                     />
-                    <p className="text-xs text-gray-500 mt-2">
-                      ✏️ Use a descriptive name like "client-call" or "brainstorm-2024"
+                    <p className="text-xs text-[#4A4A4A] mt-2">
+                      Use a descriptive name like "client-call" or "brainstorm-2024"
                     </p>
                   </div>
 
@@ -257,16 +245,11 @@ export default function Meet() {
                     type="submit"
                     disabled={isJoining}
                     className="
-                      w-full
-                      px-6 py-3
-                      bg-[#7FE6C5]
-                      hover:bg-[#5FD6B5]
-                      disabled:opacity-50
-                      disabled:cursor-not-allowed
-                      text-black
-                      font-semibold
-                      rounded-lg
-                      transition
+                      w-full px-6 py-3
+                      bg-[#1A1A1A]
+                      text-white font-bold rounded-full
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      hover:bg-black hover:shadow-md transition-all
                     "
                   >
                     {isJoining ? "Starting..." : "🚀 Create & Start Meet"}
@@ -277,18 +260,13 @@ export default function Meet() {
               {/* JOIN AN EXISTING MEET */}
               <div
                 className="
-                  bg-[#2B2D38]
-                  border border-white/10
-                  rounded-2xl
-                  p-8
-                  shadow-lg
-                  hover:border-[#4BA9FF]/30
-                  transition
+                  bg-white border border-black/5 rounded-2xl shadow-sm
+                  p-8 transition-all duration-300
                 "
               >
-                <div className="text-5xl mb-4">🚪</div>
+                <div className="text-5xl mb-4"></div>
                 <h2 className="text-2xl font-bold mb-4">Join Existing Meet</h2>
-                <p className="text-gray-400 text-sm mb-6">
+                <p className="text-[#4A4A4A] text-sm mb-6">
                   Already have a meeting room name? Enter it here to join the meeting.
                 </p>
 
@@ -306,7 +284,7 @@ export default function Meet() {
                   <div>
                     <label
                       htmlFor="joinRoom"
-                      className="block text-sm font-medium text-gray-300 mb-2"
+                      className="block text-sm font-medium text-[#4A4A4A] mb-2"
                     >
                       Room Name to Join
                     </label>
@@ -317,22 +295,15 @@ export default function Meet() {
                       onChange={(e) => setRoomName(e.target.value)}
                       placeholder="e.g., team-standup"
                       className="
-                        w-full
-                        px-4 py-3
-                        bg-[#1C1D25]
-                        border border-white/20
-                        rounded-lg
-                        text-white
-                        placeholder-gray-500
-                        focus:outline-none
-                        focus:border-[#4BA9FF]
-                        focus:ring-1
-                        focus:ring-[#4BA9FF]
-                        transition
+                        w-full px-4 py-3
+                        bg-[#F5F5F0] border border-black/5 rounded-xl
+                        text-charcoal placeholder-[#4A4A4A]/50
+                        focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20
+                        transition-colors shadow-sm
                       "
                     />
-                    <p className="text-xs text-gray-500 mt-2">
-                      📋 Ask the organizer for the room name
+                    <p className="text-xs text-[#4A4A4A] mt-2">
+                      Ask the organizer for the room name
                     </p>
                   </div>
 
@@ -340,16 +311,11 @@ export default function Meet() {
                     type="submit"
                     disabled={isJoining}
                     className="
-                      w-full
-                      px-6 py-3
-                      bg-[#4BA9FF]
-                      hover:bg-[#3A99EF]
-                      disabled:opacity-50
-                      disabled:cursor-not-allowed
-                      text-black
-                      font-semibold
-                      rounded-lg
-                      transition
+                      w-full px-6 py-3
+                      bg-[#1A1A1A]
+                      text-white font-bold rounded-full
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      hover:bg-black hover:shadow-md transition-all
                     "
                   >
                     {isJoining ? "Joining..." : "✅ Join Meet"}
@@ -360,11 +326,11 @@ export default function Meet() {
             </div>
 
             {/* Info Box */}
-            <div className="bg-[#2A2C38] border border-[#7FE6C5]/20 rounded-xl p-6 text-center">
-              <p className="text-sm text-gray-300 mb-2">
+            <div className="bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-6 text-center">
+              <p className="text-sm text-charcoal mb-2">
                 💡 <strong>Tip:</strong> The same room name is used for both creating and joining.
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#4A4A4A]">
                 So if you create a meet with room name "client-call", others can join by entering the same name.
               </p>
             </div>
@@ -375,7 +341,7 @@ export default function Meet() {
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h1 className="text-3xl font-bold">{roomName}</h1>
-                <p className="text-gray-400 text-sm mt-1">
+                <p className="text-[#4A4A4A] text-sm mt-1">
                   Meeting in progress • Connected as {displayName}
                 </p>
               </div>
@@ -401,10 +367,10 @@ export default function Meet() {
               className="
                 w-full
                 bg-black
-                rounded-lg
+                rounded-2xl
                 overflow-hidden
                 shadow-lg
-                border border-white/10
+                border border-black/5
               "
               style={{ height: "600px" }}
             />

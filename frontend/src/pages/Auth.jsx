@@ -99,7 +99,8 @@ export default function Auth() {
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page w-full overflow-hidden">
+      <div className="bg-mesh-gradient pointer-events-none absolute inset-0 z-0" />
       <div className={`auth-container ${isSignUp ? "right-panel-active" : ""}`}>
 
         {/* ================= SIGN UP FORM ================= */}

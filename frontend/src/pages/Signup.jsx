@@ -30,9 +30,9 @@ export default function Signup() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-white">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
-        <h1 className="text-3xl font-bold text-center mb-2">
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F5F0]">
+      <div className="w-full max-w-md bg-white border border-black/5 shadow-sm rounded-2xl p-8 relative overflow-hidden">
+        <h1 className="text-3xl font-bold text-center mb-2 text-charcoal">
           Create Account
         </h1>
 
@@ -79,25 +79,25 @@ export default function Signup() {
             <input
               type="text"
               placeholder="Organization Name (Optional)"
-              className="w-full p-3 border rounded-xl"
+              className="w-full p-3 border rounded-xl focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 text-charcoal placeholder-[#4A4A4A]/50 bg-[#F5F5F0]"
               value={formData.organizationName}
               onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
             />
-            <p className="text-xs text-gray-500 mt-1 ml-1">If empty, we'll use your email domain.</p>
+            <p className="text-xs text-[#4A4A4A] mt-1 ml-1">If empty, we'll use your email domain.</p>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
+            className="w-full bg-[#8C7851] text-white py-3 rounded-xl font-bold transition-colors hover:bg-[#A39066] shadow-sm"
             disabled={loading}
           >
             {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
 
-        <p className="text-center text-sm mt-5 text-gray-600">
+        <p className="text-center text-sm mt-5 text-[#4A4A4A]">
           Already have an account?{" "}
-          <Link to="/" className="font-semibold underline">
+          <Link to="/" className="font-semibold text-charcoal underline">
             Login
           </Link>
         </p>

@@ -18,6 +18,16 @@ import Auth from "./pages/Auth";
 import { useEffect } from "react";
 import api from "./api/axios";
 
+// Reusable Main Layout with proper Top Padding for the Fixed Navbar
+const MainLayout = ({ children }) => (
+  <>
+    <Navbar />
+    <div className="pt-24 min-h-screen flex flex-col">
+      {children}
+    </div>
+  </>
+);
+
 export default function App() {
 
   return (
@@ -25,134 +35,25 @@ export default function App() {
       {/* Global screen glow overlay (mounted at root level) */}
       <div id="screen-glow-overlay" aria-hidden="true"></div>
       <Routes>
-        {/* ✅ AUTH PAGES (No Navbar) */}
+        {/* ✅ AUTH PAGES (No Navbar, No Padding) */}
         <Route path="/" element={<Auth />} />
         <Route path="/login" element={<Auth />} />
         <Route path="/signup" element={<Auth />} />
-        {/* <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} /> */}
 
-        {/* ✅ MAIN APP PAGES (With Navbar) */}
-        <Route
-          path="/feed"
-          element={
-            <>
-              <Navbar />
-              <Feed />
-            </>
-          }
-        />
-
-        <Route
-          path="/write"
-          element={
-            <>
-              <Navbar />
-              <Write />
-            </>
-          }
-        />
-
-        <Route
-          path="/posts/:postId"
-          element={
-            <>
-              <Navbar />
-              <PostDetail />
-            </>
-          }
-        />
-
-        <Route
-          path="/podcasts"
-          element={
-            <>
-              <Navbar />
-              <Podcasts />
-            </>
-          }
-        />
-
-        <Route
-          path="/podcasts/upload"
-          element={
-            <>
-              <Navbar />
-              <UploadPodcast />
-            </>
-          }
-        />
-
-        <Route
-          path="/podcasts/:id"
-          element={
-            <>
-              <Navbar />
-              <PodcastDetail />
-            </>
-          }
-        />
-
-        <Route
-          path="/knowledge"
-          element={
-            <>
-              <Navbar />
-              <KnowledgeHub />
-            </>
-          }
-        />
-
-        <Route
-          path="/messages"
-          element={
-            <>
-              <Navbar />
-              <Messages />
-            </>
-          }
-        />
-
-        <Route
-          path="/activity"
-          element={
-            <>
-              <Navbar />
-              <Activity />
-            </>
-          }
-        />
-
-        <Route
-          path="/meet"
-          element={
-            <>
-              <Navbar />
-              <Meet />
-            </>
-          }
-        />
-
-        <Route
-          path="/profile/:id"
-          element={
-            <>
-              <Navbar />
-              <Profile />
-            </>
-          }
-        />
-
+        {/* ✅ MAIN APP PAGES (With Navbar & Top Padding) */}
+        <Route path="/feed" element={<MainLayout><Feed /></MainLayout>} />
+        <Route path="/write" element={<MainLayout><Write /></MainLayout>} />
+        <Route path="/posts/:postId" element={<MainLayout><PostDetail /></MainLayout>} />
+        <Route path="/podcasts" element={<MainLayout><Podcasts /></MainLayout>} />
+        <Route path="/podcasts/upload" element={<MainLayout><UploadPodcast /></MainLayout>} />
+        <Route path="/podcasts/:id" element={<MainLayout><PodcastDetail /></MainLayout>} />
+        <Route path="/knowledge" element={<MainLayout><KnowledgeHub /></MainLayout>} />
+        <Route path="/messages" element={<MainLayout><Messages /></MainLayout>} />
+        <Route path="/activity" element={<MainLayout><Activity /></MainLayout>} />
+        <Route path="/meet" element={<MainLayout><Meet /></MainLayout>} />
+        <Route path="/profile/:id" element={<MainLayout><Profile /></MainLayout>} />
         {/* Direct Messaging (DM) - opened from a user's profile */}
-        <Route
-          path="/dm/:userId"
-          element={
-            <>
-              <Navbar />
-              <DirectMessage />
-            </>
-          }
-        />
+        <Route path="/dm/:userId" element={<MainLayout><DirectMessage /></MainLayout>} />
       </Routes>
     </BrowserRouter>
   );

@@ -59,33 +59,33 @@ export default function DirectMessage() {
   const otherParticipant = conversation?.participants?.find((p) => p._id !== currentUser?._id) || null;
 
   return (
-    <div className="min-h-screen bg-[#1C1D25] text-white px-6 py-10">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <button onClick={() => navigate(-1)} className="text-sm text-gray-400 hover:text-white">← Back</button>
-          <div className="w-12 h-12 rounded-full bg-[#303241] flex items-center justify-center text-xl font-bold">{otherParticipant?.fullName?.[0] || '?'}</div>
+    <div className="flex-1 w-full px-6 py-6 text-[#1A1A1A]">
+      <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-8rem)]">
+        <div className="flex items-center gap-4 mb-4">
+          <button onClick={() => navigate(-1)} className="text-sm text-[#4A4A4A] hover:text-charcoal transition-colors">← Back</button>
+          <div className="w-12 h-12 rounded-full bg-charcoal text-white flex items-center justify-center text-xl font-bold shadow-sm">{otherParticipant?.fullName?.[0] || '?'}</div>
           <div>
-            <div className="text-lg font-semibold">{otherParticipant?.fullName || 'Direct Message'}</div>
-            <div className="text-xs text-gray-400">Private conversation</div>
+            <div className="text-lg font-bold text-charcoal">{otherParticipant?.fullName || 'Direct Message'}</div>
+            <div className="text-xs text-[#4A4A4A]">Private conversation</div>
           </div>
         </div>
 
-        <div className="bg-[#242631] rounded-2xl p-6 border border-white/5 shadow-md min-h-[400px] flex flex-col">
+        <div className="bg-white border border-black/5 rounded-2xl p-6 shadow-sm flex flex-col flex-1 overflow-hidden">
           {loading ? (
-            <div className="flex-1 flex items-center justify-center text-gray-400">Loading messages…</div>
+            <div className="flex-1 flex items-center justify-center text-[#4A4A4A]">Loading messages…</div>
           ) : (
-            <div className="flex-1 overflow-y-auto space-y-4 pb-4">
+            <div className="flex-1 overflow-y-auto space-y-4 pb-4 custom-scrollbar pr-2">
               {messages.length === 0 && (
-                <div className="text-center text-gray-400 mt-10">No messages yet — say hello</div>
+                <div className="text-center text-[#4A4A4A] mt-10">No messages yet — say hello</div>
               )}
 
               {messages.map((m) => {
                 const mine = m.sender._id === currentUser?._id;
                 return (
                   <div key={m._id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[70%] px-4 py-2 rounded-xl ${mine ? 'bg-[#4BA9FF] text-black' : 'bg-[#1C1D25] text-gray-200'} `}>
+                    <div className={`max-w-[70%] px-5 py-3 rounded-2xl shadow-sm ${mine ? 'bg-charcoal text-white' : 'bg-[#F5F5F0] border border-black/5 text-charcoal'} `}>
                       <div className="text-sm leading-relaxed">{m.content}</div>
-                      <div className="text-[10px] text-gray-400 text-right mt-1">{new Date(m.createdAt).toLocaleTimeString()}</div>
+                      <div className={`text-[10px] text-right mt-1 ${mine ? 'text-white/70' : 'text-[#4A4A4A]'}`}>{new Date(m.createdAt).toLocaleTimeString()}</div>
                     </div>
                   </div>
                 );
@@ -96,20 +96,20 @@ export default function DirectMessage() {
           )}
 
           {/* Input */}
-          <div className="mt-4 pt-4 border-t border-white/5">
+          <div className="mt-4 pt-4 border-t border-black/5">
             <div className="flex gap-3">
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 rows={2}
-                className="flex-1 resize-none bg-[#1C1D25] border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none"
+                className="flex-1 resize-none bg-[#F5F5F0] border border-black/5 rounded-xl px-4 py-3 text-sm text-charcoal focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition-colors shadow-sm"
                 placeholder={`Message ${otherParticipant?.fullName || 'user'}...`}
               />
               <div className="flex flex-col justify-end">
                 <button
                   onClick={handleSend}
                   disabled={sending || !text.trim()}
-                  className={`px-5 py-3 rounded-full font-semibold ${sending || !text.trim() ? 'bg-gray-600/40 text-gray-300 cursor-not-allowed' : 'bg-[#4BA9FF] text-black'}`}
+                  className={`px-6 py-3 rounded-full font-bold transition-all ${sending || !text.trim() ? 'bg-[#F5F5F0] text-[#4A4A4A] cursor-not-allowed border border-black/5' : 'bg-charcoal text-white hover:bg-black transition'}`}
                 >
                   Send
                 </button>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { Home, Mic, PenTool, BookOpen, Menu, X, Bell, MessageSquare, Video } from "lucide-react";
 
 import navLinks from "../../config/navigation";
 import { getUnreadActivityCount, clearUnreadActivityCount } from "../../api/axios";
@@ -7,6 +8,7 @@ import { getUnreadActivityCount, clearUnreadActivityCount } from "../../api/axio
 export default function Navbar() {
   const location = useLocation();
 
+  const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
   // Unread activity count (fetched from backend API; localStorage is fallback)
   const [unreadActivityCount, setUnreadActivityCount] = useState(0);
 
@@ -69,88 +71,150 @@ export default function Navbar() {
   // ✅ Active Write Page
   const isWritePage = location.pathname === "/write";
 
+  const getIconForLabel = (label, isActive) => {
+    const defaultClasses = `w-5 h-5 transition-all duration-300 ${isActive ? 'text-charcoal drop-shadow-sm' : 'text-[#8C7851] group-hover:text-charcoal'}`;
+    switch (label.toLowerCase()) {
+      case "feed":
+        return <Home className={defaultClasses} />;
+      case "knowledge hub":
+        return <BookOpen className={defaultClasses} />;
+      case "podcasts":
+        return <Mic className={defaultClasses} />;
+      case "activity":
+        return <Bell className={defaultClasses} />;
+      case "messages":
+        return <MessageSquare className={defaultClasses} />;
+      case "meet":
+        return <Video className={defaultClasses} />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="w-full flex justify-center pt-9 bg-[#1C1D25]">
-      <div
-        className="
-          w-[90%]
-          px-10 py-3
-          flex items-center justify-between
-          rounded-full
-          bg-[#2B2D38]
-          border border-white/10
-          shadow-lg
-        "
-      >
-        {/* Logo (now links to Knowledge Hub) */}
-        <Link
-          to="/knowledge"
-          className="text-2xl font-bold text-white tracking-wide"
-        >
-          Culture<span className="text-[#4BA9FF]">Stack</span>
-        </Link>
+    <nav className="fixed top-0 w-full z-[100] nav-container">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
+          <Link
+            to="/knowledge"
+            className="text-xl font-bold tracking-tighter text-charcoal hover:text-[#8C7851] transition"
+          >
+            CULTURE <span className="text-[#8C7851]">STACK</span>
+          </Link>
 
-        {/* 🔗 Nav Links */}
-        <div className="flex gap-12 text-lg font-medium">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.path}
-              to={link.path}
-              className={({ isActive }) =>
-                isActive
-                  ? "text-[#7FE6C5] font-semibold"
-                  : "text-gray-400 hover:text-white transition"
-              }
+          {/* Mobile Menu Button - Show on small screens */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-zinc-500 hover:text-charcoal focus:outline-none transition"
             >
-              <span className="inline-flex items-center gap-2">
-                {link.label}
-                {link.path === "/activity" && unreadActivityCount > 0 && (
-                  <span
-                    aria-label={`${unreadActivityCount} unread activity`}
-                    className="ml-2 inline-flex items-center justify-center min-w-[20px] px-2 py-0.5 text-xs font-semibold rounded-full bg-red-500 text-white"
-                  >
-                    {unreadActivityCount > 99 ? "99+" : unreadActivityCount}
-                  </span>
-                )}
-              </span>
-            </NavLink>
-          ))}
-        </div>
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
 
-        {/* ⚡ Right Side */}
-        <div className="flex items-center gap-4">
+          {/* Desktop Links */}
+          <div className="hidden md:flex space-x-1 items-center font-medium">
+            {navLinks.map((link) => {
+              // Extract logic to apply active classes consistently
+              return (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `group relative px-4 py-2 rounded-xl flex items-center justify-center font-semibold transition-all duration-300 hover:bg-black/5 ${isActive ? "bg-black/5 text-charcoal" : "text-[#8C7851]"
+                    }`
+                  }
+                  title={link.label}
+                >
+                  {({ isActive }) => (
+                    <>
+                      {getIconForLabel(link.label, isActive)}
 
-          {/* Write Button */}
-          <Link
-            to="/write"
-            className={`
-              px-6 py-2 rounded-full font-semibold
-              text-black transition
-              ${isWritePage
-                ? "bg-[#F5C76A]" // Active Yellow
-                : "bg-[#4BA9FF] hover:opacity-90" // Default Blue
-              }
-            `}
-          >
-            Write
-          </Link>
+                      {/* Unread activity badge */}
+                      {link.path === "/activity" && unreadActivityCount > 0 && (
+                        <span
+                          aria-label={`${unreadActivityCount} unread`}
+                          className="absolute top-1 right-2 inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[10px] font-bold rounded-full bg-charcoal text-white shadow-sm border border-transparent"
+                        >
+                          {unreadActivityCount > 99 ? "99+" : unreadActivityCount}
+                        </span>
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              );
+            })}
 
-          {/* Profile Circle */}
-          <Link
-            to={profilePath}
-            className="
-              w-10 h-10 flex items-center justify-center
-              rounded-full
-              bg-[#B9A6FF]
-              text-black font-bold
-              hover:opacity-90
-              transition
-            "
-          >
-            {initial}
-          </Link>
+            <div className="w-[1px] h-6 bg-black/10 mx-2"></div>
+
+            <Link to="/write" className="bg-charcoal text-white px-6 py-2 rounded-full font-bold hover:bg-black transition ml-2 flex items-center gap-2 relative z-50 cursor-pointer shadow-sm">
+              <PenTool className="w-4 h-4 text-white" />
+              Write
+            </Link>
+
+            {/* Profile Circle */}
+            <Link to={profilePath} className="ml-4 w-10 h-10 flex items-center justify-center rounded-full bg-[#EBE8E0] text-[#1A1A1A] border border-black/10 font-bold hover:opacity-90 hover:scale-105 transition">
+              {initial}
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isOpen && (
+        <div className="md:hidden bg-[#F5F5F0]/95 backdrop-blur-xl border-b border-black/5 shadow-lg">
+          <div className="px-4 pt-4 pb-6 space-y-2 flex flex-col">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 px-4 py-3 rounded-xl text-base font-semibold transition ${isActive
+                    ? "bg-black/5 text-charcoal"
+                    : "text-[#8C7851] hover:bg-black/5"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {getIconForLabel(link.label, isActive)}
+                    <span>{link.label}</span>
+                    {link.path === "/activity" && unreadActivityCount > 0 && (
+                      <span className="ml-auto px-2 py-0.5 text-xs font-bold rounded-full bg-charcoal text-white shadow-sm">
+                        {unreadActivityCount > 99 ? "99+" : unreadActivityCount}
+                      </span>
+                    )}
+                  </>
+                )}
+              </NavLink>
+            ))}
+
+            <div className="h-[1px] bg-black/5 my-2"></div>
+
+            <Link
+              to="/write"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-center gap-2 px-4 py-3 w-full rounded-full font-semibold bg-charcoal text-white shadow-sm active:scale-95 transition"
+            >
+              <PenTool className="w-5 h-5 text-white" />
+              Write
+            </Link>
+
+            <Link
+              to={profilePath}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-center gap-3 mt-2 px-4 py-3 w-full rounded-xl bg-white shadow-sm text-charcoal border border-black/5 active:scale-95 transition hover:bg-black/5"
+            >
+              <div className="w-8 h-8 rounded-full bg-charcoal text-white font-bold flex items-center justify-center">
+                {initial}
+              </div>
+              Profile
+            </Link>
+          </div>
+        </div>
+      )}
+    </nav>
   );
 }

@@ -167,7 +167,7 @@ export default function PodcastDetail() {
               {!summaryLoading && (
                 <button
                   onClick={() => triggerTranscription(id, true)}
-                  className="px-5 py-2 rounded-full bg-[#B9A6FF] text-black font-semibold hover:opacity-90 transition"
+                  className="px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition"
                 >
                   ↻ Regenerate
                 </button>

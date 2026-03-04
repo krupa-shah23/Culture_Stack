@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import Navbar from "../components/layout/Navbar";
 import PersonaAvatar from "../components/layout/PersonaAvatar";
 import { calculateHarshScore } from "../utils/harshWordDetector";
 
@@ -37,11 +36,11 @@ export default function Write() {
     { key: "strategist", label: "Strategist" },
   ];
 
-  // Pastel Accent Palette
+  // Beige Palette for Personas
   const accentColors = [
-    "#7FE6C5", // Mint - Innovator
-    "#F28B82", // Coral Pink - Risk Evaluator
-    "#4BA9FF", // Sky Blue - Strategist
+    "#8C7851", // Muted Gold - Innovator
+    "#1A1A1A", // Charcoal - Risk Evaluator
+    "#4A4A4A", // Soft Teal - Strategist
   ];
 
   // Local fallback feedback
@@ -169,20 +168,28 @@ export default function Write() {
 
   return (
     <>
+      <div className="flex-1 w-full relative py-16 md:py-24 px-4 md:px-8 bg-[#F5F5F0] text-[#1A1A1A] overflow-hidden">
+        {/* Full-width Mesh Background */}
+        <div className="bg-mesh-gradient" />
 
-      <div className="h-[calc(100vh-90px)] bg-[#1C1D25] text-white px-6 py-6 overflow-y-auto">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="max-w-3xl mx-auto flex flex-col gap-16 relative z-10">
 
-          {/* LEFT EDITOR */}
-          <div className="lg:col-span-2 bg-[#2A2C38] rounded-2xl p-6 border border-white/5 shadow-md">
-
-            <h1 className="text-2xl font-semibold mb-6">
+          {/* HEADER */}
+          <div className="text-center space-y-3">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1A1A1A]">
               Write Reflection
             </h1>
+            <p className="text-[#4A4A4A] text-lg">
+              Share your thoughts, document learnings, or vent safely.
+            </p>
+          </div>
+
+          {/* EDITOR CARD */}
+          <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-10 shadow-sm relative overflow-hidden">
 
             {/* Slider */}
-            <div className="mb-6">
-              <p className="text-sm mb-2 text-gray-300">
+            <div className="mb-8">
+              <p className="text-sm mb-3 text-charcoal font-medium">
                 Psychological Safety Level
               </p>
 
@@ -192,37 +199,34 @@ export default function Write() {
                 max="3"
                 value={safetyLevel}
                 onChange={(e) => setSafetyLevel(parseInt(e.target.value))}
-                className="w-full accent-[#7FE6C5]"
+                className="w-full accent-[#1A1A1A] hover:accent-black transition cursor-pointer"
               />
 
-              <div className="flex justify-between text-xs text-gray-400 mt-2 px-1">
+              <div className="flex justify-between text-xs text-[#4A4A4A] mt-3 px-1">
                 <div className="flex flex-col items-center">
-                  <span className="font-bold">1</span>
+                  <span className={`font-bold text-lg ${safetyLevel === 1 ? 'text-[#8C7851]' : ''}`}>1</span>
                   <span>Public</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-bold">2</span>
+                  <span className={`font-bold text-lg ${safetyLevel === 2 ? 'text-[#8C7851]' : ''}`}>2</span>
                   <span>Team</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-bold">3</span>
+                  <span className={`font-bold text-lg ${safetyLevel === 3 ? 'text-[#8C7851]' : ''}`}>3</span>
                   <span>Anonymous</span>
                 </div>
               </div>
             </div>
 
             <textarea
-              placeholder="Write your thoughts..."
-              className="w-full h-52 bg-[#1C1D25] 
-  border border-white/10 rounded-xl 
-  p-4 text-gray-200 text-sm resize-none 
-  mt-4"
+              placeholder="What's on your mind?..."
+              className="w-full min-h-[250px] bg-[#EBE8E0] border border-[#d6c6a8] rounded-2xl p-6 text-[#1A1A1A] placeholder:text-[#4A4A4A] text-base resize-none focus:outline-none focus:border-[#8C7851] focus:ring-2 focus:ring-[#8C7851]/50 transition leading-relaxed shadow-sm"
               value={content}
               onChange={handleContentChange}
             />
 
             {/* Media Upload & Preview */}
-            <div className="mt-4">
+            <div className="mt-6">
               <input
                 type="file"
                 ref={fileInputRef}
@@ -237,13 +241,13 @@ export default function Write() {
                     <video
                       src={mediaPreview}
                       controls
-                      className="max-h-40 rounded-lg border border-white/10"
+                      className="max-h-60 rounded-xl border border-black/5 shadow-sm"
                     />
                   ) : (
                     <img
                       src={mediaPreview}
                       alt="Preview"
-                      className="max-h-40 rounded-lg border border-white/10"
+                      className="max-h-60 rounded-xl border border-black/5 shadow-sm"
                     />
                   )}
                   <button
@@ -251,7 +255,7 @@ export default function Write() {
                       setMediaFile(null);
                       setMediaPreview(null);
                     }}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                    className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-[0_0_10px_rgba(239,68,68,0.5)] hover:scale-110 transition"
                   >
                     ✕
                   </button>
@@ -259,169 +263,106 @@ export default function Write() {
               ) : (
                 <button
                   onClick={() => fileInputRef.current.click()}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1C1D25] border border-white/10 text-gray-300 hover:text-white hover:border-white/30 transition text-sm"
+                  className="flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#EBE8E0] text-[#8C7851] hover:bg-[#d6c6a8] hover:text-[#1A1A1A] transition text-sm font-bold shadow-sm cursor-pointer w-fit"
                 >
-                  ➕ Add Image / Video
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  Add Image / Video
                 </button>
               )}
             </div>
 
-
             {/* Buttons */}
-            <div className="flex justify-between gap-5 mt-8 w-full">
-
-              {/* Make Constructive (Pastel Pink) */}
+            <div className="flex flex-col sm:flex-row justify-between gap-6 mt-12 w-full">
               <button
                 onClick={handleAiRefine}
                 disabled={isRefining}
-                className="w-1/2 py-3 rounded-lg font-semibold text-sm 
-    transition disabled:opacity-50"
-                style={{
-                  backgroundColor: "#F28B82",
-                  color: "black",
-                }}
+                className="flex-1 py-4 rounded-full font-bold text-[#8C7851] bg-[#EBE8E0] border border-[#8C7851] hover:bg-[#d6c6a8] hover:text-[#1A1A1A] transition disabled:opacity-50 shadow-sm cursor-pointer"
               >
-                {isRefining ? "Refining..." : "Make Constructive"}
+                {isRefining ? "Refining..." : "Make Constructive (AI)"}
               </button>
 
-              {/* Publish (Pastel Yellow) */}
               <button
                 onClick={handlePublish}
                 disabled={loading || (harshScore.intensity === "harsh" && harshScore.score > 0.7)}
-                className="w-1/2 py-3 rounded-lg font-semibold text-sm 
-    transition disabled:opacity-50"
-                style={{
-                  backgroundColor: harshScore.intensity === "harsh" ? "#999" : "#F5C76A",
-                  color: "black",
-                }}
+                className={`flex-1 py-4 rounded-full font-bold text-white transition disabled:opacity-50 cursor-pointer ${harshScore.intensity === "harsh" && harshScore.score > 0.7
+                  ? "bg-[#4A4A4A] cursor-not-allowed"
+                  : "bg-[#1A1A1A] hover:bg-black shadow-sm"
+                  }`}
               >
-                {loading ? "Publishing..." : " Publish"}
+                {loading ? "Publishing..." : "Publish Post"}
               </button>
-
-
             </div>
 
-
             {error && (
-              <p className="text-red-400 text-sm mt-4">{error}</p>
+              <div className="mt-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 text-sm text-center">
+                {error}
+              </div>
             )}
           </div>
 
-          {/* RIGHT SIDE */}
-          <div className="space-y-6">
-
-            {/* Harsh Word Detection Score */}
-            <div
-              className="bg-[#2A2C38] rounded-2xl p-6 border shadow-md"
+          {/* HARSH CONTENT CHECK */}
+          {harshScore.score > 0 && (
+            <div className={`bg-white rounded-2xl p-6 md:p-8 relative overflow-hidden shadow-sm`}
               style={{
-                borderColor:
-                  harshScore.intensity === "harsh" ? "#F28B82" :
-                    harshScore.intensity === "moderate" ? "#F5C76A" :
-                      harshScore.intensity === "caution" ? "#FFD166" :
-                        "#7FE6C5"
+                border: "1px solid",
+                borderColor: harshScore.intensity === "harsh" ? "rgba(239,68,68,0.5)" : harshScore.intensity === "moderate" ? "rgba(245, 199, 106, 0.4)" : "rgba(0, 0, 0, 0.05)",
+                boxShadow: harshScore.intensity === "harsh" ? "0 4px 12px rgba(239,68,68,0.05)" : "var(--tw-shadow)"
               }}
             >
-              <h2 className="text-lg font-semibold mb-4">Content Safety Check</h2>
+              <h2 className="text-xl font-semibold mb-5 flex items-center gap-2 text-charcoal">
+                <span className="text-2xl">🛡️</span> Content Safety Check
+              </h2>
 
-              {/* Score Bar */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Harshness Score</span>
-                  <span
-                    className="text-lg font-bold"
-                    style={{
-                      color:
-                        harshScore.intensity === "harsh" ? "#F28B82" :
-                          harshScore.intensity === "moderate" ? "#F5C76A" :
-                            harshScore.intensity === "caution" ? "#FFD166" :
-                              "#7FE6C5"
-                    }}
-                  >
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-sm text-[#4A4A4A] font-medium">Harshness Meter</span>
+                  <span className="text-lg font-bold"
+                    style={{ color: harshScore.intensity === "harsh" ? "#EF4444" : harshScore.intensity === "moderate" ? "#F5C76A" : "#8C7851" }}>
                     {(harshScore.score * 100).toFixed(0)}%
                   </span>
                 </div>
-
-                {/* Progress Bar */}
-                <div className="w-full h-2 bg-[#1C1D25] rounded-full overflow-hidden border border-white/10">
+                <div className="w-full h-3 bg-black/5 rounded-full overflow-hidden shadow-inner">
                   <div
-                    className="h-full rounded-full transition-all duration-300"
+                    className="h-full rounded-full transition-all duration-500 ease-out"
                     style={{
                       width: `${harshScore.score * 100}%`,
-                      backgroundColor:
-                        harshScore.intensity === "harsh" ? "#F28B82" :
-                          harshScore.intensity === "moderate" ? "#F5C76A" :
-                            harshScore.intensity === "caution" ? "#FFD166" :
-                              "#7FE6C5"
+                      backgroundColor: harshScore.intensity === "harsh" ? "#EF4444" : harshScore.intensity === "moderate" ? "#F5C76A" : "#8C7851"
                     }}
                   />
                 </div>
               </div>
 
-              {/* Intensity Badge */}
-              <div className="mb-4">
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold"
-                  style={{
-                    backgroundColor:
-                      harshScore.intensity === "harsh" ? "rgba(242, 139, 130, 0.2)" :
-                        harshScore.intensity === "moderate" ? "rgba(245, 199, 106, 0.2)" :
-                          harshScore.intensity === "caution" ? "rgba(255, 209, 102, 0.2)" :
-                            "rgba(127, 230, 197, 0.2)",
-                    color:
-                      harshScore.intensity === "harsh" ? "#F28B82" :
-                        harshScore.intensity === "moderate" ? "#F5C76A" :
-                          harshScore.intensity === "caution" ? "#FFD166" :
-                            "#7FE6C5"
-                  }}
-                >
-                  {harshScore.intensity === "safe" ? "✅ Safe" :
-                    harshScore.intensity === "caution" ? "⚠️ Caution" :
-                      harshScore.intensity === "moderate" ? "🔔 Moderate" :
-                        "⛔ Harsh"}
-                </span>
-              </div>
-
-              {/* Harsh Words Found */}
               {harshScore.words.length > 0 && (
-                <div className="mb-4 p-3 bg-[#1C1D25] rounded-lg border border-white/10">
-                  <p className="text-xs text-gray-400 mb-2">Harsh words detected:</p>
+                <div className="mb-4">
+                  <p className="text-sm text-[#4A4A4A] mb-3">Detected keywords:</p>
                   <div className="flex flex-wrap gap-2">
                     {harshScore.words.map((w, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-1 text-xs rounded bg-white/10 text-gray-200"
-                      >
-                        {w.word} <span className="text-gray-500">×{w.count}</span>
+                      <span key={idx} className="px-3 py-1.5 text-xs font-semibold rounded-md bg-white border border-black/5 text-charcoal shadow-sm">
+                        {w.word} <span className="opacity-50 ml-1">×{w.count}</span>
                       </span>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Recommendation */}
               {harshScore.intensity === "harsh" && (
-                <div className="p-3 bg-[#F28B82]/10 border border-[#F28B82]/30 rounded-lg">
-                  <p className="text-xs text-[#F28B82] font-semibold">
-                    💡 Recommendation: Consider using the "Make Constructive" button to tone this down before posting.
-                  </p>
-                </div>
-              )}
-
-              {harshScore.intensity === "moderate" && (
-                <div className="p-3 bg-[#F5C76A]/10 border border-[#F5C76A]/30 rounded-lg">
-                  <p className="text-xs text-[#F5C76A] font-semibold">
-                    💡 Tip: This post contains moderately strong language. Consider refining it for a better tone.
+                <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+                  <p className="text-sm text-red-400 font-medium">
+                    <span className="font-bold">Recommendation:</span> Consider using the "Make Constructive (AI)" button to tone this down. High harshness scores will prevent publishing.
                   </p>
                 </div>
               )}
             </div>
+          )}
 
-            {/* Persona Selector */}
-            <div className="bg-[#2A2C38] rounded-2xl p-6 border border-white/5 shadow-md">
-              <h2 className="text-lg font-semibold mb-5">
-                AI Personas
-              </h2>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {/* AI PERSONA AREA */}
+          <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8 shadow-sm">
+            {/* Personas Sidebar */}
+            <div className="w-full md:w-1/3">
+              <h2 className="text-xl font-semibold mb-5 text-charcoal">AI Advisors</h2>
+              <div className="flex flex-col gap-3">
                 {personas.map((p, index) => {
                   const accent = accentColors[index];
                   const isActive = selectedPersona === p.key;
@@ -430,25 +371,12 @@ export default function Write() {
                     <button
                       key={p.key}
                       onClick={() => setSelectedPersona(p.key)}
-                      className="relative flex flex-col items-center justify-center 
-                      h-[85px] w-full border border-white/10 transition-all duration-200"
-                      style={{
-                        borderRadius: "12px",
-                        backgroundColor: isActive ? accent : "#242631",
-                        color: isActive ? "black" : "white",
-                      }}
+                      className={`relative flex items-center p-4 rounded-xl border transition-all duration-300 ${isActive ? 'bg-[#8C7851] border-[#8C7851] shadow-md' : 'bg-white border-black/10 hover:bg-[#F5F5F0]'}`}
                     >
-                      {/* Accent Strip */}
-                      <div
-                        className="absolute left-0 top-0 h-full w-[6px]"
-                        style={{
-                          backgroundColor: accent,
-                          borderRadius: "12px 0 0 12px",
-                        }}
-                      />
-
-                      <div className="text-xl mb-1">{p.label[0]}</div>
-                      <span className="text-sm font-semibold">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg mr-4 shadow-sm ${isActive ? 'text-[#8C7851] bg-white' : 'text-[#1A1A1A] bg-[#EBE8E0]'}`}>
+                        {p.label[0]}
+                      </div>
+                      <span className={`font-semibold text-left ${isActive ? 'text-white' : 'text-[#1A1A1A]'}`}>
                         {p.label}
                       </span>
                     </button>
@@ -457,51 +385,49 @@ export default function Write() {
               </div>
             </div>
 
-            {/* Feedback Box */}
-            <div className="bg-[#2A2C38] rounded-2xl p-6 border border-white/5 shadow-md w-full">
-              <h2 className="text-lg font-semibold mb-4">
-                {personas.find((p) => p.key === selectedPersona)?.label} Feedback
+            {/* Feedback Content */}
+            <div className="w-full md:w-2/3 flex flex-col">
+              <h2 className="text-xl font-semibold mb-5 text-zinc-400">
+                <span style={{ color: accentColors[personas.findIndex((p) => p.key === selectedPersona)] }}>
+                  {personas.find((p) => p.key === selectedPersona)?.label}
+                </span> Feedback
               </h2>
 
               {/* HEYGEN AVATAR */}
-              <div className="w-full h-64 bg-black rounded-xl mb-4 overflow-hidden relative">
+              <div className="w-full h-48 sm:h-64 bg-[#1A1A1A] rounded-2xl mb-5 overflow-hidden relative border border-[#8C7851] shadow-inner p-4 flex items-center justify-center">
                 <PersonaAvatar
                   persona={selectedPersona}
                   textToSpeak={liveAiFeedback[selectedPersona]}
                 />
               </div>
 
-              <div
-                className="w-full bg-[#1C1D25] border border-white/10 rounded-xl 
-                p-6 min-h-[170px] text-gray-300 overflow-y-auto"
-              >
+              <div className="w-full bg-white border border-[#8C7851]/30 rounded-2xl p-6 flex-1 text-[#1A1A1A] min-h-[150px] shadow-sm text-base leading-relaxed">
                 {feedbackLoading ? (
-                  <div className="flex flex-col items-center justify-center h-full text-gray-500 gap-2">
-                    <span className="animate-pulse">✨ Analyzing your thoughts...</span>
+                  <div className="flex flex-col items-center justify-center h-full text-[#1A1A1A] gap-3 opacity-80">
+                    <div className="w-6 h-6 border-b-2 border-l-2 border-[#1A1A1A] rounded-full animate-spin" />
+                    <span className="animate-pulse tracking-wide font-medium">Analyzing narrative...</span>
                   </div>
                 ) : liveAiFeedback[selectedPersona] ? (
-                  <p className="leading-relaxed">
-                    {liveAiFeedback[selectedPersona]}
-                  </p>
+                  <p className="whitespace-pre-wrap">{liveAiFeedback[selectedPersona]}</p>
                 ) : content.length > 50 ? (
-                  <div className="flex flex-col items-center justify-center h-full text-gray-500 italic">
-                    <p>No specific feedback generated for this persona yet.</p>
+                  <div className="flex flex-col items-center justify-center h-full text-[#4A4A4A]">
+                    <p className="italic mb-3">Awaiting processing.</p>
                     <button
                       onClick={() => generateLiveFeedback(content)}
-                      className="text-[#7FE6C5] hover:underline mt-2 text-sm not-italic"
+                      className="text-white bg-[#1A1A1A] hover:bg-black transition font-medium text-sm px-5 py-2.5 rounded-full shadow-sm"
                     >
-                      Try Regenerating
+                      Regenerate Insight
                     </button>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-gray-600 italic">
-                    <p>Write at least 50 characters to see AI feedback...</p>
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <p className="text-center max-w-xs text-[#4A4A4A] italic text-sm">Write at least 50 characters in the editor to awaken the advisors and receive insights.</p>
                   </div>
                 )}
               </div>
 
               {feedbackError && (
-                <p className="text-red-400 text-sm mt-3 italic">
+                <p className="text-red-400 text-sm mt-3 font-medium bg-red-500/10 px-4 py-2 rounded-lg text-center">
                   {feedbackError}
                 </p>
               )}

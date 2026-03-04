@@ -58,14 +58,14 @@ export default function Login() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-white">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F5F0]">
+      <div className="w-full max-w-md bg-white border border-black/5 shadow-sm rounded-2xl p-8 relative overflow-hidden">
         {!showOrgSetup ? (
           <>
-            <h1 className="text-3xl font-bold text-center mb-2">
+            <h1 className="text-3xl font-bold text-center mb-2 text-charcoal">
               CultureStack
             </h1>
-            <p className="text-gray-500 text-center mb-6">
+            <p className="text-[#4A4A4A] text-center mb-6">
               Private reflections + AI feedback for teams
             </p>
 
@@ -99,7 +99,7 @@ export default function Login() {
 
               <button
                 type="submit"
-                className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
+                className="w-full bg-[#8C7851] text-white py-3 rounded-xl font-bold transition-colors hover:bg-[#A39066] shadow-sm"
                 disabled={loading}
               >
                 {loading ? 'Logging in...' : 'Login'}
@@ -107,9 +107,9 @@ export default function Login() {
             </form>
 
 
-            <p className="text-center text-sm mt-5 text-gray-600">
+            <p className="text-center text-sm mt-5 text-[#4A4A4A]">
               Don't have an account?{" "}
-              <Link to="/signup" className="font-semibold underline">
+              <Link to="/signup" className="font-semibold text-charcoal underline">
                 Sign up
               </Link>
             </p>
@@ -142,7 +142,7 @@ export default function Login() {
 
               <button
                 type="submit"
-                className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
+                className="w-full bg-[#1A1A1A] text-white py-3 rounded-xl font-bold transition-colors hover:bg-black shadow-sm"
                 disabled={creatingOrg}
               >
                 {creatingOrg ? 'Creating Organization...' : 'Create Organization'}

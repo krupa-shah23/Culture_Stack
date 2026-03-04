@@ -115,10 +115,10 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#1C1D25] text-white px-6 py-10">
+      <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
         <div className="max-w-6xl mx-auto space-y-10">
-          <div className="h-56 bg-[#242631] rounded-2xl animate-pulse" />
-          <div className="h-40 bg-[#242631] rounded-2xl animate-pulse" />
+          <div className="h-56 bg-white border border-black/5 rounded-2xl animate-pulse shadow-sm" />
+          <div className="h-40 bg-white border border-black/5 rounded-2xl animate-pulse shadow-sm" />
         </div>
       </div>
     );
@@ -126,13 +126,13 @@ export default function Profile() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#1C1D25] text-white px-6 py-10">
-        <div className="max-w-4xl mx-auto text-center text-gray-300">
-          <h2 className="text-2xl font-semibold mb-4">Profile unavailable</h2>
+      <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
+        <div className="max-w-4xl mx-auto text-center text-[#4A4A4A]">
+          <h2 className="text-2xl font-semibold mb-4 text-charcoal">Profile unavailable</h2>
           <p className="mb-6">{error || 'This profile could not be loaded.'}</p>
           <div className="flex justify-center gap-3">
-            <button onClick={retry} className="px-4 py-2 bg-[#4BA9FF] text-black rounded-full font-semibold">Retry</button>
-            <button onClick={() => window.location.href = '/knowledge'} className="px-4 py-2 bg-[#1C1D25] border border-white/10 text-gray-300 rounded-full">Go back</button>
+            <button onClick={retry} className="px-6 py-2 bg-[#1A1A1A] text-white rounded-full font-bold hover:bg-black transition-colors shadow-sm">Retry</button>
+            <button onClick={() => window.location.href = '/knowledge'} className="px-6 py-2 bg-white border border-black/5 text-[#4A4A4A] hover:bg-black/5 rounded-full transition-colors shadow-sm">Go back</button>
           </div>
         </div>
       </div>
@@ -143,32 +143,32 @@ export default function Profile() {
   const initial = user.fullName ? user.fullName.trim()[0].toUpperCase() : 'U';
 
   return (
-    <div className="min-h-screen bg-[#1C1D25] text-white px-6 py-10">
+    <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
       <div className="max-w-6xl mx-auto space-y-10">
         {error && (
-          <div className="rounded-md bg-yellow-900/10 border border-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
+          <div className="rounded-md bg-yellow-100 border border-yellow-200 px-4 py-2 text-sm text-yellow-800">
             Showing local profile — server error: {error}
           </div>
         )}
 
         {/* PROFILE HEADER */}
-        <div className="relative bg-[#242631] rounded-2xl p-8 border border-white/5 shadow-md overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#4BA9FF] rounded-l-2xl" />
+        <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
+          <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
 
           <div className="flex flex-col md:flex-row gap-8 items-start md:items-center pl-3">
 
-            <div className="w-24 h-24 rounded-full bg-[#303241] flex items-center justify-center text-3xl font-bold ring-2 ring-[#4BA9FF]">
+            <div className="w-24 h-24 rounded-full bg-[#F5F5F0] flex items-center justify-center text-3xl font-bold ring-1 ring-black/5 text-charcoal shadow-sm">
               {initial}
             </div>
 
             <div className="flex-1 space-y-2">
-              <h1 className="text-3xl font-bold">{user.fullName}</h1>
-              <p className="text-gray-400 text-sm">{user.department}</p>
-              <p className="text-gray-300 italic">{reflectionJourney.aiTheme ? `"${reflectionJourney.aiTheme} - theme detected"` : 'No bio available.'}</p>
+              <h1 className="text-3xl font-bold text-charcoal">{user.fullName}</h1>
+              <p className="text-[#4A4A4A] text-sm">{user.department}</p>
+              <p className="text-charcoal italic">{reflectionJourney.aiTheme ? `"${reflectionJourney.aiTheme} - theme detected"` : 'No bio available.'}</p>
 
               <div className="flex flex-wrap gap-3 mt-3">
                 {badges.map((b) => (
-                  <span key={b} className="px-3 py-1 text-xs rounded-full bg-[#1C1D25] border border-white/10">{b}</span>
+                  <span key={b} className="px-3 py-1 text-xs rounded-full bg-white border border-black/5 shadow-sm text-charcoal">{b}</span>
                 ))}
               </div>
             </div>
@@ -244,16 +244,16 @@ export default function Profile() {
         )}
 
         {/* CONTENT AREA */}
-        <div className="bg-[#242631] rounded-2xl border border-white/5 shadow-md p-6 min-h-[300px]">
+        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 min-h-[300px]">
           {activeTab === 'posts' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-white">Posts & Reflections</h3>
-                <span className="text-sm text-gray-400">{stats.postsCount} total</span>
+                <h3 className="text-xl font-semibold text-charcoal">Posts & Reflections</h3>
+                <span className="text-sm text-[#4A4A4A]">{stats.postsCount} total</span>
               </div>
 
               {postsLoading ? (
-                <div className="text-center py-10 text-gray-400 animate-pulse">Loading posts...</div>
+                <div className="text-center py-10 text-[#4A4A4A] animate-pulse">Loading posts...</div>
               ) : userPosts.length > 0 ? (
                 <div className="space-y-4">
                   {userPosts.map(post => (
@@ -261,7 +261,7 @@ export default function Profile() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-[#4A4A4A]">
                   <p>No posts visible or available.</p>
                 </div>
               )}
@@ -271,12 +271,12 @@ export default function Profile() {
           {activeTab === 'podcasts' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-white">Podcasts</h3>
-                <span className="text-sm text-gray-400">{stats.podcastsCount} total</span>
+                <h3 className="text-xl font-semibold text-charcoal">Podcasts</h3>
+                <span className="text-sm text-[#4A4A4A]">{stats.podcastsCount} total</span>
               </div>
 
               {podcastsLoading ? (
-                <div className="text-center py-10 text-gray-400 animate-pulse">Loading podcasts...</div>
+                <div className="text-center py-10 text-[#4A4A4A] animate-pulse">Loading podcasts...</div>
               ) : podcasts.length > 0 ? (
                 <div className="space-y-4">
                   {podcasts.map(podcast => (
@@ -284,7 +284,7 @@ export default function Profile() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-[#4A4A4A]">
                   <p>No podcasts visible or available.</p>
                 </div>
               )}
@@ -293,49 +293,49 @@ export default function Profile() {
 
           {activeTab === 'comments' && (
             <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-white mb-2">Comments</h3>
-              <p className="text-gray-400">Comment history is private or coming soon...</p>
+              <h3 className="text-xl font-semibold text-charcoal mb-2">Comments</h3>
+              <p className="text-[#4A4A4A]">Comment history is private or coming soon...</p>
             </div>
           )}
 
           {activeTab === 'reactions' && (
             <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-white mb-2">Reactions</h3>
-              <p className="text-gray-400">Reaction history coming soon...</p>
+              <h3 className="text-xl font-semibold text-charcoal mb-2">Reactions</h3>
+              <p className="text-[#4A4A4A]">Reaction history coming soon...</p>
             </div>
           )}
         </div>
 
         {/* REFLECTION JOURNEY */}
-        <div className="relative bg-[#242631] rounded-2xl p-7 border border-white/5 shadow-md overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#B9A6FF] rounded-l-2xl" />
+        <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
+          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#8C7851] rounded-l-2xl" />
 
-          <h2 className="text-lg font-semibold mb-4 pl-3">Reflection Journey</h2>
+          <h2 className="text-lg font-semibold mb-4 pl-3 text-charcoal">Reflection Journey</h2>
 
-          <div className="space-y-3 text-sm text-gray-300 pl-3">
+          <div className="space-y-3 text-sm text-[#4A4A4A] pl-3">
             <p>Joined Org: {new Date(user.createdAt).toLocaleDateString()}</p>
             <p>First Reflection Written: {reflectionJourney.firstReflection ? new Date(reflectionJourney.firstReflection).toLocaleDateString() : '—'}</p>
             <p>Most Discussed Post: {reflectionJourney.topPostTitle || '—'}</p>
             <p>Top Podcast Episode: {reflectionJourney.topPodcastTitle || '—'}</p>
-            {reflectionJourney.aiTheme && <p className="text-[#7FE6C5] font-medium">AI Theme Detected: {reflectionJourney.aiTheme}</p>}
+            {reflectionJourney.aiTheme && <p className="text-charcoal font-bold">AI Theme Detected: {reflectionJourney.aiTheme}</p>}
           </div>
         </div>
 
         {/* SAFETY CONTROLS */}
-        <div className="relative bg-[#242631] rounded-2xl p-6 border border-white/5 shadow-md overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#F5C76A] rounded-l-2xl" />
+        <div className="relative bg-white rounded-2xl p-6 border border-black/5 shadow-sm overflow-hidden">
+          <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
 
-          <h2 className="text-lg font-semibold mb-5 pl-3 flex items-center gap-2">Psychological Safety Controls</h2>
+          <h2 className="text-lg font-semibold mb-5 pl-3 flex items-center gap-2 text-charcoal">Psychological Safety Controls</h2>
 
           <div className="space-y-5 pl-3">
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <p className="text-sm text-gray-300">Default Anonymity Level</p>
-              <span className="px-3 py-1 rounded-full bg-[#1C1D25] border border-white/10 text-sm text-gray-200">Level {user.defaultAnonymityLevel}</span>
+            <div className="flex justify-between items-center border-b border-black/5 pb-4">
+              <p className="text-sm text-charcoal">Default Anonymity Level</p>
+              <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-[#4A4A4A] shadow-sm">Level {user.defaultAnonymityLevel}</span>
             </div>
 
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <p className="text-sm text-gray-300">Who can see my reflections?</p>
-              <span className="px-3 py-1 rounded-full bg-[#1C1D25] border border-white/10 text-sm text-gray-200">{user.visibility}</span>
+            <div className="flex justify-between items-center border-b border-black/5 pb-4">
+              <p className="text-sm text-charcoal">Who can see my reflections?</p>
+              <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-[#4A4A4A] shadow-sm">{user.visibility}</span>
             </div>
 
             <ToggleRow label="Allow AI feedback on my posts" defaultOn={user.allowAiFeedback} />
@@ -344,12 +344,12 @@ export default function Profile() {
         </div>
 
         {/* AI INSIGHT */}
-        <div className="relative bg-[#242631] rounded-2xl p-7 border border-white/5 shadow-md overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#7FE6C5] rounded-l-2xl" />
+        <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
+          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#8C7851] rounded-l-2xl" />
 
-          <h2 className="text-lg font-semibold mb-4 pl-3">AI Personality Insight</h2>
+          <h2 className="text-lg font-semibold mb-4 pl-3 text-charcoal">AI Personality Insight</h2>
 
-          <p className="text-gray-300 text-sm leading-relaxed pl-3">{aiPersonalitySummary || 'No AI personality summary available.'}</p>
+          <p className="text-[#4A4A4A] text-sm leading-relaxed pl-3">{aiPersonalitySummary || 'No AI personality summary available.'}</p>
         </div>
       </div>
     </div>
@@ -407,15 +407,15 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
   };
 
   return (
-    <div className="relative bg-[#242631] rounded-2xl border border-white/5 shadow-md overflow-hidden transition-all duration-300">
-      <div className="absolute left-0 top-0 h-full w-[6px] bg-gradient-to-b from-[#4BA9FF] to-[#7FE6C5] rounded-l-2xl" />
+    <div className="relative bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden transition-all duration-300 mt-2">
+      <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
 
       {/* Panel Header - Always Visible */}
       <div className="flex items-center justify-between p-6 pl-4">
         <div className="flex items-center gap-3">
           <span className="text-2xl">{currentConfig?.icon}</span>
-          <h3 className="text-xl font-semibold text-white">{currentConfig?.label}</h3>
-          <span className="ml-2 px-3 py-1 text-sm rounded-full bg-[#1C1D25] border border-white/10 text-gray-300">
+          <h3 className="text-xl font-semibold text-charcoal">{currentConfig?.label}</h3>
+          <span className="ml-2 px-3 py-1 text-sm rounded-full bg-[#EBE8E0] border border-black/5 text-[#4A4A4A]">
             {currentConfig?.value} total
           </span>
         </div>
@@ -423,7 +423,7 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
         {/* Dropdown Arrow Button - Points DOWN when collapsed, UP when expanded */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="p-2 rounded-lg bg-[#1C1D25] hover:bg-[#2A2E3E] text-gray-400 hover:text-white transition-all duration-200"
+          className="p-2 rounded-lg bg-white border border-black/5 text-charcoal shadow-sm hover:bg-black/5 transition-all duration-200"
         >
           {isExpanded ? (
             // ChevronUp - pointing UP
@@ -454,7 +454,7 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
         className={`overflow-hidden transition-all duration-300 ease-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           }`}
       >
-        <div className="border-t border-white/5 p-6 space-y-3">
+        <div className="border-t border-black/5 p-6 space-y-3">
           {currentItems && currentItems.length > 0 ? (
             <div className="space-y-3 max-h-80 overflow-y-auto">
               {currentItems.map((item, idx) => (
@@ -468,19 +468,19 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
                       navigate(`/podcasts/${item._id}`);
                     }
                   }}
-                  className="group bg-[#1C1D25] border border-white/5 rounded-lg p-4 hover:border-[#4BA9FF]/30 hover:bg-[#2A2E3E] transition-all duration-200 cursor-pointer"
+                  className="group bg-white border border-black/5 shadow-sm rounded-lg p-4 hover:border-black/20 hover:bg-black/5 transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium text-sm group-hover:text-[#4BA9FF] transition-colors line-clamp-2">
+                      <p className="text-charcoal font-medium text-sm group-hover:text-black transition-colors line-clamp-2">
                         {getItemLabel(item)}
                       </p>
-                      <p className="text-gray-500 text-xs mt-2">
+                      <p className="text-[#4A4A4A] text-xs mt-2">
                         {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Date unavailable'}
                       </p>
                     </div>
                     <div className="flex-shrink-0">
-                      <svg className="w-5 h-5 text-gray-500 group-hover:text-[#4BA9FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-[#4A4A4A] group-hover:text-charcoal transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
@@ -489,7 +489,7 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-gray-400">
+            <div className="text-center py-12 text-[#4A4A4A]">
               <p className="text-sm">No {currentConfig?.label?.toLowerCase()} to display</p>
             </div>
           )}
@@ -504,25 +504,25 @@ function Stat({ label, value, isActive, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`flex items-center gap-3 bg-[#1C1D25] 
-      border rounded-xl px-4 py-3
-      hover:scale-[1.02] transition cursor-pointer
-      ${isActive ? 'border-[#4BA9FF] ring-1 ring-[#4BA9FF]/50' : 'border-white/10 hover:border-white/20'}
+      className={`flex items-center gap-3 bg-white
+      border rounded-xl px-4 py-3 shadow-sm
+      hover:scale-[1.02] hover:shadow-md transition cursor-pointer
+      ${isActive ? 'border-charcoal ring-1 ring-charcoal/20' : 'border-black/5 hover:border-black/10'}
       `}
     >
       {/* Icon Bubble */}
-      <div className={`w-10 h-10 flex items-center justify-center rounded-full text-lg transition
-        ${isActive ? 'bg-[#4BA9FF] text-black' : 'bg-[#242631] text-white'}
+      <div className={`w-10 h-10 flex items-center justify-center rounded-full text-lg transition shadow-sm
+        ${isActive ? 'bg-[#1A1A1A] text-white' : 'bg-[#EBE8E0] text-charcoal'}
       `}>
         {label.charAt(0)}
       </div>
 
       {/* Text */}
       <div>
-        <p className={`text-xs font-medium transition ${isActive ? 'text-[#4BA9FF]' : 'text-gray-400'}`}>
+        <p className={`text-xs font-medium transition ${isActive ? 'text-charcoal font-bold' : 'text-[#4A4A4A]'}`}>
           {label}
         </p>
-        <h3 className="text-xl font-bold text-white leading-tight">
+        <h3 className="text-xl font-bold text-charcoal leading-tight">
           {value}
         </h3>
       </div>
@@ -536,23 +536,23 @@ function ToggleRow({ label, defaultOn }) {
   const [enabled, setEnabled] = useState(defaultOn);
 
   return (
-    <div className="flex justify-between items-center border-b border-white/5 pb-4">
-      <p className="text-sm text-gray-300">{label}</p>
+    <div className="flex justify-between items-center border-b border-black/5 pb-4 mt-4">
+      <p className="text-sm text-charcoal">{label}</p>
 
       {/* ✅ Toggle Switch */}
       <button
         onClick={() => setEnabled(!enabled)}
         className="relative w-14 h-8 rounded-full transition-all duration-300"
         style={{
-          backgroundColor: enabled ? "#7FE6C5" : "#FFFFFF", // ✅ ON mint, OFF white
-          boxShadow: enabled ? "0 0 10px #7FE6C5" : "none",
+          backgroundColor: enabled ? "#8C7851" : "#EBE8E0", // ✅ ON gold, OFF beige
+          boxShadow: enabled ? "0 0 5px rgba(140, 120, 81, 0.5)" : "none",
         }}
       >
         {/* ✅ Knob */}
         <span
-          className="absolute top-1 left-1 w-6 h-6 rounded-full shadow-md transition-all duration-300"
+          className="absolute top-1 left-1 w-6 h-6 rounded-full shadow-sm transition-all duration-300"
           style={{
-            backgroundColor: enabled ? "#FFFFFF" : "#242631", // knob dark when OFF
+            backgroundColor: enabled ? "#FFFFFF" : "#FFFFFF",
             transform: enabled ? "translateX(22px)" : "translateX(0px)",
           }}
         />

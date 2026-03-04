@@ -4,8 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #23242d;
-  font-family: "Inter", sans-serif;
+  font-family: inherit;
+  position: relative;
+  z-index: 10;
 }
 
 /* MAIN AUTH CONTAINER */
@@ -13,13 +14,15 @@
   width: 900px;
   height: 520px;
   max-width: 95%;
-  border-radius: 22px;
+  border-radius: 24px;
   overflow: hidden;
   position: relative;
 
-  background: #2b2d38;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* FORM CONTAINER */
@@ -35,7 +38,7 @@
 /* FORM CONTENT */
 .form-container form {
   height: 100%;
-  background: #303241;
+  background: transparent;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -62,14 +65,17 @@
   top: 0;
   width: 6px;
   height: 100%;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 .side-strip.blue {
-  background: #4ba9ff;
+  background: var(--electric-blue);
+  box-shadow: 0 0 15px rgba(0, 122, 255, 0.5);
 }
 
 .side-strip.purple {
-  background: #b9a6ff;
+  background: var(--hyper-purple);
+  box-shadow: 0 0 15px rgba(175, 82, 191, 0.5);
 }
 
 /* INPUT FIELD BOX */
@@ -81,11 +87,18 @@
 .field-box input {
   width: 100%;
   padding: 14px 14px 14px 18px;
-  border-radius: 14px;
-  background: #23242d;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
   font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field-box input:focus {
+  border-color: rgba(0, 122, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 122, 255, 0.2);
 }
 
 .field-box input::placeholder {
@@ -121,12 +134,19 @@
 
 /* TEXTAREA */
 textarea {
-  background: #23242d;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 12px 14px;
   border-radius: 12px;
   color: white;
   resize: none;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea:focus {
+  border-color: rgba(0, 122, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 122, 255, 0.2);
 }
 
 /* BUTTON */
@@ -136,28 +156,31 @@ button {
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
 
-  background: #4ba9ff;
+  background: linear-gradient(to right, var(--electric-blue), var(--hyper-purple));
   color: white;
   transition: 0.25s ease;
 }
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(75, 169, 255, 0.35);
+  box-shadow: 0 8px 18px rgba(0, 122, 255, 0.4);
 }
 
 /* GHOST BUTTON */
 button.ghost {
   background: transparent;
-  border: 1px solid rgba(75, 169, 255, 0.8);
-  color: #4ba9ff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  box-shadow: none;
 }
 
 button.ghost:hover {
-  background: rgba(75, 169, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 /* SLIDING PANELS */
@@ -199,7 +222,9 @@ button.ghost:hover {
   left: -100%;
   width: 200%;
   height: 100%;
-  background: linear-gradient(135deg, #1c1d25, #303241);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: white;
   transition: transform 0.6s ease-in-out;
 }

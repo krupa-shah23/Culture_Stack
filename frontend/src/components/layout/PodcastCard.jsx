@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 export default function PodcastCard({ podcast }) {
   const navigate = useNavigate();
 
-  // ✅ Pastel Accent Palette (Same as PostCard for consistency)
+  // ✅ Beige UI Accent Palette
   const pastelPalette = [
-    "#7FE6C5", // Mint Green
-    "#4BA9FF", // Sky Blue
+    "#8C7851", // Muted Gold
+    "#1A1A1A", // Charcoal
+    "#4A4A4A", // Soft Grey
     "#F5C76A", // Warm Yellow
-    "#F28B82", // Coral Pink
-    "#B9A6FF", // Lavender
+    "#EBE8E0", // Secondary Beige
   ];
 
   // ✅ Stable Accent Color
@@ -48,39 +48,37 @@ export default function PodcastCard({ podcast }) {
     <div
       onClick={() => navigate(`/podcasts/${podcast._id}`)}
       className="
-        relative bg-[#242631]
-        border border-white/5
-        rounded-2xl p-7
-        shadow-md hover:shadow-lg
-        transition cursor-pointer
-        overflow-hidden
+        relative bg-white border border-black/5 rounded-2xl
+        p-7 shadow-sm hover:shadow-md
+        transition-all duration-300 cursor-pointer
+        overflow-hidden group
       "
     >
-      {/* ✅ Pastel Accent Strip */}
+      {/* ✅ Pastel Accent Strip - converted to subtle colored line */}
       <div
-        style={{ backgroundColor: accentColor }}
-        className="absolute left-0 top-0 h-full w-[7px] rounded-l-2xl"
+        style={{ backgroundColor: accentColor, boxShadow: `0 0 10px ${accentColor}` }}
+        className="absolute left-0 top-0 h-full w-[4px]"
       />
 
       {/* Header */}
-      <div className="flex justify-between items-center mb-6 pl-5">
+      <div className="flex justify-between items-center mb-6 pl-3">
         <div className="flex items-center gap-4">
           {/* Avatar (Podcast Icon) */}
-          <div className="w-14 h-14 rounded-full bg-[#303241] flex items-center justify-center font-bold text-2xl text-white">
+          <div className="w-14 h-14 rounded-full bg-[#F5F5F0] border border-black/5 flex items-center justify-center font-bold text-2xl text-charcoal shadow-sm">
             {authorInitial}
           </div>
 
           {/* Title & Author */}
           <div>
-            <h3 className="text-white font-semibold text-lg">{podcast.title}</h3>
-            <p className="text-xs text-gray-400 italic">
+            <h3 className="text-charcoal font-bold text-lg">{podcast.title}</h3>
+            <p className="text-xs text-[#4A4A4A] italic">
               Hosted by {authorName} • {new Date(podcast.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
 
         {/* Duration Badge */}
-        <span className="text-xs px-3 py-1 rounded-full bg-[#1C1D25] border border-white/10 text-gray-200 flex items-center gap-2">
+        <span className="text-xs px-4 py-1.5 rounded-full bg-[#F5F5F0] border border-black/5 text-[#4A4A4A] shadow-sm flex items-center gap-2">
           {formatDuration(displayDuration)}
         </span>
       </div>
@@ -88,12 +86,12 @@ export default function PodcastCard({ podcast }) {
       {/* Description */}
       <div
         className="
-          bg-[#1C1D25]
-          border border-white/10
+          bg-[#F5F5F0]
+          border border-black/5
           rounded-xl
           px-6 py-4
-          ml-5
-          text-gray-200
+          ml-2
+          text-[#4A4A4A]
           text-sm
           leading-relaxed
         "
@@ -104,8 +102,8 @@ export default function PodcastCard({ podcast }) {
         {podcast.audioUrl && (
           <div className="mt-3 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
             <audio
-              controls              preload="metadata"
-              crossOrigin="anonymous"              className="w-full h-8 opacity-80 hover:opacity-100 transition"
+              controls preload="metadata"
+              crossOrigin="anonymous" className="w-full h-8 opacity-80 hover:opacity-100 transition"
               src={`http://localhost:5000${podcast.audioUrl}`}
             />
           </div>
@@ -113,22 +111,22 @@ export default function PodcastCard({ podcast }) {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-6 pl-5 mt-5 text-gray-400">
-        <div className="flex items-center gap-2 text-sm hover:text-white transition">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <div className="flex items-center gap-6 pl-3 mt-5 text-[#4A4A4A]">
+        <div className="flex items-center gap-2 text-sm hover:text-charcoal transition py-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
             <path d="M5 3v18l15-9-15-9z" />
           </svg>
-          {podcast.playCount || 0} plays
+          <span className="text-base">{podcast.playCount || 0} plays</span>
         </div>
 
         <button
           className="
             flex items-center gap-2
-            text-sm font-medium
-            hover:text-white transition
+            text-base font-bold py-3
+            hover:text-charcoal hover:drop-shadow-sm transition
           "
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 3.866-3.582 7-8 7a9.959 9.959 0 01-4.5-1.05L3 21l1.05-5.5A9.959 9.959 0 013 12c0-3.866 3.582-7 8-7s8 3.134 8 7z" />
           </svg>
           Discuss

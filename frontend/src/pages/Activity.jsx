@@ -41,36 +41,36 @@ export default function Activity() {
   return (
     <>
 
-      <div className="min-h-screen bg-[#1C1D25] text-white px-6 py-10">
+      <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
         <div className="max-w-5xl mx-auto space-y-8">
 
           {/* Page Header */}
           <div>
-            <h1 className="text-4xl font-bold mb-2">
+            <h1 className="text-4xl font-bold mb-2 tracking-tight">
               Activity Log
             </h1>
-            <p className="text-gray-400">
+            <p className="text-[#4A4A4A] font-medium">
               Track updates from your reflections, AI feedback, and team podcasts.
             </p>
           </div>
 
           {/* Activity Feed */}
           {loading ? (
-            <div className="text-gray-400">Loading activity...</div>
+            <div className="text-[#4A4A4A] font-medium animate-pulse">Loading activity...</div>
           ) : activities.length === 0 ? (
-            <div className="text-gray-400">No activity yet.</div>
+            <div className="text-[#4A4A4A] font-medium">No activity yet.</div>
           ) : (
             <div className="space-y-5">
               {activities.map((item, index) => (
                 <div
                   key={index}
-                  className="relative bg-[#242631] rounded-2xl p-6 
-                  border border-white/10 shadow-md overflow-hidden 
-                  hover:scale-[1.01] transition"
+                  className="relative bg-white rounded-2xl p-6 
+                  border border-black/5 shadow-sm overflow-hidden 
+                  hover:scale-[1.01] hover:shadow-md transition-all duration-300"
                 >
                   {/* Accent Strip */}
                   <div
-                    className="absolute left-0 top-0 h-full w-[6px]"
+                    className="absolute left-0 top-0 h-full w-[6px] shadow-[inset_-2px_0_5px_rgba(0,0,0,0.05)]"
                     style={{ backgroundColor: item.color }}
                   />
 
@@ -79,7 +79,7 @@ export default function Activity() {
                     {/* Icon Bubble */}
                     <div
                       className="w-12 h-12 flex items-center justify-center 
-                      rounded-full text-xl font-bold"
+                      rounded-full text-xl font-bold border border-black/5 shadow-sm mt-1"
                       style={{
                         backgroundColor: item.color,
                         color: "black",
@@ -90,10 +90,10 @@ export default function Activity() {
 
                     {/* Text */}
                     <div className="flex-1">
-                      <p className="text-gray-200 font-medium text-sm md:text-base">
+                      <p className="text-charcoal font-medium text-sm md:text-base leading-relaxed">
                         {item.text}
                       </p>
-                      <p className="text-gray-500 text-xs mt-1">
+                      <p className="text-[#4A4A4A] text-xs mt-1.5 font-semibold tracking-wide">
                         {item.time}
                       </p>
                     </div>
@@ -104,7 +104,7 @@ export default function Activity() {
           )}
 
           {/* Empty Future Note */}
-          <p className="text-gray-500 italic text-sm pt-4">
+          <p className="text-[#4A4A4A] italic text-sm pt-4 font-medium">
             More activity events will appear here as your team engages.
           </p>
         </div>
