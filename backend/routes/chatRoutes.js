@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 const { ensureOrgMember } = require('../middleware/orgScopeMiddleware');
-const { getOrCreateConversation, getMyConversations, getMessages, sendMessage } = require('../controllers/chatController');
+const { getOrCreateConversation, getMyConversations, getMessages, sendMessage, markMessagesAsRead } = require('../controllers/chatController');
 
 // All chat routes require authentication and organization membership
 router.use(protect, ensureOrgMember);
@@ -18,5 +18,8 @@ router.get('/conversations/:id/messages', getMessages);
 
 // POST /api/messages  -> { conversationId?, recipientId?, content }
 router.post('/messages', sendMessage);
+
+// PUT /api/messages/read -> { conversationId, senderId }
+router.put('/messages/read', markMessagesAsRead);
 
 module.exports = router;

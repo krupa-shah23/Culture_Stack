@@ -552,7 +552,7 @@ const voteOnPost = async (req, res) => {
       }
 
       const dec = existingVote.voteType === 'upvote' ? { upvoteCount: -1 } : { downvoteCount: -1 };
-      await existingVote.remove();
+      await existingVote.deleteOne();
       await Post.findByIdAndUpdate(postId, { $inc: dec });
       const updatedPost = await refreshScore();
 
@@ -564,7 +564,7 @@ const voteOnPost = async (req, res) => {
       // If same vote -> remove it
       if (existingVote.voteType === voteType) {
         const dec = voteType === 'upvote' ? { upvoteCount: -1 } : { downvoteCount: -1 };
-        await existingVote.remove();
+        await existingVote.deleteOne();
         await Post.findByIdAndUpdate(postId, { $inc: dec });
         const updatedPost = await refreshScore();
         return res.status(200).json({ userVote: null, upvoteCount: updatedPost.upvoteCount, downvoteCount: updatedPost.downvoteCount, score: updatedPost.score });
@@ -679,10 +679,21 @@ const getUserPosts = async (req, res) => {
       .populate('author', 'fullName email department')
       .sort({ createdAt: -1 });
 
+    const postIds = posts.map(p => p._id);
+    const userVotes = await Vote.find({ postId: { $in: postIds }, userId: req.user._id }).lean();
+    const userVoteMap = userVotes.reduce((acc, v) => { acc[String(v.postId)] = v.voteType; return acc; }, {});
+
     const processedPosts = posts.map(post => {
       const postObj = post.toObject();
       postObj.likesCount = Array.isArray(post.likes) ? post.likes.length : 0;
       postObj.likedByCurrentUser = Array.isArray(post.likes) && post.likes.some(id => id.toString() === req.user._id.toString());
+
+      // Votes: counters are stored on the Post for fast reads
+      postObj.upvoteCount = post.upvoteCount || 0;
+      postObj.downvoteCount = post.downvoteCount || 0;
+      postObj.score = typeof post.score === 'number' ? post.score : (postObj.upvoteCount - postObj.downvoteCount);
+      postObj.currentUserVote = userVoteMap[String(post._id)] || null;
+
       return postObj;
     });
 

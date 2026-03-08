@@ -17,18 +17,18 @@ const messageSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  read: {
-    type: Boolean,
-    default: false,
+  status: {
+    type: String,
+    enum: ["sent", "delivered", "read"],
+    default: "sent",
   },
 }, { timestamps: true });
 
 // Optional: ensure a message has non-empty content
-messageSchema.pre('validate', function (next) {
+messageSchema.pre('validate', function () {
   if (!this.content || !this.content.trim()) {
-    return next(new Error('Message content cannot be empty'));
+    throw new Error('Message content cannot be empty');
   }
-  next();
 });
 
 module.exports = mongoose.model('Message', messageSchema);

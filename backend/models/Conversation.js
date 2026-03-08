@@ -22,11 +22,10 @@ const conversationSchema = mongoose.Schema({
 }, { timestamps: true });
 
 // Ensure exactly two participants
-conversationSchema.pre('validate', function (next) {
+conversationSchema.pre('validate', function () {
   if (!this.participants || this.participants.length !== 2) {
-    return next(new Error('Conversation must have exactly two participants'));
+    throw new Error('Conversation must have exactly two participants');
   }
-  next();
 });
 
 module.exports = mongoose.model('Conversation', conversationSchema);

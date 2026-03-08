@@ -57,7 +57,12 @@ const getMyConversations = async (req, res) => {
     const convsWithLast = await Promise.all(
       conversations.map(async (c) => {
         const last = await Message.findOne({ conversation: c._id }).sort({ createdAt: -1 }).lean();
-        return { ...c, lastMessage: last || null };
+        const unreadCount = await Message.countDocuments({
+          conversation: c._id,
+          sender: { $ne: req.user._id },
+          status: { $ne: 'read' }
+        });
+        return { ...c, lastMessage: last || null, unreadCount };
       })
     );
 
@@ -136,9 +141,38 @@ const sendMessage = async (req, res) => {
   }
 };
 
+// PUT /api/messages/read -> { conversationId, senderId }
+const markMessagesAsRead = async (req, res) => {
+  try {
+    const { conversationId, senderId } = req.body;
+
+    if (!conversationId || !senderId) {
+      return res.status(400).json({ message: 'conversationId and senderId required' });
+    }
+
+    // Ensure authorized
+    const conv = await Conversation.findById(conversationId);
+    if (!conv || !conv.participants.some((p) => p.toString() === req.user._id.toString())) {
+      return res.status(403).json({ message: 'Not authorized for this conversation' });
+    }
+
+    // Update messages sent by the *other* user to 'read'
+    const result = await Message.updateMany(
+      { conversation: conversationId, sender: senderId, status: { $ne: 'read' } },
+      { $set: { status: 'read' } }
+    );
+
+    res.status(200).json({ success: true, modifiedCount: result.modifiedCount });
+  } catch (error) {
+    console.error('chatController.markMessagesAsRead error', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getOrCreateConversation,
   getMyConversations,
   getMessages,
   sendMessage,
+  markMessagesAsRead
 };
