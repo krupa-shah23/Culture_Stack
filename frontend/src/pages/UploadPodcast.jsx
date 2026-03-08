@@ -65,14 +65,17 @@ export default function UploadPodcast() {
   };
 
   return (
-    <>
+    <div className="flex-1 w-full px-4 md:px-6 py-6 flex flex-col h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
 
-      <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
-        {/* MASTER CONTAINER */}
-        <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
-          <div className="max-w-3xl mx-auto space-y-6">
+      {/* MASTER CONTAINER */}
+      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col md:flex-row gap-8">
 
-            {/* Page Heading & Back */}
+        <div className="flex flex-col md:flex-row gap-8 w-full">
+
+          {/* LEFT SIDE (UPLOAD FORM) */}
+          <div className="flex-[3] space-y-6">
+
+            {/* Heading */}
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate(-1)}
@@ -82,8 +85,9 @@ export default function UploadPodcast() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </button>
-              <h1 className="text-4xl font-bold tracking-tight text-charcoal">
-                Upload Podcast Episode
+
+              <h1 className="text-3xl font-semibold tracking-tight text-charcoal">
+                Upload Podcast
               </h1>
             </div>
 
@@ -92,29 +96,26 @@ export default function UploadPodcast() {
               Sentiment Insights automatically.
             </p>
 
-            {/* Error Box */}
+            {/* Error */}
             {error && (
-              <div className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-xl">
+              <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl">
                 {error}
               </div>
             )}
 
             {/* Upload Card */}
-            <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
-              {/* Accent Strip */}
-              <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851]" />
+            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-8 border-l-4 border-l-[#8C7851]">
 
-              {/* Title Input */}
+              {/* Title */}
               <div className="mb-6 pl-4">
                 <label className="block text-sm font-semibold text-charcoal mb-2">
                   Episode Title
                 </label>
+
                 <input
                   type="text"
                   placeholder="e.g., Weekly Team Sync - March 15"
-                  className="w-full bg-white border border-black/5 
-                rounded-xl px-4 py-3 text-charcoal placeholder-zinc-400
-                focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition-colors shadow-sm"
+                  className="w-full bg-white border border-black/5 rounded-xl px-4 py-3 text-charcoal placeholder-zinc-400 focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition shadow-sm"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
@@ -146,9 +147,7 @@ export default function UploadPodcast() {
 
                 <textarea
                   placeholder="Key takeaways, participants, and topics discussed..."
-                  className="w-full h-32 bg-white border border-black/5 
-                rounded-xl px-4 py-3 text-charcoal placeholder-zinc-400
-                focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition-colors resize-none shadow-sm"
+                  className="w-full h-28 bg-white border border-black/5 rounded-xl px-4 py-3 text-charcoal placeholder-zinc-400 focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition resize-none shadow-sm"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                 />
@@ -159,10 +158,7 @@ export default function UploadPodcast() {
                 <button
                   onClick={handleUpload}
                   disabled={loading}
-                  className="w-full py-4 rounded-full font-bold text-lg
-                bg-[#1A1A1A] text-white hover:bg-black hover:shadow-md transition-all
-                disabled:opacity-50 disabled:cursor-not-allowed
-                flex items-center justify-center gap-3 border-none"
+                  className="w-full py-4 rounded-full font-bold text-lg bg-[#1A1A1A] text-white hover:bg-black hover:shadow-md transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                 >
                   {loading ? (
                     <>
@@ -174,10 +170,36 @@ export default function UploadPodcast() {
                   )}
                 </button>
               </div>
+
             </div>
           </div>
+
+          {/* RIGHT SIDEBAR */}
+          <div className="flex-[1] space-y-10 pl-0">
+
+            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-5 md:p-6 relative overflow-hidden group w-full border-l-4 border-l-[#8C7851]">
+
+              <h2 className="font-bold text-[#1A1A1A] mb-3">
+                Want to see all podcasts?
+              </h2>
+
+              <p className="text-sm text-charcoal/80 mb-6">
+                Listen to team conversations, insights, and reflections shared across your organization. Catch up on what your team is talking about.
+              </p>
+
+              <button
+                onClick={() => navigate("/podcasts")}
+                className="flex items-center justify-center w-full bg-[#1A1A1A] text-white font-bold py-3 rounded-full shadow-sm hover:bg-black transition"
+              >
+                View All Podcasts
+              </button>
+
+            </div>
+          </div>
+
         </div>
+
       </div>
-    </>
+    </div>
   );
 }

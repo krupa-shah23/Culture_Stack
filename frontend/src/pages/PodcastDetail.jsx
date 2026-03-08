@@ -3,32 +3,36 @@ import { useParams, Link } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/layout/Navbar";
 
-export default function PodcastDetail() {
+export default function PodcastDetail({ modalPodcast }) {
   const { id } = useParams();
-  const [podcast, setPodcast] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const podcastIdToFetch = modalPodcast?._id || id;
+  const [podcast, setPodcast] = useState(modalPodcast || null);
+  const [loading, setLoading] = useState(!modalPodcast);
   const [error, setError] = useState(null);
   const [summaryLoading, setSummaryLoading] = useState(false);
 
   useEffect(() => {
+    // If we passed the full object via modal, we don't strictly *need* to re-fetch
+    // unless we want to guarantee freshness. For instant UX, we skip the raw fetch
+    // but still trigger transcription if it's missing.
     const fetchPodcast = async () => {
       try {
-        const response = await api.get(`/podcasts/${id}`);
-        setPodcast(response.data);
+        let currentPodcast = modalPodcast;
 
-        const transcriptionText = response.data.transcription?.text || "";
+        if (!currentPodcast) {
+          const response = await api.get(`/podcasts/${podcastIdToFetch}`);
+          currentPodcast = response.data;
+          setPodcast(currentPodcast);
+        }
+
+        const transcriptionText = currentPodcast.transcription?.text || "";
         const isTranscriptionError =
           transcriptionText.startsWith("[Transcription unavailable") ||
           transcriptionText.startsWith("[Transcription error") ||
           transcriptionText.startsWith("Transcription unavailable");
 
-        if (
-          response.data &&
-          ((!response.data.summary) || isTranscriptionError)
-        ) {
-          triggerTranscription(id);
-        } else if (isTranscriptionError) {
-          triggerTranscription(id);
+        if (!currentPodcast.summary || isTranscriptionError) {
+          triggerTranscription(podcastIdToFetch);
         }
       } catch (err) {
         console.error("Failed to fetch podcast:", err);
@@ -38,8 +42,8 @@ export default function PodcastDetail() {
       }
     };
 
-    fetchPodcast();
-  }, [id]);
+    if (podcastIdToFetch) fetchPodcast();
+  }, [podcastIdToFetch, modalPodcast]);
 
   const triggerTranscription = async (podcastId, force = false) => {
     try {
@@ -86,16 +90,18 @@ export default function PodcastDetail() {
   return (
     <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
       {/* MASTER CONTAINER */}
-      <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <div className={modalPodcast ? "w-full flex-1 relative flex flex-col gap-8 bg-transparent" : "w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10"}>
+        <div className={modalPodcast ? "w-full space-y-8" : "max-w-4xl mx-auto space-y-8"}>
 
           {/* Back Link */}
-          <Link
-            to="/podcasts"
-            className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition inline-block font-semibold"
-          >
-            ← Back to Lounge
-          </Link>
+          {!modalPodcast && (
+            <Link
+              to="/podcasts"
+              className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition inline-block font-semibold"
+            >
+              ← Back to Lounge
+            </Link>
+          )}
 
           {/* Podcast Card */}
           <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
@@ -129,7 +135,7 @@ export default function PodcastDetail() {
                       // persist duration if backend doesn't have it yet
                       if (prev && !prev.duration) {
                         try {
-                          api.put(`/podcasts/${id}`, { duration: dur });
+                          api.put(`/podcasts/${podcastIdToFetch}`, { duration: dur });
                         } catch (err) {
                           /* ignore persistence failure */
                         }
@@ -164,7 +170,7 @@ export default function PodcastDetail() {
 
               {!summaryLoading && (
                 <button
-                  onClick={() => triggerTranscription(id, true)}
+                  onClick={() => triggerTranscription(podcastIdToFetch, true)}
                   className="px-5 py-2 rounded-full bg-[#1A1A1A] border border-black/5 text-white font-semibold hover:bg-black transition"
                 >
                   ↻ Regenerate
@@ -184,7 +190,7 @@ export default function PodcastDetail() {
               <p className="text-[#1A1A1A]/50 italic pl-4">
                 No summary available.
                 <button
-                  onClick={() => triggerTranscription(id)}
+                  onClick={() => triggerTranscription(podcastIdToFetch)}
                   className="ml-2 text-[#8C7851] hover:text-[#596A53] font-semibold transition"
                 >
                   Generate Now

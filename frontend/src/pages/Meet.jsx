@@ -177,21 +177,15 @@ export default function Meet() {
   };
 
   return (
-    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+    <div className="flex-1 w-full pb-12 relative flex flex-col pt-6 md:pt-10">
+      {/* Antigravity Mesh Background */}
+      <div className="bg-mesh-gradient fixed inset-0 z-[-1]" />
+
       {/* MASTER CONTAINER */}
-      <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
-        <div className="max-w-5xl mx-auto w-full">
+      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col gap-8">
+        <div className="max-w-7xl mx-auto w-full">
           {!meetingStarted ? (
             <>
-              {/* Page Header */}
-              <div className="mb-12 text-center">
-                <h1 className="text-4xl font-bold mb-3">CultureStack Meetings</h1>
-                <p className="text-[#1A1A1A]/80 text-lg">
-                  Create or join a video meeting powered by Jitsi Meet
-                </p>
-              </div>
-
-              {/* Two Column Section */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
 
                 {/* CREATE A MEET */}

@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Home, Mic, PenTool, BookOpen, Menu, X, Bell, MessageSquare, Video } from "lucide-react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Home, Mic, PenTool, BookOpen, Menu, X, Bell, MessageSquare, Video, LogOut } from "lucide-react";
 
 import navLinks from "../../config/navigation";
 import { getUnreadActivityCount, clearUnreadActivityCount } from "../../api/axios";
@@ -11,6 +11,13 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
   // Unread activity count (fetched from backend API; localStorage is fallback)
   const [unreadActivityCount, setUnreadActivityCount] = useState(0);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("activityUnreadCount");
+    navigate("/login");
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -92,12 +99,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-5xl z-[100] bg-white/40 backdrop-blur-xl border border-black/5 rounded-full shadow-sm">
-      <div className="px-6 sm:px-8">
-        <div className="flex justify-between h-14 items-center">
+    <nav className="fixed top-0 left-0 w-full z-40 bg-white/90 backdrop-blur-xl border-b border-black/5 shadow-sm">
+      <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8">
+        <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <Link
-            to="/knowledge"
+            to="/feed"
             className="text-xl font-bold tracking-tighter text-[#1A1A1A] hover:opacity-80 transition"
           >
             CULTURE <span className="text-[#8C7851]">STACK</span>
@@ -149,8 +156,8 @@ export default function Navbar() {
 
             <div className="w-[1px] h-6 bg-black/10 mx-2"></div>
 
-            <Link to="/write" className="bg-[#1A1A1A] text-white px-5 py-2 rounded-full font-bold hover:bg-black transition ml-2 flex items-center gap-2 relative z-50 cursor-pointer shadow-sm">
-              <PenTool className="w-4 h-4 text-white" />
+            <Link to="/write" className="btn-primary ml-2 z-50">
+              <PenTool className="w-4 h-4" />
               Write
             </Link>
 
@@ -158,6 +165,15 @@ export default function Navbar() {
             <Link to={profilePath} className="ml-4 w-10 h-10 flex items-center justify-center rounded-full bg-[#F5F5F0] text-[#1A1A1A] border border-black/10 font-bold hover:opacity-90 hover:scale-105 transition">
               {initial}
             </Link>
+
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="ml-2 w-10 h-10 flex items-center justify-center rounded-full text-red-500 hover:bg-red-50 transition"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -174,7 +190,7 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   `flex items-center gap-4 px-4 py-3 rounded-xl text-base font-semibold transition ${isActive
                     ? "bg-black/5 text-charcoal"
-                    : "text-earth-green hover:bg-black/5"
+                    : "text-charcoal/70 hover:bg-black/5"
                   }`
                 }
               >
@@ -213,6 +229,14 @@ export default function Navbar() {
               </div>
               Profile
             </Link>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center gap-3 mt-2 px-4 py-3 w-full rounded-xl text-red-500 font-semibold active:scale-95 transition hover:bg-red-50"
+            >
+              <LogOut className="w-5 h-5" />
+              Logout
+            </button>
           </div>
         </div>
       )}

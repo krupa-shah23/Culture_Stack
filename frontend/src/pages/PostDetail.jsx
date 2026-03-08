@@ -13,8 +13,9 @@ const PERSONAS = [
   { key: "innovator", label: "Innovator", accent: "#F5C76A" }, // Warm Yellow
 ];
 
-export default function PostDetail() {
-  const { postId } = useParams();
+export default function PostDetail({ modalPostId }) {
+  const params = useParams();
+  const postId = modalPostId || params.postId;
 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -176,10 +177,10 @@ export default function PostDetail() {
     if (prevVote === 'upvote') {
       newVote = 'remove';
       setUserVote(null);
-      setUpvoteCount(c => c - 1);
+      setUpvoteCount(c => Math.max(0, c - 1));
     } else {
       if (prevVote === 'downvote') {
-        setDownvoteCount(c => c - 1);
+        setDownvoteCount(c => Math.max(0, c - 1));
       }
       setUserVote('upvote');
       setUpvoteCount(c => c + 1);
@@ -193,7 +194,7 @@ export default function PostDetail() {
       setDownvoteCount(res.downvoteCount);
     } catch (err) {
       setUserVote(prevVote);
-      if (newVote === 'upvote') setUpvoteCount(c => c - 1);
+      if (newVote === 'upvote') setUpvoteCount(c => Math.max(0, c - 1));
       if (newVote === 'remove') setUpvoteCount(c => c + 1);
       if (prevVote === 'downvote') setDownvoteCount(c => c + 1);
       setError('Failed to update vote');
@@ -212,10 +213,10 @@ export default function PostDetail() {
     if (prevVote === 'downvote') {
       newVote = 'remove';
       setUserVote(null);
-      setDownvoteCount(c => c - 1);
+      setDownvoteCount(c => Math.max(0, c - 1));
     } else {
       if (prevVote === 'upvote') {
-        setUpvoteCount(c => c - 1);
+        setUpvoteCount(c => Math.max(0, c - 1));
       }
       setUserVote('downvote');
       setDownvoteCount(c => c + 1);
@@ -229,7 +230,7 @@ export default function PostDetail() {
       setDownvoteCount(res.downvoteCount);
     } catch (err) {
       setUserVote(prevVote);
-      if (newVote === 'downvote') setDownvoteCount(c => c - 1);
+      if (newVote === 'downvote') setDownvoteCount(c => Math.max(0, c - 1));
       if (newVote === 'remove') setDownvoteCount(c => c + 1);
       if (prevVote === 'upvote') setUpvoteCount(c => c + 1);
       setError('Failed to update vote');
@@ -286,11 +287,19 @@ export default function PostDetail() {
 
   const selectedPersonaData = post.aiFeedback?.[selectedPersona] || "";
 
+  const containerClasses = modalPostId
+    ? "w-full flex-1 relative flex flex-col bg-transparent max-w-4xl mx-auto"
+    : "flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col min-h-[calc(100vh-6rem)] bg-[#F5F5F0]";
+
+  const innerClasses = modalPostId
+    ? "w-full flex-1 flex flex-col gap-10 bg-transparent rounded-none border-none shadow-none mt-4"
+    : "w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto custom-scrollbar p-6 md:p-10 relative z-10";
+
   return (
-    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] bg-[#F5F5F0]">
+    <div className={containerClasses}>
       {/* MASTER CONTAINER */}
-      <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto custom-scrollbar p-6 md:p-10 relative z-10">
-        <div className="max-w-4xl mx-auto flex flex-col gap-10">
+      <div className={innerClasses}>
+        <div className={modalPostId ? "w-full flex flex-col gap-6" : "max-w-4xl mx-auto flex flex-col gap-10"}>
 
           {/* MAIN POST AREA */}
           <div className="bg-white rounded-2xl border border-black/5 p-6 md:p-12 shadow-sm relative overflow-hidden">
@@ -343,21 +352,17 @@ export default function PostDetail() {
                   <button
                     onClick={handleUpvote}
                     disabled={voteLoading}
-                    className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all ${userVote === 'upvote' ? 'bg-earth-green text-white shadow-sm' : 'bg-transparent text-charcoal/80 hover:text-earth-green hover:bg-white/50'}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all border border-transparent ${userVote === 'upvote' ? 'bg-black text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-200'}`}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={userVote === 'upvote' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={userVote === 'upvote' ? 2 : 1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l7 7m-7-7l-7 7" />
-                    </svg>
+                    <span className="font-bold text-lg pointer-events-none tracking-tight">↑ {upvoteCount}</span>
                   </button>
-                  <span className="font-bold text-lg min-w-[20px] text-center text-charcoal">{upvoteCount - downvoteCount}</span>
+                  <div className="w-[1px] h-5 bg-black/10 mx-1"></div>
                   <button
                     onClick={handleDownvote}
                     disabled={voteLoading}
-                    className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all ${userVote === 'downvote' ? 'bg-red-500 text-white shadow-sm' : 'bg-transparent text-charcoal/80 hover:text-red-500 hover:bg-white/50'}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all border border-transparent ${userVote === 'downvote' ? 'bg-black text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-200'}`}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={userVote === 'downvote' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={userVote === 'downvote' ? 2 : 1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" />
-                    </svg>
+                    <span className="font-bold text-lg pointer-events-none tracking-tight">↓ {downvoteCount}</span>
                   </button>
                 </div>
 
@@ -425,7 +430,7 @@ export default function PostDetail() {
               <button
                 onClick={handleGenerateAi}
                 disabled={aiGenerating}
-                className="w-full mt-6 bg-earth-green text-white py-4 rounded-xl font-bold hover:bg-[#A39066] transition shadow-sm"
+                className="w-full mt-6 bg-[#1A1A1A] text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-sm"
               >
                 {aiGenerating ? "Synthesizing Insights..." : "Generate Advisory Feedback"}
               </button>
@@ -519,7 +524,7 @@ export default function PostDetail() {
 
                         <button
                           onClick={() => handleReactToComment(comment._id, comment.currentUserReaction === 'dislike' ? 'remove' : 'dislike')}
-                          className={`flex items-center gap-1.5 transition ${comment.currentUserReaction === 'dislike' ? 'text-earth-green' : 'hover:text-earth-green hover:bg-black/5 px-1 py-0.5 rounded -ml-1'}`}
+                          className={`flex items-center gap-1.5 transition ${comment.currentUserReaction === 'dislike' ? 'text-charcoal' : 'hover:text-charcoal hover:bg-black/5 px-1 py-0.5 rounded -ml-1'}`}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                             <path d="M18 10a6 6 0 11-12 0 6 6 0 0112 0zm-9 2a1 1 0 012 0v3a1 1 0 01-1 1H9v-3H8v-1h1z" />

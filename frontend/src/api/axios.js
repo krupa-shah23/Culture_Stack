@@ -122,7 +122,7 @@ export const toggleLike = async (postId) => {
 
 // Vote API: upvote | downvote | remove
 export const voteOnPost = async (postId, voteType) => {
-  const response = await api.post(`/posts/${postId}/vote`, { voteType });
+  const response = await api.post(`/votes`, { postId, voteType });
   return response.data;
 };
 
@@ -223,6 +223,11 @@ export const getConversationMessages = async (conversationId) => {
 
 export const sendChatMessage = async ({ conversationId, recipientId, content }) => {
   const response = await api.post(`/messages`, { conversationId, recipientId, content });
+  return response.data;
+};
+
+export const markMessagesAsRead = async (conversationId, senderId) => {
+  const response = await api.put(`/messages/read`, { conversationId, senderId });
   return response.data;
 };
 

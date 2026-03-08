@@ -1,10 +1,10 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@600;700&display=swap');
+@import "tailwindcss";
 
 :root {
   --color-earth-bg: #FAF8F5;
   --color-earth-surface: #F2EBE1;
-  --color-earth-green: #687C64;
+  --color-earth-green: #1A1A1A;
   --color-earth-tan: #B6A696;
   --color-earth-sand: #E6DBCE;
   --color-charcoal: #1A1A1A;
@@ -115,6 +115,27 @@ h6 {
 
 .btn-jiggle:hover {
   animation: jiggle 0.4s ease-in-out infinite alternate;
+}
+
+/* User-requested Button System */
+.btn-primary {
+  @apply bg-[#1A1A1A] text-white px-5 py-2 rounded-full font-bold shadow-sm transition-all duration-200 flex items-center justify-center gap-2;
+}
+
+.btn-primary:hover {
+  @apply bg-black scale-105;
+}
+
+.btn-secondary {
+  @apply bg-white text-[#1A1A1A] border border-gray-200 px-4 py-2 rounded-full font-semibold shadow-sm transition-all duration-200 flex items-center justify-center gap-2;
+}
+
+.btn-secondary:hover {
+  @apply bg-gray-50 border-gray-300 scale-105 shadow-md;
+}
+
+.btn-icon {
+  @apply flex items-center justify-center p-2 rounded-full transition-all duration-200 text-gray-500 hover:bg-gray-100 hover:text-[#1A1A1A];
 }
 
 @keyframes jiggle {

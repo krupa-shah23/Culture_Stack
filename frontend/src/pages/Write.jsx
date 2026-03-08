@@ -207,15 +207,15 @@ export default function Write() {
 
                 <div className="flex justify-between text-xs text-charcoal/80 mt-3 px-1">
                   <div className="flex flex-col items-center">
-                    <span className={`font-bold text-lg ${safetyLevel === 1 ? 'text-earth-green' : ''}`}>1</span>
+                    <span className={`font-bold text-lg ${safetyLevel === 1 ? 'text-charcoal' : ''}`}>1</span>
                     <span>Public</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <span className={`font-bold text-lg ${safetyLevel === 2 ? 'text-earth-green' : ''}`}>2</span>
+                    <span className={`font-bold text-lg ${safetyLevel === 2 ? 'text-charcoal' : ''}`}>2</span>
                     <span>Team</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <span className={`font-bold text-lg ${safetyLevel === 3 ? 'text-earth-green' : ''}`}>3</span>
+                    <span className={`font-bold text-lg ${safetyLevel === 3 ? 'text-charcoal' : ''}`}>3</span>
                     <span>Anonymous</span>
                   </div>
                 </div>
@@ -223,7 +223,7 @@ export default function Write() {
 
               <textarea
                 placeholder="What's on your mind?..."
-                className="w-full min-h-[250px] bg-earth-surface border border-[#d6c6a8] rounded-2xl p-6 text-charcoal placeholder:text-charcoal/80 text-base resize-none focus:outline-none focus:border-earth-green focus:ring-2 focus:ring-earth-green/50 transition leading-relaxed shadow-sm"
+                className="w-full min-h-[250px] bg-earth-surface border border-[#d6c6a8] rounded-2xl p-6 text-charcoal placeholder:text-charcoal/80 text-base resize-none focus:outline-none focus:border-charcoal focus:ring-2 focus:ring-charcoal/50 transition leading-relaxed shadow-sm"
                 value={content}
                 onChange={handleContentChange}
               />
@@ -266,7 +266,7 @@ export default function Write() {
                 ) : (
                   <button
                     onClick={() => fileInputRef.current.click()}
-                    className="flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-earth-surface text-earth-green hover:bg-[#d6c6a8] hover:text-charcoal transition text-sm font-bold shadow-sm cursor-pointer w-fit"
+                    className="flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-earth-surface text-charcoal hover:bg-[#d6c6a8] hover:text-charcoal transition text-sm font-bold shadow-sm cursor-pointer w-fit"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -397,14 +397,14 @@ export default function Write() {
                 </h2>
 
                 {/* HEYGEN AVATAR */}
-                <div className="w-full h-48 sm:h-64 bg-charcoal rounded-2xl mb-5 overflow-hidden relative border border-earth-green shadow-inner p-4 flex items-center justify-center">
+                <div className="w-full h-48 sm:h-64 bg-charcoal rounded-2xl mb-5 overflow-hidden relative border border-charcoal shadow-inner p-4 flex items-center justify-center">
                   <PersonaAvatar
                     persona={selectedPersona}
                     textToSpeak={liveAiFeedback[selectedPersona]}
                   />
                 </div>
 
-                <div className="w-full bg-white border border-earth-green/30 rounded-2xl p-6 flex-1 text-charcoal min-h-[150px] shadow-sm text-base leading-relaxed">
+                <div className="w-full bg-white border border-charcoal/30 rounded-2xl p-6 flex-1 text-charcoal min-h-[150px] shadow-sm text-base leading-relaxed">
                   {feedbackLoading ? (
                     <div className="flex flex-col items-center justify-center h-full text-charcoal gap-3 opacity-80">
                       <div className="w-6 h-6 border-b-2 border-l-2 border-charcoal rounded-full animate-spin" />

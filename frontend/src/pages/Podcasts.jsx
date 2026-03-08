@@ -1,12 +1,14 @@
 ﻿import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
-import { Play, Plus } from "lucide-react";
+import PodcastCard from "../components/layout/PodcastCard";
+import PodcastModal from "../components/layout/PodcastModal";
 
 export default function Podcasts() {
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedPodcast, setSelectedPodcast] = useState(null);
 
   useEffect(() => {
     const fetchPodcasts = async () => {
@@ -26,30 +28,15 @@ export default function Podcasts() {
 
   return (
     <>
-      <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+      <div className="flex-1 w-full pb-12 relative flex flex-col pt-6 md:pt-10">
         {/* Full-width Mesh Background */}
-        <div className="bg-mesh-gradient" />
+        <div className="bg-mesh-gradient fixed inset-0 z-[-1]" />
 
         {/* MASTER CONTAINER */}
-        <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10 flex flex-col gap-12">
-          <div className="w-full flex flex-col gap-12">
-            {/* HEADER */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
-              <div>
-                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-charcoal">
-                  Podcasts Lounge
-                </h1>
-                <p className="text-charcoal/80 mt-2 text-lg">Immerse yourself in sonic knowledge.</p>
-              </div>
+        <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col md:flex-row gap-8">
 
-              <Link
-                to="/podcasts/upload"
-                className="px-6 py-3 rounded-full font-semibold bg-[#1A1A1A] text-white flex items-center justify-center gap-2 transition-all hover:shadow-md hover:bg-black"
-              >
-                Upload Audio
-                <Plus className="w-5 h-5 text-white" />
-              </Link>
-            </div>
+          {/* ================= PODCAST FEED ================= */}
+          <div className="flex-[3] space-y-6">
 
             {/* LOADING */}
             {loading && (
@@ -70,88 +57,48 @@ export default function Podcasts() {
 
             {/* EMPTY */}
             {!loading && podcasts.length === 0 && !error && (
-              <div className="bg-white border border-black/5 rounded-2xl p-12 text-center flex flex-col items-center shadow-sm">
-                <p className="text-charcoal/80 mb-6 text-lg font-medium">
-                  No podcasts found in this dimension. Be the first to broadcast.
+              <div className="text-center py-20 flex flex-col items-center">
+                <p className="text-charcoal/80 mb-6 text-lg">
+                  No podcasts yet. Be the first to upload one.
                 </p>
 
                 <Link
                   to="/podcasts/upload"
                   className="px-6 py-3 rounded-full font-semibold bg-[#1A1A1A] text-white transition hover:shadow-md hover:bg-black"
                 >
-                  Upload a Podcast
+                  Upload Podcast
                 </Link>
               </div>
             )}
 
-            {/* PODCAST GRID - Polaroid Layout */}
+            {/* PODCAST LIST */}
             {!loading && podcasts.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {podcasts.map((podcast, index) => {
-                  const beigePalette = ["#8C7851", "#1A1A1A", "#4A4A4A", "#F5F5F0"];
-                  const accent = beigePalette[index % beigePalette.length];
-
-                  return (
-                    <div
-                      key={podcast._id}
-                      className="group relative bg-white border border-black/5 rounded-2xl p-4 pb-8 flex flex-col hover:-translate-y-1 transition-transform duration-500 ease-out hover:shadow-md"
-                    >
-                      {/* Polaroid Image Area */}
-                      <div className="w-full aspect-square rounded-xl bg-earth-bg border border-black/5 flex items-center justify-center relative overflow-hidden shadow-sm">
-                        {/* Decorative internal mesh */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent opacity-50" />
-
-                        {/* Abstract Visual based on ID */}
-                        <div
-                          className="w-3/4 h-3/4 blur-3xl rounded-full absolute mix-blend-screen opacity-40 transition-transform duration-700 group-hover:scale-125 group-hover:opacity-60"
-                          style={{ backgroundColor: accent }}
-                        />
-
-                        <div className="z-10 text-black/40 drop-shadow-sm relative">
-                          {/* Audio Wave Decor */}
-                          <div className="flex items-center gap-1 h-12">
-                            <div className="w-2 bg-black/20 h-full animate-[pulse_1s_ease-in-out_infinite]" style={{ animationDelay: '0.1s' }} />
-                            <div className="w-2 bg-black/20 h-2/3 animate-[pulse_1s_ease-in-out_infinite]" style={{ animationDelay: '0.2s' }} />
-                            <div className="w-2 bg-black/20 h-4/5 animate-[pulse_1s_ease-in-out_infinite]" style={{ animationDelay: '0.3s' }} />
-                            <div className="w-2 bg-black/20 h-1/2 animate-[pulse_1s_ease-in-out_infinite]" style={{ animationDelay: '0.4s' }} />
-                          </div>
-                        </div>
-
-                        {/* Floating Play Button */}
-                        <Link
-                          to={`/podcasts/${podcast._id}`}
-                          className="absolute bottom-4 right-4 w-14 h-14 rounded-full flex items-center justify-center bg-charcoal text-white opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:shadow-md hover:bg-black z-20"
-                        >
-                          <Play className="w-6 h-6 ml-1 fill-white" />
-                        </Link>
-                      </div>
-
-                      {/* Polaroid Text Area */}
-                      <div className="mt-5 px-1 flex flex-col flex-1">
-                        <h2 className="font-bold text-xl text-charcoal line-clamp-1 mb-1 group-hover:text-earth-green transition-colors">
-                          {podcast.title}
-                        </h2>
-
-                        <p className="text-sm text-charcoal/80">
-                          By{" "}
-                          <span className="text-charcoal font-medium tracking-wide">
-                            {podcast.author?.fullName || "Unknown"}
-                          </span>
-                        </p>
-
-                        <div className="mt-auto pt-4 flex justify-between items-center text-xs text-charcoal/80 font-medium">
-                          <span>{new Date(podcast.createdAt).toLocaleDateString()}</span>
-                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}` }} />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="flex flex-col gap-6">
+                {podcasts.map((podcast) => (
+                  <PodcastCard key={podcast._id} podcast={podcast} onOpenModal={(p) => setSelectedPodcast(p)} />
+                ))}
               </div>
             )}
           </div>
+
+          {/* ================= UPLOAD SIDEBAR ================= */}
+          <div className="flex-[1] space-y-10 pl-0">
+            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-5 md:p-6 relative overflow-hidden group w-full border-l-4 border-l-[#8C7851]">
+              <h2 className="font-bold text-[#1A1A1A] mb-3">Share Your Voice</h2>
+              <p className="text-sm text-charcoal/80 mb-6">
+                Have an idea, reflection, or story worth sharing? Upload a podcast and let your team listen and learn.
+              </p>
+              <Link to="/podcasts/upload" className="flex items-center justify-center w-full bg-[#1A1A1A] text-white font-bold py-3 rounded-full shadow-sm hover:bg-black transition">
+                Upload Podcast
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
+
+      {selectedPodcast && (
+        <PodcastModal podcast={selectedPodcast} onClose={() => setSelectedPodcast(null)} />
+      )}
     </>
   );
 }
