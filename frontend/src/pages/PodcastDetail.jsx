@@ -60,56 +60,55 @@ export default function PodcastDetail() {
   /* ---------------- LOADING ---------------- */
   if (loading) {
     return (
-      <>
-        <div className="flex justify-center items-center h-screen bg-[#1C1D25]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4BA9FF]" />
+      <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+        <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 flex flex-col items-center justify-center relative z-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A1A1A]" />
         </div>
-      </>
+      </div>
     );
   }
 
   /* ---------------- ERROR ---------------- */
   if (error || !podcast) {
     return (
-      <>
-        <div className="max-w-6xl mx-auto mt-10 p-6 text-center text-white">
-          <h2 className="text-2xl font-bold text-red-400 mb-4">Error</h2>
-          <p className="mb-6">{error || "Podcast not found"}</p>
-          <Link to="/podcasts" className="text-[#4BA9FF] hover:underline">
+      <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+        <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 text-center relative z-10">
+          <h2 className="text-2xl font-bold text-red-500 mb-4 mt-10">Error</h2>
+          <p className="mb-6 text-[#1A1A1A]">{error || "Podcast not found"}</p>
+          <Link to="/podcasts" className="text-[#8C7851] hover:underline font-bold">
             ← Back to Podcasts
           </Link>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-
-      <div className="min-h-screen bg-[#1C1D25] text-white px-6 py-10">
-        <div className="max-w-6xl mx-auto space-y-8">
+    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+      {/* MASTER CONTAINER */}
+      <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
+        <div className="max-w-4xl mx-auto space-y-8">
 
           {/* Back Link */}
           <Link
             to="/podcasts"
-            className="text-gray-400 hover:text-white transition inline-block"
+            className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition inline-block font-semibold"
           >
             ← Back to Lounge
           </Link>
 
-          {/* 🎙 Podcast Card */}
-          <div className="relative bg-[#242631] rounded-2xl p-8 border border-white/10 shadow-lg overflow-hidden">
-
+          {/* Podcast Card */}
+          <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
             {/* Accent Strip */}
-            <div className="absolute left-0 top-0 h-full w-[6px] bg-[#4BA9FF]" />
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851]" />
 
-            <h1 className="text-4xl font-bold mb-2 pl-4">
+            <h1 className="text-4xl font-bold mb-2 pl-4 text-[#1A1A1A]">
               {podcast.title}
             </h1>
 
-            <p className="text-gray-400 text-sm pl-4">
+            <p className="text-[#1A1A1A]/60 text-sm pl-4">
               Posted by{" "}
-              <span className="text-white font-medium">
+              <span className="text-[#1A1A1A] font-medium">
                 {podcast.author?.fullName || "Unknown"}
               </span>{" "}
               • {new Date(podcast.createdAt).toLocaleDateString()}
@@ -122,7 +121,7 @@ export default function PodcastDetail() {
                 preload="metadata"
                 crossOrigin="anonymous"
                 src={`http://localhost:5000${podcast.audioUrl}`}
-                className="w-full mt-6 rounded-xl bg-[#1C1D25] border border-white/10"
+                className="w-full mt-6 rounded-xl bg-earth-bg border border-black/5"
                 onLoadedMetadata={(e) => {
                   const dur = Math.floor(e.target.duration || 0);
                   if (dur > 0) {
@@ -144,30 +143,29 @@ export default function PodcastDetail() {
 
             {/* Description */}
             <div className="mt-6 pl-4">
-              <h3 className="font-semibold mb-2 text-gray-200">
+              <h3 className="font-semibold mb-2 text-[#1A1A1A]">
                 Description
               </h3>
-              <p className="text-gray-400 whitespace-pre-wrap leading-relaxed">
+              <p className="text-[#1A1A1A]/80 whitespace-pre-wrap leading-relaxed">
                 {podcast.description}
               </p>
             </div>
           </div>
 
-          {/* ✨ Echo Summary */}
-          <div className="relative bg-[#242631] rounded-2xl p-8 border border-white/10 shadow-lg overflow-hidden">
-
+          {/* Echo Summary */}
+          <div className="relative bg-[#F5F5F0] rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
             {/* Accent */}
-            <div className="absolute left-0 top-0 h-full w-[6px] bg-[#B9A6FF]" />
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#1A1A1A]" />
 
             <div className="flex justify-between items-center mb-4 pl-4">
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-2xl font-bold text-[#1A1A1A]">
                 Echo Summary
               </h2>
 
               {!summaryLoading && (
                 <button
                   onClick={() => triggerTranscription(id, true)}
-                  className="px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition"
+                  className="px-5 py-2 rounded-full bg-[#1A1A1A] border border-black/5 text-white font-semibold hover:bg-black transition"
                 >
                   ↻ Regenerate
                 </button>
@@ -175,19 +173,19 @@ export default function PodcastDetail() {
             </div>
 
             {summaryLoading ? (
-              <p className="text-gray-400 italic pl-4">
+              <p className="text-[#1A1A1A]/70 italic pl-4">
                 Listening and generating AI insights...
               </p>
             ) : podcast.summary ? (
-              <p className="text-gray-300 whitespace-pre-line leading-relaxed pl-4">
+              <p className="text-[#1A1A1A]/90 whitespace-pre-line leading-relaxed pl-4">
                 {podcast.summary}
               </p>
             ) : (
-              <p className="text-gray-500 italic pl-4">
+              <p className="text-[#1A1A1A]/50 italic pl-4">
                 No summary available.
                 <button
                   onClick={() => triggerTranscription(id)}
-                  className="ml-2 text-[#B9A6FF] hover:underline font-semibold"
+                  className="ml-2 text-[#8C7851] hover:text-[#596A53] font-semibold transition"
                 >
                   Generate Now
                 </button>
@@ -195,21 +193,20 @@ export default function PodcastDetail() {
             )}
           </div>
 
-          {/* 🔥 Sentiment Heatmap */}
-          <div className="relative bg-[#242631] rounded-2xl p-8 border border-white/10 shadow-lg overflow-hidden">
-
+          {/* Sentiment Heatmap */}
+          <div className="relative bg-[#F5F5F0] rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
             {/* Accent */}
-            <div className="absolute left-0 top-0 h-full w-[6px] bg-[#F5C76A]" />
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#596A53]" />
 
-            <h2 className="text-2xl font-bold mb-2 pl-4">
+            <h2 className="text-2xl font-bold mb-2 pl-4 text-[#1A1A1A]">
               Sentiment Heatmap
             </h2>
 
-            <p className="text-gray-400 text-sm mb-5 pl-4">
+            <p className="text-[#1A1A1A]/70 text-sm mb-5 pl-4">
               Timeline showing the emotional arc of the conversation.
             </p>
 
-            <div className="h-9 bg-[#1C1D25] rounded-full overflow-hidden flex w-full border border-white/10">
+            <div className="h-9 bg-earth-surface rounded-full overflow-hidden flex w-full border border-black/5">
               {podcast.heatmap && podcast.heatmap.length > 0 ? (
                 podcast.heatmap.map((block, index) => {
                   let color = "#555";
@@ -231,13 +228,13 @@ export default function PodcastDetail() {
                   );
                 })
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+                <div className="w-full h-full flex items-center justify-center text-[#1A1A1A] opacity-50 text-xs">
                   No sentiment data available
                 </div>
               )}
             </div>
 
-            <div className="flex justify-between text-xs text-gray-500 mt-3 px-2">
+            <div className="flex justify-between text-xs text-[#1A1A1A]/50 font-bold mt-3 px-2">
               <span>Start</span>
               <span>End</span>
             </div>
@@ -245,6 +242,6 @@ export default function PodcastDetail() {
 
         </div>
       </div>
-    </>
+    </div>
   );
 }

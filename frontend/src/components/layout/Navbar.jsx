@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Home, Mic, PenTool, BookOpen, Menu, X, Bell, MessageSquare, Video } from "lucide-react";
 
@@ -54,13 +54,13 @@ export default function Navbar() {
     }
   }, [location.pathname, unreadActivityCount]);
 
-  // ✅ Logged-in user info
+  // Logged-in user info
   const userInfo =
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("userInfo") || "null")
       : null;
 
-  // ✅ Profile Initial
+  // Profile Initial
   const initial =
     userInfo?.fullName
       ? userInfo.fullName.trim()[0].toUpperCase()
@@ -68,11 +68,11 @@ export default function Navbar() {
 
   const profilePath = userInfo ? `/profile/${userInfo._id}` : "/";
 
-  // ✅ Active Write Page
+  // Active Write Page
   const isWritePage = location.pathname === "/write";
 
   const getIconForLabel = (label, isActive) => {
-    const defaultClasses = `w-5 h-5 transition-all duration-300 ${isActive ? 'text-charcoal drop-shadow-sm' : 'text-[#8C7851] group-hover:text-charcoal'}`;
+    const defaultClasses = `w-5 h-5 transition-all duration-300 ${isActive ? 'text-charcoal drop-shadow-sm' : 'text-earth-green group-hover:text-charcoal'}`;
     switch (label.toLowerCase()) {
       case "feed":
         return <Home className={defaultClasses} />;
@@ -92,13 +92,13 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-[100] nav-container">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-5xl z-[100] bg-white/40 backdrop-blur-xl border border-black/5 rounded-full shadow-sm">
+      <div className="px-6 sm:px-8">
+        <div className="flex justify-between h-14 items-center">
           {/* Logo */}
           <Link
             to="/knowledge"
-            className="text-xl font-bold tracking-tighter text-charcoal hover:text-[#8C7851] transition"
+            className="text-xl font-bold tracking-tighter text-[#1A1A1A] hover:opacity-80 transition"
           >
             CULTURE <span className="text-[#8C7851]">STACK</span>
           </Link>
@@ -122,14 +122,15 @@ export default function Navbar() {
                   key={link.path}
                   to={link.path}
                   className={({ isActive }) =>
-                    `group relative px-4 py-2 rounded-xl flex items-center justify-center font-semibold transition-all duration-300 hover:bg-black/5 ${isActive ? "bg-black/5 text-charcoal" : "text-[#8C7851]"
+                    `group relative px-4 py-2 rounded-xl flex items-center justify-center font-semibold transition-all duration-300 hover:bg-black/5 ${isActive ? "bg-black/5 text-[#1A1A1A]" : "text-[#1A1A1A]/70"
                     }`
                   }
                   title={link.label}
                 >
                   {({ isActive }) => (
-                    <>
+                    <div className="flex items-center gap-2">
                       {getIconForLabel(link.label, isActive)}
+                      <span className="hidden lg:block">{link.label}</span>
 
                       {/* Unread activity badge */}
                       {link.path === "/activity" && unreadActivityCount > 0 && (
@@ -140,7 +141,7 @@ export default function Navbar() {
                           {unreadActivityCount > 99 ? "99+" : unreadActivityCount}
                         </span>
                       )}
-                    </>
+                    </div>
                   )}
                 </NavLink>
               );
@@ -148,13 +149,13 @@ export default function Navbar() {
 
             <div className="w-[1px] h-6 bg-black/10 mx-2"></div>
 
-            <Link to="/write" className="bg-charcoal text-white px-6 py-2 rounded-full font-bold hover:bg-black transition ml-2 flex items-center gap-2 relative z-50 cursor-pointer shadow-sm">
+            <Link to="/write" className="bg-[#1A1A1A] text-white px-5 py-2 rounded-full font-bold hover:bg-black transition ml-2 flex items-center gap-2 relative z-50 cursor-pointer shadow-sm">
               <PenTool className="w-4 h-4 text-white" />
               Write
             </Link>
 
             {/* Profile Circle */}
-            <Link to={profilePath} className="ml-4 w-10 h-10 flex items-center justify-center rounded-full bg-[#EBE8E0] text-[#1A1A1A] border border-black/10 font-bold hover:opacity-90 hover:scale-105 transition">
+            <Link to={profilePath} className="ml-4 w-10 h-10 flex items-center justify-center rounded-full bg-[#F5F5F0] text-[#1A1A1A] border border-black/10 font-bold hover:opacity-90 hover:scale-105 transition">
               {initial}
             </Link>
           </div>
@@ -163,7 +164,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-[#F5F5F0]/95 backdrop-blur-xl border-b border-black/5 shadow-lg">
+        <div className="md:hidden bg-earth-bg/95 backdrop-blur-xl border-b border-black/5 shadow-lg">
           <div className="px-4 pt-4 pb-6 space-y-2 flex flex-col">
             {navLinks.map((link) => (
               <NavLink
@@ -173,7 +174,7 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   `flex items-center gap-4 px-4 py-3 rounded-xl text-base font-semibold transition ${isActive
                     ? "bg-black/5 text-charcoal"
-                    : "text-[#8C7851] hover:bg-black/5"
+                    : "text-earth-green hover:bg-black/5"
                   }`
                 }
               >

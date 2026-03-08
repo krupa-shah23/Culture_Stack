@@ -1,30 +1,21 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@600;700&display=swap');
 
 :root {
-  --color-soft-bone: #F5F5F0;
-  --color-warm-linen: #F2EFE9;
+  --color-earth-bg: #FAF8F5;
+  --color-earth-surface: #F2EBE1;
+  --color-earth-green: #687C64;
+  --color-earth-tan: #B6A696;
+  --color-earth-sand: #E6DBCE;
   --color-charcoal: #1A1A1A;
-  --color-muted-gold: #8C7851;
-  --bg-deep: #0A0A0B;
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --accent-cyan: #00f2ff;
-  --text-primary: #FFFFFF;
-  --text-secondary: #A1A1AA;
-  --accent-primary: #007AFF;
-  --accent-secondary: #5AC8FA;
-  --accent-purple: #AF52BF;
+  --glass-border: rgba(255, 255, 255, 0.4);
 }
 
 body {
   margin: 0;
   background-color: #F5F5F0;
-  background-image:
-    radial-gradient(circle at top right, rgba(140, 120, 81, 0.05), transparent 40%),
-    radial-gradient(circle at bottom left, rgba(0, 0, 0, 0.02), transparent 40%);
-  color: #4A4A4A;
-  font-family: "Times New Roman", Times, serif;
+  color: var(--color-charcoal);
+  font-family: "Caudex", serif;
   font-size: 16px;
   overflow-x: hidden;
 }
@@ -45,25 +36,68 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 600;
+  font-family: "Caudex", serif;
+  font-weight: 700;
   color: #1A1A1A;
 }
 
-/* Glassmorphism Utility */
+/* Glassmorphism Utility Base */
 .glass-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(24px) !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04) !important;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  /* Slightly rounder like in the target design */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03) !important;
   transition: all 0.3s ease;
 }
 
 .glass-card:hover {
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06) !important;
+  transform: translateY(-2px);
+}
+
+/* Color matched glass variants from the prompt's design */
+.glass-green {
+  background: var(--color-earth-green);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.glass-green h1,
+.glass-green h2,
+.glass-green h3,
+.glass-green p,
+.glass-green span {
+  color: #FFFFFF;
+}
+
+.glass-tan {
+  background: var(--color-earth-tan);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.glass-tan h1,
+.glass-tan h2,
+.glass-tan h3,
+.glass-tan p,
+.glass-tan span {
+  color: #FFFFFF;
+}
+
+.glass-sand {
+  background: var(--color-earth-sand);
+  color: var(--color-charcoal);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.glass-surface {
+  background: var(--color-earth-surface);
+  color: var(--color-charcoal);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* Removed Global Inputs Overrides as they conflict with Tailwind utility components */
@@ -124,14 +158,18 @@ h6 {
 
 .no-scrollbar {
   -ms-overflow-style: none;
+  /* IE and Edge */
   scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Fixed Glass Navbar Container */
 .nav-container {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(242, 235, 225, 0.85);
+  /* Slightly frosty earth-surface */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 /*

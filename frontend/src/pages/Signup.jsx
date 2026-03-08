@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 
@@ -30,7 +30,7 @@ export default function Signup() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F5F5F0]">
+    <div className="min-h-screen flex items-center justify-center bg-earth-bg">
       <div className="w-full max-w-md bg-white border border-black/5 shadow-sm rounded-2xl p-8 relative overflow-hidden">
         <h1 className="text-3xl font-bold text-center mb-2 text-charcoal">
           Create Account
@@ -79,23 +79,23 @@ export default function Signup() {
             <input
               type="text"
               placeholder="Organization Name (Optional)"
-              className="w-full p-3 border rounded-xl focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 text-charcoal placeholder-[#4A4A4A]/50 bg-[#F5F5F0]"
+              className="w-full p-3 border rounded-xl focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 text-charcoal placeholder-[#4A4A4A]/50 bg-earth-bg"
               value={formData.organizationName}
               onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
             />
-            <p className="text-xs text-[#4A4A4A] mt-1 ml-1">If empty, we'll use your email domain.</p>
+            <p className="text-xs text-charcoal/80 mt-1 ml-1">If empty, we'll use your email domain.</p>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#8C7851] text-white py-3 rounded-xl font-bold transition-colors hover:bg-[#A39066] shadow-sm"
+            className="w-full bg-earth-green text-white py-3 rounded-xl font-bold transition-colors hover:bg-[#A39066] shadow-sm"
             disabled={loading}
           >
             {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
 
-        <p className="text-center text-sm mt-5 text-[#4A4A4A]">
+        <p className="text-center text-sm mt-5 text-charcoal/80">
           Already have an account?{" "}
           <Link to="/" className="font-semibold text-charcoal underline">
             Login

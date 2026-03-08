@@ -1,21 +1,19 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function PodcastCard({ podcast }) {
   const navigate = useNavigate();
 
-  // ✅ Beige UI Accent Palette
-  const pastelPalette = [
-    "#8C7851", // Muted Gold
-    "#1A1A1A", // Charcoal
-    "#4A4A4A", // Soft Grey
-    "#F5C76A", // Warm Yellow
-    "#EBE8E0", // Secondary Beige
+  // ✅ Glass Variants
+  const glassVariants = [
+    "glass-surface",
+    "glass-green",
+    "glass-tan",
+    "glass-sand"
   ];
 
-  // ✅ Stable Accent Color
-  const accentColor =
-    pastelPalette[podcast._id.charCodeAt(0) % pastelPalette.length];
+  // ✅ Stable Glass Theme
+  const cardTheme = glassVariants[podcast._id.charCodeAt(0) % glassVariants.length];
 
   // Author Info
   const authorName = podcast.author?.fullName || "Anonymous";
@@ -47,38 +45,33 @@ export default function PodcastCard({ podcast }) {
   return (
     <div
       onClick={() => navigate(`/podcasts/${podcast._id}`)}
-      className="
-        relative bg-white border border-black/5 rounded-2xl
+      className={`
+        relative ${cardTheme}
         p-7 shadow-sm hover:shadow-md
         transition-all duration-300 cursor-pointer
         overflow-hidden group
-      "
+      `}
     >
-      {/* ✅ Pastel Accent Strip - converted to subtle colored line */}
-      <div
-        style={{ backgroundColor: accentColor, boxShadow: `0 0 10px ${accentColor}` }}
-        className="absolute left-0 top-0 h-full w-[4px]"
-      />
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6 pl-3">
         <div className="flex items-center gap-4">
           {/* Avatar (Podcast Icon) */}
-          <div className="w-14 h-14 rounded-full bg-[#F5F5F0] border border-black/5 flex items-center justify-center font-bold text-2xl text-charcoal shadow-sm">
+          <div className="w-14 h-14 rounded-full bg-white/20 border border-white/10 flex items-center justify-center font-bold text-2xl shadow-sm">
             {authorInitial}
           </div>
 
           {/* Title & Author */}
           <div>
-            <h3 className="text-charcoal font-bold text-lg">{podcast.title}</h3>
-            <p className="text-xs text-[#4A4A4A] italic">
+            <h3 className="font-bold text-lg opacity-90">{podcast.title}</h3>
+            <p className="text-xs italic opacity-70">
               Hosted by {authorName} • {new Date(podcast.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
 
         {/* Duration Badge */}
-        <span className="text-xs px-4 py-1.5 rounded-full bg-[#F5F5F0] border border-black/5 text-[#4A4A4A] shadow-sm flex items-center gap-2">
+        <span className="text-xs px-4 py-1.5 rounded-full bg-white/20 border border-white/10 opacity-80 shadow-sm flex items-center gap-2">
           {formatDuration(displayDuration)}
         </span>
       </div>
@@ -86,12 +79,12 @@ export default function PodcastCard({ podcast }) {
       {/* Description */}
       <div
         className="
-          bg-[#F5F5F0]
-          border border-black/5
+          bg-white/10
+          border border-white/10
           rounded-xl
           px-6 py-4
           ml-2
-          text-[#4A4A4A]
+          opacity-90
           text-sm
           leading-relaxed
         "
@@ -111,8 +104,8 @@ export default function PodcastCard({ podcast }) {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-6 pl-3 mt-5 text-[#4A4A4A]">
-        <div className="flex items-center gap-2 text-sm hover:text-charcoal transition py-3">
+      <div className="flex items-center gap-6 pl-3 mt-5 opacity-80">
+        <div className="flex items-center gap-2 text-sm hover:opacity-100 transition py-3">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
             <path d="M5 3v18l15-9-15-9z" />
           </svg>
@@ -123,7 +116,7 @@ export default function PodcastCard({ podcast }) {
           className="
             flex items-center gap-2
             text-base font-bold py-3
-            hover:text-charcoal hover:drop-shadow-sm transition
+            hover:opacity-100 hover:drop-shadow-sm transition
           "
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

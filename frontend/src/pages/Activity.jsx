@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import Navbar from "../components/layout/Navbar";
 import { getActivities } from "../api/axios";
 
@@ -29,36 +29,36 @@ export default function Activity() {
 
   const getColorByType = (type) => {
     switch (type) {
-      case 'post': return '#4BA9FF'; // Blue
-      case 'comment': return '#B9A6FF'; // Purple
-      case 'podcast': return '#7FE6C5'; // Green
-      case 'vote': return '#FFD166'; // Orange/Yellow - distinct from others
-      case 'ai_feedback': return '#F28B82'; // Red/Pink
-      default: return '#F5C76A'; // Yellow
+      case 'post': return '#8C7851'; // Muted Gold
+      case 'comment': return '#A49673'; // Lighter Gold
+      case 'podcast': return '#1A1A1A'; // Charcoal
+      case 'vote': return '#EBE8E0'; // Beige
+      case 'ai_feedback': return '#4A4A4A'; // Gray
+      default: return '#8C7851'; // Muted Gold
     }
   };
 
   return (
-    <>
-
-      <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
-        <div className="max-w-5xl mx-auto space-y-8">
+    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+      {/* MASTER CONTAINER */}
+      <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
+        <div className="max-w-5xl mx-auto w-full space-y-8">
 
           {/* Page Header */}
           <div>
-            <h1 className="text-4xl font-bold mb-2 tracking-tight">
+            <h1 className="text-4xl font-bold mb-2 tracking-tight text-[#1A1A1A]">
               Activity Log
             </h1>
-            <p className="text-[#4A4A4A] font-medium">
+            <p className="text-[#1A1A1A]/80 font-medium">
               Track updates from your reflections, AI feedback, and team podcasts.
             </p>
           </div>
 
           {/* Activity Feed */}
           {loading ? (
-            <div className="text-[#4A4A4A] font-medium animate-pulse">Loading activity...</div>
+            <div className="text-[#1A1A1A]/80 font-medium animate-pulse">Loading activity...</div>
           ) : activities.length === 0 ? (
-            <div className="text-[#4A4A4A] font-medium">No activity yet.</div>
+            <div className="text-[#1A1A1A]/80 font-medium">No activity yet.</div>
           ) : (
             <div className="space-y-5">
               {activities.map((item, index) => (
@@ -82,7 +82,7 @@ export default function Activity() {
                       rounded-full text-xl font-bold border border-black/5 shadow-sm mt-1"
                       style={{
                         backgroundColor: item.color,
-                        color: "black",
+                        color: item.color === '#EBE8E0' ? '#1A1A1A' : '#FFFFFF',
                       }}
                     >
                       {item.initial}
@@ -90,10 +90,10 @@ export default function Activity() {
 
                     {/* Text */}
                     <div className="flex-1">
-                      <p className="text-charcoal font-medium text-sm md:text-base leading-relaxed">
+                      <p className="text-[#1A1A1A] font-medium text-sm md:text-base leading-relaxed">
                         {item.text}
                       </p>
-                      <p className="text-[#4A4A4A] text-xs mt-1.5 font-semibold tracking-wide">
+                      <p className="text-[#1A1A1A]/80 text-xs mt-1.5 font-semibold tracking-wide">
                         {item.time}
                       </p>
                     </div>
@@ -104,11 +104,11 @@ export default function Activity() {
           )}
 
           {/* Empty Future Note */}
-          <p className="text-[#4A4A4A] italic text-sm pt-4 font-medium">
+          <p className="text-[#1A1A1A]/80 italic text-sm pt-4 font-medium">
             More activity events will appear here as your team engages.
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }

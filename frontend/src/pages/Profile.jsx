@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getUserProfile, getUserPosts } from "../api/axios";
 import api from "../api/axios";
 import PostCard from "../components/layout/PostCard";
 import PodcastCard from "../components/layout/PodcastCard";
+import { FileText, Mic, MessageSquare, ThumbsUp } from "lucide-react";
 
 export default function Profile() {
   const { id } = useParams();
@@ -115,10 +116,12 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <div className="h-56 bg-white border border-black/5 rounded-2xl animate-pulse shadow-sm" />
-          <div className="h-40 bg-white border border-black/5 rounded-2xl animate-pulse shadow-sm" />
+      <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+        <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
+          <div className="w-full space-y-10">
+            <div className="h-56 bg-white border border-black/5 rounded-2xl animate-pulse shadow-sm" />
+            <div className="h-40 bg-white border border-black/5 rounded-2xl animate-pulse shadow-sm" />
+          </div>
         </div>
       </div>
     );
@@ -126,13 +129,15 @@ export default function Profile() {
 
   if (!profile) {
     return (
-      <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
-        <div className="max-w-4xl mx-auto text-center text-[#4A4A4A]">
-          <h2 className="text-2xl font-semibold mb-4 text-charcoal">Profile unavailable</h2>
-          <p className="mb-6">{error || 'This profile could not be loaded.'}</p>
-          <div className="flex justify-center gap-3">
-            <button onClick={retry} className="px-6 py-2 bg-[#1A1A1A] text-white rounded-full font-bold hover:bg-black transition-colors shadow-sm">Retry</button>
-            <button onClick={() => window.location.href = '/knowledge'} className="px-6 py-2 bg-white border border-black/5 text-[#4A4A4A] hover:bg-black/5 rounded-full transition-colors shadow-sm">Go back</button>
+      <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+        <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm p-6 md:p-10 text-center relative z-10 items-center justify-center">
+          <div className="max-w-xl mx-auto text-[#1A1A1A]/80">
+            <h2 className="text-2xl font-semibold mb-4 text-[#1A1A1A]">Profile unavailable</h2>
+            <p className="mb-6">{error || 'This profile could not be loaded.'}</p>
+            <div className="flex justify-center gap-3">
+              <button onClick={retry} className="px-6 py-2 bg-[#1A1A1A] text-white rounded-full font-bold hover:bg-black transition-colors shadow-sm">Retry</button>
+              <button onClick={() => window.location.href = '/knowledge'} className="px-6 py-2 bg-white border border-black/5 text-[#1A1A1A]/80 hover:bg-[#F5F5F0] rounded-full transition-colors shadow-sm">Go back</button>
+            </div>
           </div>
         </div>
       </div>
@@ -143,220 +148,223 @@ export default function Profile() {
   const initial = user.fullName ? user.fullName.trim()[0].toUpperCase() : 'U';
 
   return (
-    <div className="flex-1 w-full px-6 py-10 text-[#1A1A1A]">
-      <div className="max-w-6xl mx-auto space-y-10">
-        {error && (
-          <div className="rounded-md bg-yellow-100 border border-yellow-200 px-4 py-2 text-sm text-yellow-800">
-            Showing local profile — server error: {error}
-          </div>
-        )}
-
-        {/* PROFILE HEADER */}
-        <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
-
-          <div className="flex flex-col md:flex-row gap-8 items-start md:items-center pl-3">
-
-            <div className="w-24 h-24 rounded-full bg-[#F5F5F0] flex items-center justify-center text-3xl font-bold ring-1 ring-black/5 text-charcoal shadow-sm">
-              {initial}
+    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
+      {/* MASTER CONTAINER */}
+      <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
+        <div className="w-full space-y-10">
+          {error && (
+            <div className="rounded-md bg-yellow-100 border border-yellow-200 px-4 py-2 text-sm text-yellow-800">
+              Showing local profile - server error: {error}
             </div>
+          )}
 
-            <div className="flex-1 space-y-2">
-              <h1 className="text-3xl font-bold text-charcoal">{user.fullName}</h1>
-              <p className="text-[#4A4A4A] text-sm">{user.department}</p>
-              <p className="text-charcoal italic">{reflectionJourney.aiTheme ? `"${reflectionJourney.aiTheme} - theme detected"` : 'No bio available.'}</p>
+          {/* PROFILE HEADER */}
+          <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
+            <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
 
-              <div className="flex flex-wrap gap-3 mt-3">
-                {badges.map((b) => (
-                  <span key={b} className="px-3 py-1 text-xs rounded-full bg-white border border-black/5 shadow-sm text-charcoal">{b}</span>
-                ))}
-              </div>
-            </div>
+            <div className="flex flex-col md:flex-row gap-8 items-start md:items-center pl-3">
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <Stat
-                label="Posts"
-                value={stats.postsCount}
-                isActive={selectedStat === 'posts'}
-                onClick={() => {
-                  if (selectedStat === 'posts') {
-                    setIsExpanded(!isExpanded);
-                  } else {
-                    setSelectedStat('posts');
-                    setIsExpanded(true);
-                  }
-                }}
-              />
-              <Stat
-                label="Podcasts"
-                value={stats.podcastsCount}
-                isActive={selectedStat === 'podcasts'}
-                onClick={() => {
-                  if (selectedStat === 'podcasts') {
-                    setIsExpanded(!isExpanded);
-                  } else {
-                    setSelectedStat('podcasts');
-                    setIsExpanded(true);
-                  }
-                }}
-              />
-              <Stat
-                label="Comments"
-                value={stats.commentsCount}
-                isActive={selectedStat === 'comments'}
-                onClick={() => {
-                  if (selectedStat === 'comments') {
-                    setIsExpanded(!isExpanded);
-                  } else {
-                    setSelectedStat('comments');
-                    setIsExpanded(true);
-                  }
-                }}
-              />
-              <Stat
-                label="Reactions"
-                value={stats.reactionsCount}
-                isActive={selectedStat === 'reactions'}
-                onClick={() => {
-                  if (selectedStat === 'reactions') {
-                    setIsExpanded(!isExpanded);
-                  } else {
-                    setSelectedStat('reactions');
-                    setIsExpanded(true);
-                  }
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* STATS FILTER DROPDOWN PANEL - Standalone Section Below Profile Card */}
-        {selectedStat && (
-          <StatsFilterDropdown
-            selectedStat={selectedStat}
-            setSelectedStat={setSelectedStat}
-            isExpanded={isExpanded}
-            setIsExpanded={setIsExpanded}
-            stats={stats}
-            userPosts={userPosts}
-            podcasts={podcasts}
-          />
-        )}
-
-        {/* CONTENT AREA */}
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 min-h-[300px]">
-          {activeTab === 'posts' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-charcoal">Posts & Reflections</h3>
-                <span className="text-sm text-[#4A4A4A]">{stats.postsCount} total</span>
+              <div className="w-24 h-24 rounded-full bg-earth-bg flex items-center justify-center text-3xl font-bold ring-1 ring-black/5 text-charcoal shadow-sm">
+                {initial}
               </div>
 
-              {postsLoading ? (
-                <div className="text-center py-10 text-[#4A4A4A] animate-pulse">Loading posts...</div>
-              ) : userPosts.length > 0 ? (
-                <div className="space-y-4">
-                  {userPosts.map(post => (
-                    <PostCard key={post._id} post={post} />
+              <div className="flex-1 space-y-2">
+                <h1 className="text-3xl font-bold text-charcoal">{user.fullName}</h1>
+                <p className="text-[#1A1A1A]/80 text-sm">{user.department}</p>
+                <p className="text-[#1A1A1A] italic">{reflectionJourney.aiTheme ? `"${reflectionJourney.aiTheme} - theme detected"` : 'No bio available.'}</p>
+
+                <div className="flex flex-wrap gap-3 mt-3">
+                  {badges.map((b) => (
+                    <span key={b} className="px-3 py-1 text-xs rounded-full bg-white border border-black/5 shadow-sm text-[#1A1A1A]">{b}</span>
                   ))}
                 </div>
-              ) : (
-                <div className="text-center py-12 text-[#4A4A4A]">
-                  <p>No posts visible or available.</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === 'podcasts' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-charcoal">Podcasts</h3>
-                <span className="text-sm text-[#4A4A4A]">{stats.podcastsCount} total</span>
               </div>
 
-              {podcastsLoading ? (
-                <div className="text-center py-10 text-[#4A4A4A] animate-pulse">Loading podcasts...</div>
-              ) : podcasts.length > 0 ? (
-                <div className="space-y-4">
-                  {podcasts.map(podcast => (
-                    <PodcastCard key={podcast._id} podcast={podcast} />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12 text-[#4A4A4A]">
-                  <p>No podcasts visible or available.</p>
-                </div>
-              )}
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <Stat
+                  label="Posts"
+                  value={stats.postsCount}
+                  isActive={selectedStat === 'posts'}
+                  onClick={() => {
+                    if (selectedStat === 'posts') {
+                      setIsExpanded(!isExpanded);
+                    } else {
+                      setSelectedStat('posts');
+                      setIsExpanded(true);
+                    }
+                  }}
+                />
+                <Stat
+                  label="Podcasts"
+                  value={stats.podcastsCount}
+                  isActive={selectedStat === 'podcasts'}
+                  onClick={() => {
+                    if (selectedStat === 'podcasts') {
+                      setIsExpanded(!isExpanded);
+                    } else {
+                      setSelectedStat('podcasts');
+                      setIsExpanded(true);
+                    }
+                  }}
+                />
+                <Stat
+                  label="Comments"
+                  value={stats.commentsCount}
+                  isActive={selectedStat === 'comments'}
+                  onClick={() => {
+                    if (selectedStat === 'comments') {
+                      setIsExpanded(!isExpanded);
+                    } else {
+                      setSelectedStat('comments');
+                      setIsExpanded(true);
+                    }
+                  }}
+                />
+                <Stat
+                  label="Reactions"
+                  value={stats.reactionsCount}
+                  isActive={selectedStat === 'reactions'}
+                  onClick={() => {
+                    if (selectedStat === 'reactions') {
+                      setIsExpanded(!isExpanded);
+                    } else {
+                      setSelectedStat('reactions');
+                      setIsExpanded(true);
+                    }
+                  }}
+                />
+              </div>
             </div>
-          )}
-
-          {activeTab === 'comments' && (
-            <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-charcoal mb-2">Comments</h3>
-              <p className="text-[#4A4A4A]">Comment history is private or coming soon...</p>
-            </div>
-          )}
-
-          {activeTab === 'reactions' && (
-            <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-charcoal mb-2">Reactions</h3>
-              <p className="text-[#4A4A4A]">Reaction history coming soon...</p>
-            </div>
-          )}
-        </div>
-
-        {/* REFLECTION JOURNEY */}
-        <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#8C7851] rounded-l-2xl" />
-
-          <h2 className="text-lg font-semibold mb-4 pl-3 text-charcoal">Reflection Journey</h2>
-
-          <div className="space-y-3 text-sm text-[#4A4A4A] pl-3">
-            <p>Joined Org: {new Date(user.createdAt).toLocaleDateString()}</p>
-            <p>First Reflection Written: {reflectionJourney.firstReflection ? new Date(reflectionJourney.firstReflection).toLocaleDateString() : '—'}</p>
-            <p>Most Discussed Post: {reflectionJourney.topPostTitle || '—'}</p>
-            <p>Top Podcast Episode: {reflectionJourney.topPodcastTitle || '—'}</p>
-            {reflectionJourney.aiTheme && <p className="text-charcoal font-bold">AI Theme Detected: {reflectionJourney.aiTheme}</p>}
           </div>
-        </div>
 
-        {/* SAFETY CONTROLS */}
-        <div className="relative bg-white rounded-2xl p-6 border border-black/5 shadow-sm overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
+          {/* STATS FILTER DROPDOWN PANEL - Standalone Section Below Profile Card */}
+          {selectedStat && (
+            <StatsFilterDropdown
+              selectedStat={selectedStat}
+              setSelectedStat={setSelectedStat}
+              isExpanded={isExpanded}
+              setIsExpanded={setIsExpanded}
+              stats={stats}
+              userPosts={userPosts}
+              podcasts={podcasts}
+            />
+          )}
 
-          <h2 className="text-lg font-semibold mb-5 pl-3 flex items-center gap-2 text-charcoal">Psychological Safety Controls</h2>
+          {/* CONTENT AREA */}
+          <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 min-h-[300px]">
+            {activeTab === 'posts' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-charcoal">Posts & Reflections</h3>
+                  <span className="text-sm text-charcoal/80">{stats.postsCount} total</span>
+                </div>
 
-          <div className="space-y-5 pl-3">
-            <div className="flex justify-between items-center border-b border-black/5 pb-4">
-              <p className="text-sm text-charcoal">Default Anonymity Level</p>
-              <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-[#4A4A4A] shadow-sm">Level {user.defaultAnonymityLevel}</span>
-            </div>
+                {postsLoading ? (
+                  <div className="text-center py-10 text-charcoal/80 animate-pulse">Loading posts...</div>
+                ) : userPosts.length > 0 ? (
+                  <div className="space-y-4">
+                    {userPosts.map(post => (
+                      <PostCard key={post._id} post={post} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-charcoal/80">
+                    <p>No posts visible or available.</p>
+                  </div>
+                )}
+              </div>
+            )}
 
-            <div className="flex justify-between items-center border-b border-black/5 pb-4">
-              <p className="text-sm text-charcoal">Who can see my reflections?</p>
-              <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-[#4A4A4A] shadow-sm">{user.visibility}</span>
-            </div>
+            {activeTab === 'podcasts' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-charcoal">Podcasts</h3>
+                  <span className="text-sm text-charcoal/80">{stats.podcastsCount} total</span>
+                </div>
 
-            <ToggleRow label="Allow AI feedback on my posts" defaultOn={user.allowAiFeedback} />
-            <ToggleRow label="Allow comments on anonymous posts" defaultOn={user.allowAnonymousComments} />
+                {podcastsLoading ? (
+                  <div className="text-center py-10 text-charcoal/80 animate-pulse">Loading podcasts...</div>
+                ) : podcasts.length > 0 ? (
+                  <div className="space-y-4">
+                    {podcasts.map(podcast => (
+                      <PodcastCard key={podcast._id} podcast={podcast} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-charcoal/80">
+                    <p>No podcasts visible or available.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'comments' && (
+              <div className="text-center py-12">
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Comments</h3>
+                <p className="text-charcoal/80">Comment history is private or coming soon...</p>
+              </div>
+            )}
+
+            {activeTab === 'reactions' && (
+              <div className="text-center py-12">
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Reactions</h3>
+                <p className="text-charcoal/80">Reaction history coming soon...</p>
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* AI INSIGHT */}
-        <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
-          <div className="absolute left-0 top-0 h-full w-[6px] bg-[#8C7851] rounded-l-2xl" />
+          {/* REFLECTION JOURNEY */}
+          <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] rounded-l-2xl" />
 
-          <h2 className="text-lg font-semibold mb-4 pl-3 text-charcoal">AI Personality Insight</h2>
+            <h2 className="text-lg font-semibold mb-4 pl-3 text-[#1A1A1A]">Reflection Journey</h2>
 
-          <p className="text-[#4A4A4A] text-sm leading-relaxed pl-3">{aiPersonalitySummary || 'No AI personality summary available.'}</p>
+            <div className="space-y-3 text-sm text-[#1A1A1A]/80 pl-3">
+              <p>Joined Org: {new Date(user.createdAt).toLocaleDateString()}</p>
+              <p>First Reflection Written: {reflectionJourney.firstReflection ? new Date(reflectionJourney.firstReflection).toLocaleDateString() : '-'}</p>
+              <p>Most Discussed Post: {reflectionJourney.topPostTitle || '-'}</p>
+              <p>Top Podcast Episode: {reflectionJourney.topPodcastTitle || '-'}</p>
+              {reflectionJourney.aiTheme && <p className="text-[#1A1A1A] font-bold">AI Theme Detected: {reflectionJourney.aiTheme}</p>}
+            </div>
+          </div>
+
+          {/* SAFETY CONTROLS */}
+          <div className="relative bg-white rounded-2xl p-6 border border-black/5 shadow-sm overflow-hidden">
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#1A1A1A] rounded-l-2xl" />
+
+            <h2 className="text-lg font-semibold mb-5 pl-3 flex items-center gap-2 text-[#1A1A1A]">Psychological Safety Controls</h2>
+
+            <div className="space-y-5 pl-3">
+              <div className="flex justify-between items-center border-b border-black/5 pb-4">
+                <p className="text-sm text-charcoal">Default Anonymity Level</p>
+                <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-charcoal/80 shadow-sm">Level {user.defaultAnonymityLevel}</span>
+              </div>
+
+              <div className="flex justify-between items-center border-b border-black/5 pb-4">
+                <p className="text-sm text-charcoal">Who can see my reflections?</p>
+                <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-charcoal/80 shadow-sm">{user.visibility}</span>
+              </div>
+
+              <ToggleRow label="Allow AI feedback on my posts" defaultOn={user.allowAiFeedback} />
+              <ToggleRow label="Allow comments on anonymous posts" defaultOn={user.allowAnonymousComments} />
+            </div>
+          </div>
+
+          {/* AI INSIGHT */}
+          <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] rounded-l-2xl" />
+
+            <h2 className="text-lg font-semibold mb-4 pl-3 text-[#1A1A1A]">AI Personality Insight</h2>
+
+            <p className="text-[#1A1A1A]/80 text-sm leading-relaxed pl-3">{aiPersonalitySummary || 'No AI personality summary available.'}</p>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-/* ✅ STATS FILTER DROPDOWN PANEL - Appears Below Profile Card */
+/* STATS FILTER DROPDOWN PANEL - Appears Below Profile Card */
 function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsExpanded, stats, userPosts, podcasts }) {
   const navigate = useNavigate();
 
@@ -373,25 +381,25 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
       key: 'posts',
       label: 'Posts',
       value: stats.postsCount,
-      icon: '📝'
+      icon: <FileText className="w-5 h-5 text-[#1A1A1A]" />
     },
     {
       key: 'podcasts',
       label: 'Podcasts',
       value: stats.podcastsCount,
-      icon: '🎙️'
+      icon: <Mic className="w-5 h-5 text-[#1A1A1A]" />
     },
     {
       key: 'comments',
       label: 'Comments',
       value: stats.commentsCount,
-      icon: '💬'
+      icon: <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
     },
     {
       key: 'reactions',
       label: 'Reactions',
       value: stats.reactionsCount,
-      icon: '👍'
+      icon: <ThumbsUp className="w-5 h-5 text-[#1A1A1A]" />
     }
   ];
 
@@ -415,7 +423,7 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
         <div className="flex items-center gap-3">
           <span className="text-2xl">{currentConfig?.icon}</span>
           <h3 className="text-xl font-semibold text-charcoal">{currentConfig?.label}</h3>
-          <span className="ml-2 px-3 py-1 text-sm rounded-full bg-[#EBE8E0] border border-black/5 text-[#4A4A4A]">
+          <span className="ml-2 px-3 py-1 text-sm rounded-full bg-earth-surface border border-black/5 text-charcoal/80">
             {currentConfig?.value} total
           </span>
         </div>
@@ -475,12 +483,12 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
                       <p className="text-charcoal font-medium text-sm group-hover:text-black transition-colors line-clamp-2">
                         {getItemLabel(item)}
                       </p>
-                      <p className="text-[#4A4A4A] text-xs mt-2">
+                      <p className="text-charcoal/80 text-xs mt-2">
                         {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Date unavailable'}
                       </p>
                     </div>
                     <div className="flex-shrink-0">
-                      <svg className="w-5 h-5 text-[#4A4A4A] group-hover:text-charcoal transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-charcoal/80 group-hover:text-charcoal transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
@@ -489,7 +497,7 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-[#4A4A4A]">
+            <div className="text-center py-12 text-charcoal/80">
               <p className="text-sm">No {currentConfig?.label?.toLowerCase()} to display</p>
             </div>
           )}
@@ -499,7 +507,7 @@ function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsE
   );
 }
 
-/* ✅ Premium Stat Card with Click State */
+/* Premium Stat Card with Click State */
 function Stat({ label, value, isActive, onClick }) {
   return (
     <div
@@ -512,14 +520,14 @@ function Stat({ label, value, isActive, onClick }) {
     >
       {/* Icon Bubble */}
       <div className={`w-10 h-10 flex items-center justify-center rounded-full text-lg transition shadow-sm
-        ${isActive ? 'bg-[#1A1A1A] text-white' : 'bg-[#EBE8E0] text-charcoal'}
+        ${isActive ? 'bg-charcoal text-white' : 'bg-earth-surface text-charcoal'}
       `}>
         {label.charAt(0)}
       </div>
 
       {/* Text */}
       <div>
-        <p className={`text-xs font-medium transition ${isActive ? 'text-charcoal font-bold' : 'text-[#4A4A4A]'}`}>
+        <p className={`text-xs font-medium transition ${isActive ? 'text-charcoal font-bold' : 'text-charcoal/80'}`}>
           {label}
         </p>
         <h3 className="text-xl font-bold text-charcoal leading-tight">
@@ -531,7 +539,7 @@ function Stat({ label, value, isActive, onClick }) {
 }
 
 
-/* ✅ Toggle Row Component */
+/* Toggle Row Component */
 function ToggleRow({ label, defaultOn }) {
   const [enabled, setEnabled] = useState(defaultOn);
 
@@ -539,16 +547,16 @@ function ToggleRow({ label, defaultOn }) {
     <div className="flex justify-between items-center border-b border-black/5 pb-4 mt-4">
       <p className="text-sm text-charcoal">{label}</p>
 
-      {/* ✅ Toggle Switch */}
+      {/* Toggle Switch */}
       <button
         onClick={() => setEnabled(!enabled)}
         className="relative w-14 h-8 rounded-full transition-all duration-300"
         style={{
-          backgroundColor: enabled ? "#8C7851" : "#EBE8E0", // ✅ ON gold, OFF beige
+          backgroundColor: enabled ? "#8C7851" : "#EBE8E0", // ON gold, OFF beige
           boxShadow: enabled ? "0 0 5px rgba(140, 120, 81, 0.5)" : "none",
         }}
       >
-        {/* ✅ Knob */}
+        {/* Knob */}
         <span
           className="absolute top-1 left-1 w-6 h-6 rounded-full shadow-sm transition-all duration-300"
           style={{

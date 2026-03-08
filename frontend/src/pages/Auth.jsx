@@ -100,19 +100,18 @@ export default function Auth() {
 
   return (
     <div className="auth-page w-full overflow-hidden">
-      <div className="bg-mesh-gradient pointer-events-none absolute inset-0 z-0" />
       <div className={`auth-container ${isSignUp ? "right-panel-active" : ""}`}>
 
         {/* ================= SIGN UP FORM ================= */}
         <div className="form-container sign-up">
-          <div className="side-strip purple"></div>
+          <div className="side-strip green"></div>
 
           <form onSubmit={handleSignup}>
             <h1>Create Account</h1>
 
             {error && <p className="error">{error}</p>}
 
-            <div className="field-box accent-purple">
+            <div className="field-box accent-green">
               <input
                 placeholder="Full Name"
                 value={fullName}
@@ -121,7 +120,7 @@ export default function Auth() {
               />
             </div>
 
-            <div className="field-box accent-mint">
+            <div className="field-box accent-green">
               <input
                 placeholder="Email"
                 value={signupEmail}
@@ -130,7 +129,7 @@ export default function Auth() {
               />
             </div>
 
-            <div className="field-box accent-blue">
+            <div className="field-box accent-green">
               <input
                 type="password"
                 placeholder="Password"
@@ -140,7 +139,7 @@ export default function Auth() {
               />
             </div>
 
-            <div className="field-box accent-yellow">
+            <div className="field-box accent-green">
               <input
                 placeholder="Department"
                 value={department}
@@ -149,7 +148,7 @@ export default function Auth() {
               />
             </div>
 
-            <div className="field-box accent-mint">
+            <div className="field-box accent-green">
               <input
                 placeholder="Organization Name (Optional)"
                 value={signupOrgName}
@@ -163,7 +162,7 @@ export default function Auth() {
 
         {/* ================= LOGIN FORM ================= */}
         <div className="form-container sign-in">
-          <div className="side-strip blue"></div>
+          <div className="side-strip green"></div>
 
           {!showOrgSetup ? (
             <form onSubmit={handleLogin}>
@@ -171,7 +170,7 @@ export default function Auth() {
 
               {error && <p className="error">{error}</p>}
 
-              <div className="field-box accent-mint">
+              <div className="field-box accent-green">
                 <input
                   placeholder="Email"
                   value={email}
@@ -180,7 +179,7 @@ export default function Auth() {
                 />
               </div>
 
-              <div className="field-box accent-blue">
+              <div className="field-box accent-green">
                 <input
                   type="password"
                   placeholder="Password"
@@ -190,7 +189,7 @@ export default function Auth() {
                 />
               </div>
 
-              <div className="field-box accent-yellow">
+              <div className="field-box accent-green">
                 <input
                   placeholder="Organization Name (Optional)"
                   value={loginOrgName}
@@ -204,7 +203,7 @@ export default function Auth() {
             <form onSubmit={handleCreateOrg}>
               <h1>Set Up Organization</h1>
 
-              <div className="field-box accent-yellow">
+              <div className="field-box accent-green">
                 <input
                   placeholder="Organization Name"
                   value={orgName}
@@ -220,7 +219,7 @@ export default function Auth() {
                 required
               />
 
-              <button type="submit">Continue</button>
+              <button className="charcoal-btn" type="submit">Continue</button>
             </form>
           )}
         </div>

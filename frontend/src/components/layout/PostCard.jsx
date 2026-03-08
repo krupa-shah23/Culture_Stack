@@ -1,21 +1,22 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { voteOnPost } from "../../api/axios";
 
 export default function PostCard({ post }) {
   const navigate = useNavigate();
 
-  // ✅ Beige Minimalist Accent Palette
-  const antigravityPalette = [
-    "#8C7851", // Muted Gold
-    "#1A1A1A", // Charcoal
-    "#8C7851",
-    "#1A1A1A",
+  // ✅ Glass Variants
+  const glassVariants = [
+    "glass-surface",
+    "glass-green",
+    "glass-tan",
+    "glass-sand"
   ];
 
-  // ✅ Stable Accent Color per Post
-  const accentColor =
-    antigravityPalette[post._id.charCodeAt(0) % antigravityPalette.length];
+  if (!post) return null;
+
+  // Stable Glass Theme
+  const cardTheme = glassVariants[(post._id?.charCodeAt(0) || 0) % glassVariants.length];
 
   // Tag
   const tag = post.tags?.[0] || "Reflection";
@@ -29,49 +30,70 @@ export default function PostCard({ post }) {
   const [upvoteCount, setUpvoteCount] = useState(post.upvoteCount || 0);
   const [downvoteCount, setDownvoteCount] = useState(post.downvoteCount || 0);
 
-  // Vote handlers (optimistic UI)
   const handleUpvote = async (e) => {
     e.stopPropagation();
-    if (userVote) return; // Prevent multiple votes/toggling
-
     const prevVote = userVote;
+    let newVote = 'upvote';
+
+    // If already upvoted, clicking again removes the vote
+    if (prevVote === 'upvote') {
+      newVote = 'remove';
+      setUserVote(null);
+      setUpvoteCount(c => c - 1);
+    } else {
+      // If switching from downvote
+      if (prevVote === 'downvote') {
+        setDownvoteCount(c => c - 1);
+      }
+      setUserVote('upvote');
+      setUpvoteCount(c => c + 1);
+    }
 
     try {
-      // new upvote
-      setUserVote('upvote');
-      setUpvoteCount((c) => c + 1);
-      const res = await voteOnPost(post._id, 'upvote');
+      const res = await voteOnPost(post._id, newVote);
       setUserVote(res.userVote);
       setUpvoteCount(res.upvoteCount);
       setDownvoteCount(res.downvoteCount);
     } catch (err) {
-      // revert optimistic change on error
+      // Revert optimistic changes
       setUserVote(prevVote);
-      if (prevVote === 'upvote') setUpvoteCount((c) => c + 1);
-      if (prevVote === 'downvote') setDownvoteCount((c) => c + 1);
+      if (newVote === 'upvote') setUpvoteCount(c => c - 1);
+      if (newVote === 'remove') setUpvoteCount(c => c + 1);
+      if (prevVote === 'downvote') setDownvoteCount(c => c + 1);
       console.error('Vote error', err);
     }
   };
 
   const handleDownvote = async (e) => {
     e.stopPropagation();
-    if (userVote) return; // Prevent multiple votes/toggling
-
     const prevVote = userVote;
+    let newVote = 'downvote';
+
+    // If already downvoted, clicking again removes the vote
+    if (prevVote === 'downvote') {
+      newVote = 'remove';
+      setUserVote(null);
+      setDownvoteCount(c => c - 1);
+    } else {
+      // If switching from upvote
+      if (prevVote === 'upvote') {
+        setUpvoteCount(c => c - 1);
+      }
+      setUserVote('downvote');
+      setDownvoteCount(c => c + 1);
+    }
 
     try {
-      // new downvote
-      setUserVote('downvote');
-      setDownvoteCount((c) => c + 1);
-      const res = await voteOnPost(post._id, 'downvote');
+      const res = await voteOnPost(post._id, newVote);
       setUserVote(res.userVote);
       setUpvoteCount(res.upvoteCount);
       setDownvoteCount(res.downvoteCount);
     } catch (err) {
-      // revert optimistic change on error
+      // Revert optimistic changes
       setUserVote(prevVote);
-      if (prevVote === 'upvote') setUpvoteCount((c) => c + 1);
-      if (prevVote === 'downvote') setDownvoteCount((c) => c + 1);
+      if (newVote === 'downvote') setDownvoteCount(c => c - 1);
+      if (newVote === 'remove') setDownvoteCount(c => c + 1);
+      if (prevVote === 'upvote') setUpvoteCount(c => c + 1);
       console.error('Vote error', err);
     }
   };
@@ -79,16 +101,15 @@ export default function PostCard({ post }) {
   return (
     <div
       onClick={() => navigate(`/posts/${post._id}`)}
-      className="
-        relative glass-card
+      className={`
+        relative ${cardTheme}
         p-7 transition-all duration-300 cursor-pointer
         overflow-hidden group hover:-translate-y-2
-      "
+      `}
     >
-      {/* ✅ Accent Strip */}
+      {/* Accent Strip */}
       <div
-        style={{ backgroundColor: accentColor }}
-        className="absolute left-0 top-0 h-full w-[4px]"
+        className="absolute left-0 top-0 h-full w-[4px] bg-earth-green"
       />
 
       {/* Header */}
@@ -101,15 +122,15 @@ export default function PostCard({ post }) {
 
           {/* Author */}
           <div>
-            <h3 className="text-charcoal font-bold cursor-pointer hover:text-[#8C7851] transition-colors" onClick={(e) => { e.stopPropagation(); navigate(`/profile/${post.author?._id}`); }}>{authorName}</h3>
-            <p className="text-xs text-[#4A4A4A] mt-0.5">
+            <h3 className="font-bold cursor-pointer transition-colors opacity-90" onClick={(e) => { e.stopPropagation(); navigate(`/profile/${post.author?._id}`); }}>{authorName}</h3>
+            <p className="text-xs opacity-70 mt-0.5">
               Posted {new Date(post.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
 
         {/* Tag */}
-        <span className="text-xs px-4 py-1.5 rounded-full bg-white shadow-sm border border-black/5 text-[#4A4A4A]">
+        <span className="text-xs px-4 py-1.5 rounded-full bg-white/20 shadow-sm border border-white/10 opacity-90">
           {tag}
         </span>
       </div>
@@ -117,12 +138,14 @@ export default function PostCard({ post }) {
       {/* Content */}
       <div
         className="
-          glass-card
+          bg-white/10
+          rounded-xl
           px-6 py-5
           ml-2
-          text-[#4A4A4A]
+          opacity-90
           text-sm
           leading-relaxed
+          border border-white/10
         "
       >
         {post.mediaUrl && (
@@ -131,50 +154,50 @@ export default function PostCard({ post }) {
               <video
                 src={`http://localhost:5000${post.mediaUrl}`}
                 controls
-                className="w-full rounded-lg border border-black/5 max-h-60 object-cover"
+                className="w-full rounded-lg border border-white/10 max-h-60 object-cover"
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
               <img
                 src={`http://localhost:5000${post.mediaUrl}`}
                 alt="Post Media"
-                className="w-full rounded-lg border border-black/5 h-auto object-cover max-h-80"
+                className="w-full rounded-lg border border-white/10 h-auto object-cover max-h-80"
               />
             )}
           </div>
         )}
-        {post.content.length > 200
-          ? post.content.substring(0, 200) + "..."
+        {(post.content || "").length > 200
+          ? (post.content || "").substring(0, 200) + "..."
           : post.content}
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-10 pl-3 mt-5 text-[#4A4A4A]">
+      <div className="flex items-center gap-10 pl-3 mt-5 opacity-80">
 
-        {/* Vote controls: upvote / score / downvote */}
-        <div className="flex items-center gap-4">
+        {/* Vote controls: upvote - score - downvote */}
+        <div className="flex items-center gap-3">
           <button
             onClick={handleUpvote}
-            disabled={!!userVote}
-            className={`flex items-center gap-2 text-sm font-bold transition py-3 ${userVote === 'upvote' ? 'text-charcoal' : userVote ? 'text-zinc-400 cursor-not-allowed' : 'text-[#8C7851] hover:text-charcoal'}`}
+            className={`flex items-center justify-center p-2 rounded-full transition ${userVote === 'upvote' ? 'bg-earth-green/20 text-earth-green' : 'hover:bg-white/10'}`}
           >
             {/* Up arrow */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={userVote === 'upvote' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={userVote === 'upvote' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={userVote === 'upvote' ? 2 : 1.5} className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75V5.25m0 0 6.75 6.75M12 5.25 5.25 12" />
             </svg>
-            <span className="text-base font-semibold">{upvoteCount}</span>
           </button>
+
+          <span className="font-bold text-base min-w-[2ch] text-center">
+            {upvoteCount - downvoteCount}
+          </span>
 
           <button
             onClick={handleDownvote}
-            disabled={!!userVote}
-            className={`flex items-center gap-2 text-sm font-bold transition py-3 ${userVote === 'downvote' ? 'text-red-700' : userVote ? 'text-zinc-400 cursor-not-allowed' : 'text-[#8C7851] hover:text-red-700'}`}
+            className={`flex items-center justify-center p-2 rounded-full transition ${userVote === 'downvote' ? 'bg-red-500/20 text-red-400' : 'hover:bg-white/10'}`}
           >
             {/* Down arrow */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={userVote === 'downvote' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={userVote === 'downvote' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={userVote === 'downvote' ? 2 : 1.5} className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 5.25v13.5m0 0-6.75-6.75M12 18.75L18.75 12" />
             </svg>
-            <span className="text-base font-semibold">{downvoteCount}</span>
           </button>
         </div>
 
@@ -186,8 +209,8 @@ export default function PostCard({ post }) {
           }}
           className="
             flex items-center gap-2
-            text-base font-bold py-3 text-[#4A4A4A]
-            hover:text-charcoal transition
+            text-base font-bold py-3 opacity-90
+            hover:opacity-100 transition
           "
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import PostCard from "../components/layout/PostCard";
 import api, { getTrendingPosts } from "../api/axios";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ export default function Feed() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ✅ Fetch Posts
+  // Fetch Posts
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -39,7 +39,7 @@ export default function Feed() {
     fetchPosts();
   }, []);
 
-  // ✅ Trending Posts (server-side ranking)
+  // Trending Posts (server-side ranking)
   const [trendingPosts, setTrendingPosts] = useState([]);
 
   const fetchTrending = async () => {
@@ -57,18 +57,19 @@ export default function Feed() {
   useEffect(() => { fetchTrending(); }, [posts]);
 
   return (
-    <div className="flex-1 w-full pb-20 pt-16 md:pt-24 px-4 md:px-10 lg:px-20 relative">
+    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)]">
       {/* Antigravity Mesh Background */}
       <div className="bg-mesh-gradient" />
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 relative z-10">
+      {/* MASTER CONTAINER */}
+      <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
 
         {/* ================= LEFT FEED ================= */}
         <div className="md:col-span-1 lg:col-span-2 space-y-6">
 
           {/* Loading */}
           {loading && (
-            <p className="text-[#4A4A4A] text-center">Loading posts...</p>
+            <p className="text-charcoal/80 text-center">Loading posts...</p>
           )}
 
           {/* Error */}
@@ -86,7 +87,7 @@ export default function Feed() {
 
           {/* No Posts */}
           {!loading && !error && posts.length === 0 && (
-            <p className="text-[#4A4A4A] text-center">
+            <p className="text-charcoal/80 text-center">
               No posts yet. Start sharing reflections
             </p>
           )}
@@ -101,22 +102,22 @@ export default function Feed() {
         {/* ================= RIGHT SIDEBAR ================= */}
         <div className="space-y-10 pl-0 lg:pl-6">
 
-          {/* ✅ Trending Discussions */}
-          <div className="relative bg-white border border-black/5 rounded-2xl shadow-sm p-6 overflow-hidden">
+          {/* Trending Discussions */}
+          <div className="relative bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-6 overflow-hidden">
 
-            {/* Charcoal Strip */}
-            <div className="absolute left-0 top-0 h-full w-[4px] bg-charcoal shadow-sm" />
+            {/* Muted Gold Strip */}
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] shadow-sm" />
 
             <h2 className="font-bold text-charcoal mb-3 pl-3">
               Trending Discussions
             </h2>
 
-            <ul className="text-sm text-[#4A4A4A] space-y-3 pl-5">
-              {trendingPosts.length > 0 ? (
+            <ul className="text-sm text-charcoal/80 space-y-3 pl-5">
+              {trendingPosts && trendingPosts.length > 0 ? (
                 trendingPosts.map((post) => (
                   <li key={post._id} className="truncate">
                     {post.summary ||
-                      post.content.split(" ").slice(0, 6).join(" ") + "..."}
+                      (post.content || "").split(" ").slice(0, 6).join(" ") + "..."}
                   </li>
                 ))
               ) : (
@@ -125,17 +126,16 @@ export default function Feed() {
             </ul>
           </div>
 
-          {/* ✅ AI Thought Starter */}
-          <div className="relative bg-white rounded-2xl p-6 border border-black/5 shadow-sm">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851]" /> {/* Left Border Fix */}
+          {/* AI Thought Starter */}
+          <div className="relative bg-[#F5F5F0] rounded-2xl p-6 border border-black/5 shadow-sm">
+            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851]" />
             <h2 className="font-bold text-[#1A1A1A] mb-3 pl-4">AI Thought Starter</h2>
 
-            <p className="text-sm text-[#4A4A4A] mb-6 pl-4">
+            <p className="text-sm text-charcoal/80 mb-6 pl-4">
               What's one thing your team should stop doing immediately?
             </p>
 
-            {/* Correct Link & Visible Button */}
-            <Link to="/write" className="block text-center w-full bg-[#1A1A1A] text-white font-bold py-3 rounded-xl hover:bg-black transition">
+            <Link to="/write" className="flex items-center justify-center w-full bg-[#1A1A1A] text-white font-bold py-3 rounded-full shadow-sm hover:bg-black transition">
               Write Reflection
             </Link>
           </div>

@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import api, { voteOnPost, reactToComment, refreshAiFeedback } from "../api/axios";
 import Navbar from "../components/layout/Navbar";
 
-/* ✅ Persona Theme Palette (Beige Minimalist) */
+/* Persona Theme Palette (Beige Minimalist) */
 const PERSONAS = [
   { key: "mentor", label: "Mentor", accent: "#1A1A1A" }, // Charcoal
   { key: "critic", label: "Critic", accent: "#8C7851" }, // Muted Gold
@@ -169,20 +169,33 @@ export default function PostDetail() {
   /* Vote handlers (optimistic) */
   const handleUpvote = async () => {
     if (!post) return;
-    if (userVote) return; // Prevent multiple votes
 
-    const prev = userVote;
+    const prevVote = userVote;
+    let newVote = 'upvote';
+
+    if (prevVote === 'upvote') {
+      newVote = 'remove';
+      setUserVote(null);
+      setUpvoteCount(c => c - 1);
+    } else {
+      if (prevVote === 'downvote') {
+        setDownvoteCount(c => c - 1);
+      }
+      setUserVote('upvote');
+      setUpvoteCount(c => c + 1);
+    }
+
     try {
       setVoteLoading(true);
-      // new upvote
-      setUserVote('upvote');
-      setUpvoteCount((c) => c + 1);
-      const res = await voteOnPost(post._id, 'upvote');
+      const res = await voteOnPost(post._id, newVote);
       setUserVote(res.userVote);
       setUpvoteCount(res.upvoteCount);
       setDownvoteCount(res.downvoteCount);
     } catch (err) {
-      setUserVote(prev);
+      setUserVote(prevVote);
+      if (newVote === 'upvote') setUpvoteCount(c => c - 1);
+      if (newVote === 'remove') setUpvoteCount(c => c + 1);
+      if (prevVote === 'downvote') setDownvoteCount(c => c + 1);
       setError('Failed to update vote');
       console.error('vote error', err);
     } finally {
@@ -192,20 +205,33 @@ export default function PostDetail() {
 
   const handleDownvote = async () => {
     if (!post) return;
-    if (userVote) return; // Prevent multiple votes
 
-    const prev = userVote;
+    const prevVote = userVote;
+    let newVote = 'downvote';
+
+    if (prevVote === 'downvote') {
+      newVote = 'remove';
+      setUserVote(null);
+      setDownvoteCount(c => c - 1);
+    } else {
+      if (prevVote === 'upvote') {
+        setUpvoteCount(c => c - 1);
+      }
+      setUserVote('downvote');
+      setDownvoteCount(c => c + 1);
+    }
+
     try {
       setVoteLoading(true);
-      // new downvote
-      setUserVote('downvote');
-      setDownvoteCount((c) => c + 1);
-      const res = await voteOnPost(post._id, 'downvote');
+      const res = await voteOnPost(post._id, newVote);
       setUserVote(res.userVote);
       setUpvoteCount(res.upvoteCount);
       setDownvoteCount(res.downvoteCount);
     } catch (err) {
-      setUserVote(prev);
+      setUserVote(prevVote);
+      if (newVote === 'downvote') setDownvoteCount(c => c - 1);
+      if (newVote === 'remove') setDownvoteCount(c => c + 1);
+      if (prevVote === 'upvote') setUpvoteCount(c => c + 1);
       setError('Failed to update vote');
       console.error('vote error', err);
     } finally {
@@ -244,8 +270,7 @@ export default function PostDetail() {
 
   if (loading) {
     return (
-      <div className="flex-1 w-full relative py-10 px-4 flex items-center justify-center text-[#1A1A1A]">
-        <div className="bg-mesh-gradient" />
+      <div className="flex-1 w-full relative py-10 px-4 flex items-center justify-center text-charcoal bg-[#F5F5F0]">
         <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-charcoal shadow-sm z-10" />
       </div>
     );
@@ -253,8 +278,7 @@ export default function PostDetail() {
 
   if (!post) {
     return (
-      <div className="flex-1 w-full relative py-10 px-4 flex items-center justify-center text-[#4A4A4A]">
-        <div className="bg-mesh-gradient" />
+      <div className="flex-1 w-full relative py-10 px-4 flex items-center justify-center text-charcoal/80 bg-[#F5F5F0]">
         <p className="z-10 text-xl font-medium tracking-wide">Signal lost in the void. Post not found.</p>
       </div>
     );
@@ -263,12 +287,10 @@ export default function PostDetail() {
   const selectedPersonaData = post.aiFeedback?.[selectedPersona] || "";
 
   return (
-    <>
-      <div className="flex-1 w-full relative py-10 px-4 md:px-8 text-[#1A1A1A] overflow-hidden">
-        {/* Full-width Mesh Background */}
-        <div className="bg-mesh-gradient" />
-
-        <div className="max-w-4xl mx-auto flex flex-col gap-10 relative z-10">
+    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] bg-[#F5F5F0]">
+      {/* MASTER CONTAINER */}
+      <div className="w-full max-w-6xl mx-auto flex-1 rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto custom-scrollbar p-6 md:p-10 relative z-10">
+        <div className="max-w-4xl mx-auto flex flex-col gap-10">
 
           {/* MAIN POST AREA */}
           <div className="bg-white rounded-2xl border border-black/5 p-6 md:p-12 shadow-sm relative overflow-hidden">
@@ -283,8 +305,8 @@ export default function PostDetail() {
                 {post.title}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-3 text-sm text-[#4A4A4A] mb-8 font-medium">
-                <span className="text-charcoal bg-[#F5F5F0] py-1 px-3 rounded-full border border-black/5 shadow-sm">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-charcoal/80 mb-8 font-medium">
+                <span className="text-charcoal bg-earth-bg py-1 px-3 rounded-full border border-black/5 shadow-sm">
                   {post.author?.fullName || "Anonymous"}
                 </span>
                 <span>•</span>
@@ -292,7 +314,7 @@ export default function PostDetail() {
               </div>
 
               {post.mediaUrl && (
-                <div className="mb-8 rounded-2xl overflow-hidden border border-black/5 shadow-sm bg-[#EBE8E0] p-2">
+                <div className="mb-8 rounded-2xl overflow-hidden border border-black/5 shadow-sm bg-earth-surface p-2">
                   {post.mediaType === "video" ? (
                     <video
                       src={`http://localhost:5000${post.mediaUrl}`}
@@ -309,7 +331,7 @@ export default function PostDetail() {
                 </div>
               )}
 
-              <div className="prose max-w-none text-[#4A4A4A] text-lg leading-relaxed whitespace-pre-wrap font-medium">
+              <div className="prose max-w-none text-charcoal/80 text-lg leading-relaxed whitespace-pre-wrap font-medium">
                 {post.content}
               </div>
 
@@ -317,29 +339,29 @@ export default function PostDetail() {
 
               {/* Reactions & Stats */}
               <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2 bg-[#F5F5F0] p-1.5 rounded-xl border border-black/5 shadow-inner">
+                <div className="flex items-center gap-3 bg-earth-bg p-1.5 rounded-xl border border-black/5 shadow-inner">
                   <button
                     onClick={handleUpvote}
-                    disabled={voteLoading || !!userVote}
-                    className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all ${userVote === 'upvote' ? 'bg-charcoal text-white shadow-sm' : userVote ? 'bg-transparent text-gray-400 cursor-not-allowed' : 'bg-transparent text-[#4A4A4A] hover:text-charcoal hover:bg-black/5'}`}
+                    disabled={voteLoading}
+                    className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all ${userVote === 'upvote' ? 'bg-earth-green text-white shadow-sm' : 'bg-transparent text-charcoal/80 hover:text-earth-green hover:bg-white/50'}`}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={userVote === 'upvote' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={userVote === 'upvote' ? 2 : 1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l7 7m-7-7l-7 7" />
                     </svg>
                   </button>
                   <span className="font-bold text-lg min-w-[20px] text-center text-charcoal">{upvoteCount - downvoteCount}</span>
                   <button
                     onClick={handleDownvote}
-                    disabled={voteLoading || !!userVote}
-                    className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all ${userVote === 'downvote' ? 'bg-[#8C7851] text-white shadow-sm' : userVote ? 'bg-transparent text-gray-400 cursor-not-allowed' : 'bg-transparent text-[#4A4A4A] hover:text-[#8C7851] hover:bg-black/5'}`}
+                    disabled={voteLoading}
+                    className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all ${userVote === 'downvote' ? 'bg-red-500 text-white shadow-sm' : 'bg-transparent text-charcoal/80 hover:text-red-500 hover:bg-white/50'}`}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7-7-7-7" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={userVote === 'downvote' ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={userVote === 'downvote' ? 2 : 1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" />
                     </svg>
                   </button>
                 </div>
 
-                <div className="flex gap-4 ml-auto text-sm text-[#4A4A4A] font-medium bg-[#F5F5F0] px-4 py-3 rounded-xl border border-black/5">
+                <div className="flex gap-4 ml-auto text-sm text-charcoal/80 font-medium bg-earth-bg px-4 py-3 rounded-xl border border-black/5">
                   <span className="flex items-center gap-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
@@ -360,7 +382,7 @@ export default function PostDetail() {
           {/* AI ADVISORY PANEL */}
           <div className="bg-white rounded-2xl border border-black/5 p-6 md:p-8 shadow-sm">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-charcoal">
-              <span className="text-charcoal">✨</span> AI Advisory Panel
+              <span className="text-[#1A1A1A]"></span> AI Advisory Panel
             </h2>
 
             {/* Persona Tiles */}
@@ -386,14 +408,14 @@ export default function PostDetail() {
             </div>
 
             {/* Feedback Box */}
-            <div className="bg-[#F5F5F0] border border-black/5 rounded-2xl p-6 text-charcoal text-base leading-relaxed min-h-[160px] shadow-sm">
+            <div className="bg-earth-bg border border-black/5 rounded-2xl p-6 text-charcoal text-base leading-relaxed min-h-[160px] shadow-sm">
               {selectedPersonaData ? (
                 <div className="animate-in fade-in duration-500">
                   {selectedPersonaData}
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-[120px] opacity-70">
-                  <p className="italic text-[#4A4A4A]">Seeking analytical counsel from the void...</p>
+                  <p className="italic text-charcoal/80">Seeking analytical counsel from the void...</p>
                 </div>
               )}
             </div>
@@ -403,7 +425,7 @@ export default function PostDetail() {
               <button
                 onClick={handleGenerateAi}
                 disabled={aiGenerating}
-                className="w-full mt-6 bg-[#8C7851] text-white py-4 rounded-xl font-bold hover:bg-[#A39066] transition shadow-sm"
+                className="w-full mt-6 bg-earth-green text-white py-4 rounded-xl font-bold hover:bg-[#A39066] transition shadow-sm"
               >
                 {aiGenerating ? "Synthesizing Insights..." : "Generate Advisory Feedback"}
               </button>
@@ -418,7 +440,7 @@ export default function PostDetail() {
           <div className="bg-white rounded-2xl border border-black/5 p-6 md:p-10 shadow-sm">
             <h2 className="text-2xl font-bold mb-8 flex items-center text-charcoal">
               Discourse
-              <span className="ml-3 text-sm font-medium bg-[#EBE8E0] px-3 py-1 rounded-full text-charcoal border border-black/5">
+              <span className="ml-3 text-sm font-medium bg-earth-surface px-3 py-1 rounded-full text-charcoal border border-black/5">
                 {comments.length}
               </span>
             </h2>
@@ -430,7 +452,7 @@ export default function PostDetail() {
                 value={newCommentText}
                 onChange={(e) => setNewCommentText(e.target.value)}
                 placeholder="Contribute to the narrative..."
-                className="w-full bg-[#F5F5F0] border border-black/5 rounded-xl p-5 text-charcoal text-base resize-none focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 shadow-sm transition"
+                className="w-full bg-earth-bg border border-black/5 rounded-xl p-5 text-charcoal text-base resize-none focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 shadow-sm transition"
                 rows="3"
               />
 
@@ -448,7 +470,7 @@ export default function PostDetail() {
             {/* Comments List */}
             <div className="space-y-6">
               {comments.length === 0 ? (
-                <div className="text-center py-10 bg-[#F5F5F0] rounded-2xl border text-[#4A4A4A] border-black/5 border-dashed">
+                <div className="text-center py-10 bg-earth-bg rounded-2xl border text-charcoal/80 border-black/5 border-dashed">
                   <p className="italic">Silence reigns. Be the first to speak.</p>
                 </div>
               ) : (
@@ -459,7 +481,7 @@ export default function PostDetail() {
                     style={{ animationDelay: `${i * 0.05}s` }}
                   >
                     {/* Avatar Placeholder */}
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#EBE8E0] border border-black/5 flex items-center justify-center font-bold text-charcoal text-sm shadow-sm mt-1">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-earth-surface border border-black/5 flex items-center justify-center font-bold text-charcoal text-sm shadow-sm mt-1">
                       {(comment.author?.fullName?.[0] || "A").toUpperCase()}
                     </div>
 
@@ -479,12 +501,12 @@ export default function PostDetail() {
                         )}
                       </div>
 
-                      <p className="text-[#4A4A4A] text-base leading-relaxed break-words whitespace-pre-wrap">
+                      <p className="text-charcoal/80 text-base leading-relaxed break-words whitespace-pre-wrap">
                         {comment.content}
                       </p>
 
                       {/* Comment-level reactions */}
-                      <div className="flex items-center gap-5 mt-4 text-xs font-semibold text-[#4A4A4A]">
+                      <div className="flex items-center gap-5 mt-4 text-xs font-semibold text-charcoal/80">
                         <button
                           onClick={() => handleReactToComment(comment._id, comment.currentUserReaction === 'like' ? 'remove' : 'like')}
                           className={`flex items-center gap-1.5 transition ${comment.currentUserReaction === 'like' ? 'text-charcoal' : 'hover:text-charcoal hover:bg-black/5 px-1 py-0.5 rounded -ml-1'}`}
@@ -497,7 +519,7 @@ export default function PostDetail() {
 
                         <button
                           onClick={() => handleReactToComment(comment._id, comment.currentUserReaction === 'dislike' ? 'remove' : 'dislike')}
-                          className={`flex items-center gap-1.5 transition ${comment.currentUserReaction === 'dislike' ? 'text-[#8C7851]' : 'hover:text-[#8C7851] hover:bg-black/5 px-1 py-0.5 rounded -ml-1'}`}
+                          className={`flex items-center gap-1.5 transition ${comment.currentUserReaction === 'dislike' ? 'text-earth-green' : 'hover:text-earth-green hover:bg-black/5 px-1 py-0.5 rounded -ml-1'}`}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                             <path d="M18 10a6 6 0 11-12 0 6 6 0 0112 0zm-9 2a1 1 0 012 0v3a1 1 0 01-1 1H9v-3H8v-1h1z" />
@@ -510,11 +532,10 @@ export default function PostDetail() {
                 ))
               )}
             </div>
-
           </div>
 
         </div>
       </div>
-    </>
+    </div>
   );
 }
