@@ -1,3 +1,145 @@
+﻿
+> frontend@0.0.0 build
+> vite build
+
 [36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
 transforming...
-[32m???[39m 1885 modules transformed.
+[32mΓ£ô[39m 1919 modules transformed.
+node.exe : 
+[31mΓ£ù[39m Build 
+failed in 2.19s
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: ([31mΓ£ù[39m   
+  Build failed in 2    
+.19s:String) [], R    
+emoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+[31merror during 
+build:
+[31msrc/App.jsx 
+(14:7): "default" is 
+not exported by "src/pa
+ges/MeetingRoom.jsx", 
+imported by 
+"src/App.jsx".[31m
+file: 
+[36mC:/Users/Krupa Sha
+h/Desktop/College/Proje
+cts - Resume/Culture_St
+ack/frontend/src/App.js
+x:14:7[31m
+[33m
+12: import Activity 
+from 
+"./pages/Activity";
+13: import Meet from 
+"./pages/Meet";
+14: import MeetingRoom 
+from 
+"./pages/MeetingRoom";
+           ^
+15: import 
+LiveInsights from 
+"./pages/LiveInsights";
+16: import 
+PreviousInsights from "
+./pages/PreviousInsight
+s";
+[31m
+    at getRollupError (
+file:///C:/Users/Krupa%
+20Shah/Desktop/College/
+Projects%20-%20Resume/C
+ulture_Stack/frontend/n
+ode_modules/rollup/dist
+/es/shared/parseAst.js:
+402:41)
+    at error (file:///C
+:/Users/Krupa%20Shah/De
+sktop/College/Projects%
+20-%20Resume/Culture_St
+ack/frontend/node_modul
+es/rollup/dist/es/share
+d/parseAst.js:398:42)
+    at Module.error (fi
+le:///C:/Users/Krupa%20
+Shah/Desktop/College/Pr
+ojects%20-%20Resume/Cul
+ture_Stack/frontend/nod
+e_modules/rollup/dist/e
+s/shared/node-entry.js:
+17040:16)
+    at 
+Module.traceVariable (f
+ile:///C:/Users/Krupa%2
+0Shah/Desktop/College/P
+rojects%20-%20Resume/Cu
+lture_Stack/frontend/no
+de_modules/rollup/dist/
+es/shared/node-entry.js
+:17452:29)
+    at ModuleScope.find
+Variable (file:///C:/Us
+ers/Krupa%20Shah/Deskto
+p/College/Projects%20-%
+20Resume/Culture_Stack/
+frontend/node_modules/r
+ollup/dist/es/shared/no
+de-entry.js:15070:39)
+    at FunctionScope.fi
+ndVariable (file:///C:/
+Users/Krupa%20Shah/Desk
+top/College/Projects%20
+-%20Resume/Culture_Stac
+k/frontend/node_modules
+/rollup/dist/es/shared/
+node-entry.js:5673:38)
+    at FunctionBodyScop
+e.findVariable (file://
+/C:/Users/Krupa%20Shah/
+Desktop/College/Project
+s%20-%20Resume/Culture_
+Stack/frontend/node_mod
+ules/rollup/dist/es/sha
+red/node-entry.js:5673:
+38)
+    at Identifier.bind 
+(file:///C:/Users/Krupa
+%20Shah/Desktop/College
+/Projects%20-%20Resume/
+Culture_Stack/frontend/
+node_modules/rollup/dis
+t/es/shared/node-entry.
+js:5447:40)
+    at 
+CallExpression.bind (fi
+le:///C:/Users/Krupa%20
+Shah/Desktop/College/Pr
+ojects%20-%20Resume/Cul
+ture_Stack/frontend/nod
+e_modules/rollup/dist/e
+s/shared/node-entry.js:
+2825:28)
+    at 
+CallExpression.bind (fi
+le:///C:/Users/Krupa%20
+Shah/Desktop/College/Pr
+ojects%20-%20Resume/Cul
+ture_Stack/frontend/nod
+e_modules/rollup/dist/e
+s/shared/node-entry.js:
+12179:15)[39m

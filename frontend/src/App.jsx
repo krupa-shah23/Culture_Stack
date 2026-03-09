@@ -12,6 +12,8 @@ import PodcastDetail from "./pages/PodcastDetail";
 import Activity from "./pages/Activity";
 import Meet from "./pages/Meet";
 import MeetingRoom from "./pages/MeetingRoom";
+import LiveInsights from "./pages/LiveInsights";
+import PreviousInsights from "./pages/PreviousInsights";
 import Profile from "./pages/Profile";
 import DirectMessage from "./pages/DirectMessage";
 import Messages from "./pages/Messages";
@@ -76,6 +78,8 @@ export default function App() {
           <Route path="/activity" element={<MainLayout><Activity /></MainLayout>} />
           <Route path="/meet" element={<MainLayout><Meet /></MainLayout>} />
           <Route path="/meet/:roomId" element={<MeetingRoom />} />
+          <Route path="/insights/live" element={<MainLayout><LiveInsights /></MainLayout>} />
+          <Route path="/insights" element={<MainLayout><PreviousInsights /></MainLayout>} />
           <Route path="/profile/:id" element={<MainLayout><Profile /></MainLayout>} />
           {/* Direct Messaging (DM) - opened from a user's profile */}
           <Route path="/dm/:userId" element={<MainLayout><DirectMessage /></MainLayout>} />
