@@ -179,31 +179,53 @@ export default function PostCard({ post, onOpenModal }) {
         <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={handleUpvote}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-md transition-colors duration-200 ${userVote === 'upvote'
-              ? 'bg-black text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-md transition-colors duration-200 ${userVote === "upvote"
+              ? "bg-green-500 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-green-100 border border-gray-200"
               }`}
           >
-            {/* Up arrow */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" fill="none" className="w-4 h-4 pointer-events-none">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              strokeWidth={2.5}
+              stroke="currentColor"
+              fill="none"
+              className={`w-4 h-4 pointer-events-none ${userVote === "upvote" ? "text-white" : "text-gray-500"
+                }`}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
             </svg>
-            <span className="font-semibold text-sm pointer-events-none">{upvoteCount}</span>
+
+            <span className="font-semibold text-sm pointer-events-none">
+              {upvoteCount}
+            </span>
           </button>
 
           <button
             onClick={handleDownvote}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-md transition-colors duration-200 ${userVote === 'downvote'
-              ? 'bg-black text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-md transition-colors duration-200 ${userVote === "downvote"
+              ? "bg-red-500 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-red-100 border border-gray-200"
               }`}
           >
-            {/* Down arrow */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" fill="none" className="w-4 h-4 pointer-events-none">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              strokeWidth={2.5}
+              stroke="currentColor"
+              fill="none"
+              className={`w-4 h-4 pointer-events-none ${userVote === "downvote" ? "text-white" : "text-gray-500"
+                }`}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
             </svg>
-            <span className="font-semibold text-sm pointer-events-none">{downvoteCount}</span>
+
+            <span className="font-semibold text-sm pointer-events-none">
+              {downvoteCount}
+            </span>
           </button>
+
+
           <button
             onClick={(e) => {
               e.stopPropagation();

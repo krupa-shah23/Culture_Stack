@@ -4,6 +4,7 @@ import { createOrGetConversation, getConversationMessages, sendChatMessage } fro
 import { Search, FileText, Image as ImageIcon, Video, Folder, Paperclip, Send, MoreVertical, ChevronDown, Clock, CheckCircle2, Check, CheckCheck } from 'lucide-react';
 import { socket } from '../utils/socket';
 import { markMessagesAsRead } from '../api/axios';
+import { isNewDay, formatDateLabel } from '../utils/dateUtils';
 
 export default function DirectMessage() {
   const { userId } = useParams();
@@ -291,34 +292,48 @@ export default function DirectMessage() {
                   </div>
                 )}
 
-                {messages.map((m) => {
+                {messages.map((m, idx) => {
                   const mine = m.sender._id === currentUser?._id;
+                  const showDateSeparator = isNewDay(
+                    m.createdAt,
+                    idx > 0 ? messages[idx - 1].createdAt : null
+                  );
 
                   return (
-                    <div key={m._id} className={`flex flex-col ${mine ? "items-end" : "items-start"}`}>
-                      <span className="text-[10px] font-medium text-charcoal/40 mb-1 ml-1 mr-1">
-                        {mine ? 'You' : m.sender.fullName}, {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                      <div className={`flex gap-2 max-w-[70%] ${mine ? "flex-row-reverse" : "flex-row"}`}>
-                        {!mine && (
-                          <div className="w-8 h-8 rounded-full bg-charcoal text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-auto">
-                            {m.sender.fullName[0]}
-                          </div>
-                        )}
-                        <div
-                          className={`px-5 py-3.5 rounded-2xl shadow-sm text-sm leading-relaxed relative flex flex-col ${mine
-                            ? "bg-charcoal text-white rounded-br-sm"
-                            : "bg-white text-charcoal border border-gray-100 rounded-bl-sm"
-                            }`}
-                        >
-                          <span className={`${mine ? "pr-4" : ""}`}>{m.content}</span>
-                          {mine && (
-                            <span className="absolute bottom-1 right-1.5 text-white/70">
-                              {m.status === "sent" && <Check size={12} />}
-                              {m.status === "delivered" && <CheckCheck size={12} />}
-                              {m.status === "read" && <CheckCheck size={12} className="text-blue-400" />}
-                            </span>
+                    <div key={m._id} className="flex flex-col">
+                      {showDateSeparator && (
+                        <div className="flex justify-center my-6">
+                          <span className="bg-gray-100/80 text-charcoal/60 text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
+                            {formatDateLabel(m.createdAt)}
+                          </span>
+                        </div>
+                      )}
+
+                      <div className={`flex flex-col ${mine ? "items-end" : "items-start"} mb-6`}>
+                        <span className="text-[10px] font-medium text-charcoal/40 mb-1 ml-1 mr-1">
+                          {mine ? 'You' : m.sender.fullName}, {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <div className={`flex gap-2 max-w-[70%] ${mine ? "flex-row-reverse" : "flex-row"}`}>
+                          {!mine && (
+                            <div className="w-8 h-8 rounded-full bg-charcoal text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-auto">
+                              {m.sender.fullName[0]}
+                            </div>
                           )}
+                          <div
+                            className={`px-5 py-3.5 rounded-2xl shadow-sm text-sm leading-relaxed relative flex flex-col ${mine
+                              ? "bg-charcoal text-white rounded-br-sm"
+                              : "bg-white text-charcoal border border-gray-100 rounded-bl-sm"
+                              }`}
+                          >
+                            <span className={`${mine ? "pr-4" : ""}`}>{m.content}</span>
+                            {mine && (
+                              <span className="absolute bottom-1 right-1.5 text-white/70">
+                                {m.status === "sent" && <Check size={12} />}
+                                {m.status === "delivered" && <CheckCheck size={12} />}
+                                {m.status === "read" && <CheckCheck size={12} className="text-blue-400" />}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

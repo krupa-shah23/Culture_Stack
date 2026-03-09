@@ -160,18 +160,17 @@ export default function Feed() {
         <div className="flex-[1] space-y-10 pl-0">
 
           {/* Trending Discussions */}
-          <div className="bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-5 overflow-hidden relative">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] shadow-sm" />
-            <h3 className="text-lg font-bold mb-4 pl-3 text-[#1A1A1A]">Trending Discussions</h3>
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-5 md:p-6 relative overflow-hidden group w-full border-l-4 border-l-[#8C7851]">
+            <h3 className="text-lg font-bold mb-4 text-[#1A1A1A]">Trending Discussions</h3>
 
             {trendingLoading ? (
-              <div className="text-sm text-charcoal/80 font-medium pl-3">Loading...</div>
+              <div className="text-sm text-charcoal/80 font-medium">Loading...</div>
             ) : trendingError ? (
-              <div className="text-sm text-red-500 font-medium pl-3">{trendingError}</div>
+              <div className="text-sm text-red-500 font-medium">{trendingError}</div>
             ) : trending.length === 0 ? (
-              <div className="text-sm text-charcoal/80 font-medium pl-3">No trending posts</div>
+              <div className="text-sm text-charcoal/80 font-medium">No trending posts</div>
             ) : (
-              <ol className="space-y-3 pl-3">
+              <ol className="space-y-3">
                 {trending.map((t, idx) => (
                   <li
                     key={t._id}
@@ -190,9 +189,8 @@ export default function Feed() {
           </div>
 
           {/* AI Thought Starter */}
-          <div className="bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-5 overflow-hidden relative group w-full">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] shadow-sm" />
-            <div className="pl-3">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-5 md:p-6 relative overflow-hidden group w-full border-l-4 border-l-[#8C7851]">
+            <div>
               <h2 className="font-bold text-[#1A1A1A] mb-3">AI Thought Starter</h2>
               <p className="text-sm text-charcoal/80 mb-6">
                 What's one thing your team should stop doing immediately?
@@ -204,12 +202,11 @@ export default function Feed() {
           </div>
 
           {/* CONTENT TYPE FILTER */}
-          <div className="relative bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-5 overflow-hidden">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] shadow-sm" />
-            <h3 className="text-lg font-bold mb-4 pl-3 text-[#1A1A1A]">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-5 md:p-6 relative overflow-hidden group w-full border-l-4 border-l-[#8C7851]">
+            <h3 className="text-lg font-bold mb-4 text-[#1A1A1A]">
               Content Type
             </h3>
-            <div className="space-y-2 pl-3">
+            <div className="space-y-2">
               {[
                 { label: "All", value: "all" },
                 { label: "Reflection", value: "reflection" },
@@ -236,15 +233,14 @@ export default function Feed() {
           </div>
 
           {/* SORT BY FILTER */}
-          <div className="relative bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-5 overflow-hidden">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] shadow-sm" />
-            <div className="flex items-center justify-between mb-4 pl-3">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-5 md:p-6 relative overflow-hidden group w-full border-l-4 border-l-[#8C7851]">
+            <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-[#1A1A1A]">Sort By</h3>
               <svg className="w-5 h-5 text-charcoal/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
             </div>
-            <div className="space-y-2 pl-3">
+            <div className="space-y-2">
               {[
                 { label: "Latest", value: "latest" },
                 { label: "Oldest", value: "oldest" },

@@ -1,38 +1,10 @@
-﻿import { useEffect, useRef, useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Video, Info } from "lucide-react";
 
 export default function Meet() {
-  const jitsiContainerRef = useRef(null);
   const [roomName, setRoomName] = useState("");
-  const [meetingStarted, setMeetingStarted] = useState(false);
-  const [isJoining, setIsJoining] = useState(false);
-  const jitsiAPIRef = useRef(null);
   const navigate = useNavigate();
-
-  // Get logged-in user info
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
-  const displayName = userInfo?.fullName || "User";
-
-  // Load Jitsi Meet external API script
-  useEffect(() => {
-    // Check if script already exists
-    if (!window.JitsiMeetExternalAPI) {
-      const script = document.createElement("script");
-      script.src = "https://meet.jitsi/external_api.js";
-      script.async = true;
-      script.onload = () => {
-        console.log("[SUCCESS] Jitsi Meet API loaded successfully");
-      };
-      script.onerror = () => {
-        console.error("[ERROR] Failed to load Jitsi Meet API");
-      };
-      document.body.appendChild(script);
-      console.log("[INFO] Loading Jitsi Meet API script...");
-    } else {
-      console.log("[SUCCESS] Jitsi Meet API already available");
-    }
-  }, []);
 
   // Handle meeting start triggers
   const startMeeting = (e) => {
@@ -43,137 +15,8 @@ export default function Meet() {
       return;
     }
 
-    setIsJoining(true);
-    setMeetingStarted(true);
-  };
-
-  // Initialize Jitsi when meetingStarted becomes true and container is ready
-  useEffect(() => {
-    if (!meetingStarted || !jitsiContainerRef.current || !window.JitsiMeetExternalAPI) {
-      if (meetingStarted && !window.JitsiMeetExternalAPI) {
-        // API not ready yet, wait/retry handled by script load, 
-        // but we can start a small poller if needed or just rely on the user trying again?
-        // Actually, let's just wait a bit if script is loading
-        const checkInterval = setInterval(() => {
-          if (window.JitsiMeetExternalAPI && jitsiContainerRef.current) {
-            clearInterval(checkInterval);
-            initJitsi();
-          }
-        }, 500);
-        return () => clearInterval(checkInterval);
-      }
-      return;
-    }
-
-    initJitsi();
-
-    // specific cleanup for this effect
-    return () => {
-      if (jitsiAPIRef.current) {
-        console.log("Cleaning up Jitsi instance on effect unmount");
-        jitsiAPIRef.current.dispose();
-        jitsiAPIRef.current = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meetingStarted, roomName]); // Re-run if meeting "starts"
-
-  const initJitsi = () => {
-    if (jitsiAPIRef.current) return; // already active
-
-    const domain = "meet.jitsi";
     const cleanRoomName = roomName.toLowerCase().trim().replace(/\s+/g, "-");
-
-    console.log("ðŸŽ¥ Initializing Jitsi for room:", cleanRoomName);
-
-    const options = {
-      roomName: cleanRoomName,
-      parentNode: jitsiContainerRef.current,
-      width: "100%",
-      height: "100%",
-      configOverwrite: {
-        startWithAudioMuted: false,
-        startWithVideoMuted: false,
-        enableWelcomePage: false,
-        disableAudioLevels: true,
-      },
-      interfaceConfigOverwrite: {
-        DEFAULT_LANGUAGE: "en",
-        SHOW_JITSI_WATERMARK: false,
-        TOOLBAR_BUTTONS: [
-          "microphone",
-          "camera",
-          "closedcaptions",
-          "desktop",
-          "fullscreen",
-          "fodeviceselection",
-          "hangup",
-          "profile",
-          "chat",
-          "recording",
-          "livestream",
-          "etherpad",
-          "sharedvideo",
-          "settings",
-          "raisehand",
-          "videoquality",
-          "filmstrip",
-          "invite",
-          "feedback",
-          "stats",
-          "shortcuts",
-          "tileview",
-        ],
-        VERTICAL_FILMSTRIP: false,
-        DISPLAY_WELCOME_PAGE_CONTENT: false,
-        HIDE_INVITE_MORE_HEADER: true,
-      },
-      userInfo: {
-        displayName: displayName || "User",
-      },
-    };
-
-    try {
-      jitsiAPIRef.current = new window.JitsiMeetExternalAPI(domain, options);
-      console.log("[SUCCESS] Jitsi instance created");
-      setIsJoining(false);
-
-      jitsiAPIRef.current.addEventListener("videoConferenceJoined", () => {
-        console.log("[SUCCESS] User joined the meeting");
-        setIsJoining(false);
-      });
-
-      jitsiAPIRef.current.addEventListener("videoConferenceLeft", () => {
-        console.log("[LEAVE] User left the meeting");
-        setMeetingStarted(false);
-        setRoomName("");
-        jitsiAPIRef.current.dispose();
-        jitsiAPIRef.current = null;
-      });
-
-      jitsiAPIRef.current.addEventListener("readyToClose", () => {
-        console.log("[CLOSE] Meeting is ready to close");
-        setMeetingStarted(false);
-        setRoomName("");
-        jitsiAPIRef.current.dispose();
-        jitsiAPIRef.current = null;
-      });
-
-    } catch (error) {
-      console.error("[ERROR] Error starting Jitsi meeting:", error);
-      alert("Failed to load meeting. Please try again.");
-      setIsJoining(false);
-      setMeetingStarted(false);
-    }
-  };
-
-  const leaveMeeting = () => {
-    if (jitsiAPIRef.current) {
-      jitsiAPIRef.current.executeCommand("hangup");
-      jitsiAPIRef.current = null;
-    }
-    setMeetingStarted(false);
-    setRoomName("");
+    navigate(`/meet/${cleanRoomName}`);
   };
 
   return (
@@ -184,193 +27,131 @@ export default function Meet() {
       {/* MASTER CONTAINER */}
       <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col gap-8">
         <div className="max-w-7xl mx-auto w-full">
-          {!meetingStarted ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
 
-                {/* CREATE A MEET */}
-                <div
-                  className="
-                  bg-white border border-black/5 rounded-2xl shadow-sm
-                  p-8 transition-all duration-300
-                "
-                >
-                  <div className="text-5xl mb-4"></div>
-                  <h2 className="text-2xl font-bold mb-4 text-[#1A1A1A]">Create a New Meet</h2>
-                  <p className="text-[#1A1A1A]/80 text-sm mb-6">
-                    Start a new meeting with a unique room name. Share the name with others so they can join.
-                  </p>
+            {/* CREATE A MEET */}
+            <div
+              className="
+              bg-white border border-black/5 rounded-2xl shadow-sm
+              p-8 transition-all duration-300
+            "
+            >
+              <div className="text-5xl mb-4"></div>
+              <h2 className="text-2xl font-bold mb-4 text-[#1A1A1A]">Create a New Meet</h2>
+              <p className="text-[#1A1A1A]/80 text-sm mb-6">
+                Start a new meeting with a unique room name. Share the name with others so they can join.
+              </p>
 
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      if (!roomName.trim()) {
-                        alert("Please enter a meeting room name");
-                        return;
-                      }
-                      startMeeting(e);
-                    }}
-                    className="space-y-4"
-                  >
-                    <div>
-                      <label
-                        htmlFor="createRoom"
-                        className="block text-sm font-medium text-charcoal/80 mb-2"
-                      >
-                        Room Name
-                      </label>
-                      <input
-                        id="createRoom"
-                        type="text"
-                        value={roomName}
-                        onChange={(e) => setRoomName(e.target.value)}
-                        placeholder="e.g., team-standup"
-                        className="
-                        w-full px-4 py-3
-                        bg-earth-bg border border-black/5 rounded-xl
-                        text-charcoal placeholder-[#4A4A4A]/50
-                        focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20
-                        transition-colors shadow-sm
-                      "
-                      />
-                      <p className="text-xs text-charcoal/80 mt-2">
-                        Use a descriptive name like "client-call" or "brainstorm-2024"
-                      </p>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isJoining}
-                      className="
-                      w-full px-6 py-3
-                      bg-[#1A1A1A] text-white font-bold rounded-full
-                      disabled:opacity-50 disabled:cursor-not-allowed
-                      hover:bg-black hover:shadow-md transition-all flex items-center justify-center gap-2
-                    "
-                    >
-                      {isJoining ? "Starting..." : <><Plus className="w-5 h-5" /> Create & Start Meet</>}
-                    </button>
-                  </form>
-                </div>
-
-                {/* JOIN AN EXISTING MEET */}
-                <div
-                  className="
-                  bg-white border border-black/5 rounded-2xl shadow-sm
-                  p-8 transition-all duration-300
-                "
-                >
-                  <div className="text-5xl mb-4"></div>
-                  <h2 className="text-2xl font-bold mb-4 text-[#1A1A1A]">Join Existing Meet</h2>
-                  <p className="text-[#1A1A1A]/80 text-sm mb-6">
-                    Already have a meeting room name? Enter it here to join the meeting.
-                  </p>
-
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      if (!roomName.trim()) {
-                        alert("Please enter a meeting room name");
-                        return;
-                      }
-                      startMeeting(e);
-                    }}
-                    className="space-y-4"
-                  >
-                    <div>
-                      <label
-                        htmlFor="joinRoom"
-                        className="block text-sm font-medium text-charcoal/80 mb-2"
-                      >
-                        Room Name to Join
-                      </label>
-                      <input
-                        id="joinRoom"
-                        type="text"
-                        value={roomName}
-                        onChange={(e) => setRoomName(e.target.value)}
-                        placeholder="e.g., team-standup"
-                        className="
-                        w-full px-4 py-3
-                        bg-earth-bg border border-black/5 rounded-xl
-                        text-charcoal placeholder-[#4A4A4A]/50
-                        focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20
-                        transition-colors shadow-sm
-                      "
-                      />
-                      <p className="text-xs text-charcoal/80 mt-2">
-                        Ask the organizer for the room name
-                      </p>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isJoining}
-                      className="
-                      w-full px-6 py-3
-                      bg-[#1A1A1A] text-white font-bold rounded-full
-                      disabled:opacity-50 disabled:cursor-not-allowed
-                      hover:bg-black hover:shadow-md transition-all flex items-center justify-center gap-2
-                    "
-                    >
-                      {isJoining ? "Joining..." : <><Video className="w-5 h-5" /> Join Meet</>}
-                    </button>
-                  </form>
-                </div>
-
-              </div>
-
-              {/* Info Box */}
-              <div className="bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-6 text-center">
-                <p className="text-sm text-[#1A1A1A] mb-2 flex items-center justify-center gap-2">
-                  <Info className="w-4 h-4 text-[#1A1A1A]/50" /> <strong>Tip:</strong> The same room name is used for both creating and joining.
-                </p>
-                <p className="text-xs text-[#1A1A1A]/80">
-                  So if you create a meet with room name "client-call", others can join by entering the same name.
-                </p>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Meeting Active - Header */}
-              <div className="flex justify-between items-center mb-6">
+              <form
+                onSubmit={startMeeting}
+                className="space-y-4"
+              >
                 <div>
-                  <h1 className="text-3xl font-bold">{roomName}</h1>
-                  <p className="text-charcoal/80 text-sm mt-1">
-                    Meeting in progress • Connected as {displayName}
+                  <label
+                    htmlFor="createRoom"
+                    className="block text-sm font-medium text-charcoal/80 mb-2"
+                  >
+                    Room Name
+                  </label>
+                  <input
+                    id="createRoom"
+                    type="text"
+                    value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                    placeholder="e.g., team-standup"
+                    className="
+                    w-full px-4 py-3
+                    bg-earth-bg border border-black/5 rounded-xl
+                    text-charcoal placeholder-[#4A4A4A]/50
+                    focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20
+                    transition-colors shadow-sm
+                  "
+                  />
+                  <p className="text-xs text-charcoal/80 mt-2">
+                    Use a descriptive name like "client-call" or "brainstorm-2024"
                   </p>
                 </div>
+
                 <button
-                  onClick={leaveMeeting}
+                  type="submit"
                   className="
-                  px-6 py-3
-                  bg-red-600
-                  hover:bg-red-700
-                  text-white
-                  font-semibold
-                  rounded-lg
-                  transition
+                  w-full px-6 py-3
+                  bg-[#1A1A1A] text-white font-bold rounded-full
+                  hover:bg-black hover:shadow-md transition-all flex items-center justify-center gap-2
                 "
                 >
-                  Leave Meeting
+                  <Plus className="w-5 h-5" /> Create & Start Meet
                 </button>
-              </div>
+              </form>
+            </div>
 
-              {/* Jitsi Meet Container */}
-              <div
-                ref={jitsiContainerRef}
-                className="
-                w-full
-                bg-black
-                rounded-2xl
-                overflow-hidden
-                shadow-lg
-                border border-black/5
-              "
-                style={{ height: "600px" }}
-              />
-            </>
-          )}
+            {/* JOIN AN EXISTING MEET */}
+            <div
+              className="
+              bg-white border border-black/5 rounded-2xl shadow-sm
+              p-8 transition-all duration-300
+            "
+            >
+              <div className="text-5xl mb-4"></div>
+              <h2 className="text-2xl font-bold mb-4 text-[#1A1A1A]">Join Existing Meet</h2>
+              <p className="text-[#1A1A1A]/80 text-sm mb-6">
+                Already have a meeting room name? Enter it here to join the meeting.
+              </p>
+
+              <form
+                onSubmit={startMeeting}
+                className="space-y-4"
+              >
+                <div>
+                  <label
+                    htmlFor="joinRoom"
+                    className="block text-sm font-medium text-charcoal/80 mb-2"
+                  >
+                    Room Name to Join
+                  </label>
+                  <input
+                    id="joinRoom"
+                    type="text"
+                    value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                    placeholder="e.g., team-standup"
+                    className="
+                    w-full px-4 py-3
+                    bg-earth-bg border border-black/5 rounded-xl
+                    text-charcoal placeholder-[#4A4A4A]/50
+                    focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20
+                    transition-colors shadow-sm
+                  "
+                  />
+                  <p className="text-xs text-charcoal/80 mt-2">
+                    Ask the organizer for the room name
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  className="
+                  w-full px-6 py-3
+                  bg-[#1A1A1A] text-white font-bold rounded-full
+                  hover:bg-black hover:shadow-md transition-all flex items-center justify-center gap-2
+                "
+                >
+                  <Video className="w-5 h-5" /> Join Meet
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+          {/* Info Box */}
+          <div className="bg-[#F5F5F0] border border-black/5 rounded-2xl shadow-sm p-6 text-center">
+            <p className="text-sm text-[#1A1A1A] mb-2 flex items-center justify-center gap-2">
+              <Info className="w-4 h-4 text-[#1A1A1A]/50" /> <strong>Tip:</strong> The same room name is used for both creating and joining.
+            </p>
+            <p className="text-xs text-[#1A1A1A]/80">
+              So if you create a meet with room name "client-call", others can join by entering the same name.
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getMyOrganization, createOrGetConversation, getConversationMessages, sendChatMessage, markMessagesAsRead, getMyConversations } from '../api/axios';
 import { Search, Send, ChevronDown, Check, CheckCheck } from 'lucide-react';
 import { socket } from '../utils/socket';
-
+import { isNewDay, formatDateLabel } from '../utils/dateUtils';
 export default function Messages() {
   const [members, setMembers] = useState([]);
   const [loadingMembers, setLoadingMembers] = useState(true);
@@ -401,26 +401,41 @@ export default function Messages() {
                   <>
                     {messages.map((m, idx) => {
                       const isMine = m.sender._id === currentUser?._id;
+                      const showDateSeparator = isNewDay(
+                        m.createdAt,
+                        idx > 0 ? messages[idx - 1].createdAt : null
+                      );
+
                       return (
-                        <div key={m._id || idx} className={`flex flex-col ${isMine ? "items-end" : "items-start"}`}>
-                          <div
-                            className={`px-5 py-3.5 rounded-2xl max-w-[65%] text-[15px] leading-relaxed shadow-sm relative flex flex-col ${isMine
-                              ? "bg-[#1A1A1A] text-white rounded-tr-sm"
-                              : "bg-white text-charcoal border border-gray-100 rounded-tl-sm"
-                              }`}
-                          >
-                            <span className={`${isMine ? "pr-5" : ""}`}>{m.content}</span>
-                            {isMine && (
-                              <span className="absolute bottom-1 right-2 text-white/70">
-                                {m.status === "sent" && <Check size={12} />}
-                                {m.status === "delivered" && <CheckCheck size={12} />}
-                                {m.status === "read" && <CheckCheck size={12} className="text-blue-400" />}
+                        <div key={m._id || idx} className="flex flex-col">
+                          {showDateSeparator && (
+                            <div className="flex justify-center my-6">
+                              <span className="bg-[#EAEAEA] text-[#7A7A7A] text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
+                                {formatDateLabel(m.createdAt)}
                               </span>
-                            )}
+                            </div>
+                          )}
+
+                          <div className={`flex flex-col ${isMine ? "items-end" : "items-start"} mb-4`}>
+                            <div
+                              className={`px-5 py-3.5 rounded-2xl max-w-[65%] text-[15px] leading-relaxed shadow-sm relative flex flex-col ${isMine
+                                ? "bg-[#1A1A1A] text-white rounded-tr-sm"
+                                : "bg-white text-charcoal border border-gray-100 rounded-tl-sm"
+                                }`}
+                            >
+                              <span className={`${isMine ? "pr-5" : ""}`}>{m.content}</span>
+                              {isMine && (
+                                <span className="absolute bottom-1 right-2 text-white/70">
+                                  {m.status === "sent" && <Check size={12} />}
+                                  {m.status === "delivered" && <CheckCheck size={12} />}
+                                  {m.status === "read" && <CheckCheck size={12} className="text-blue-400" />}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-xs text-charcoal/40 font-medium mt-1.5 px-1">
+                              {new Date(m.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
                           </div>
-                          <span className="text-xs text-charcoal/40 font-medium mt-1.5 px-1">
-                            {new Date(m.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </span>
                         </div>
                       )
                     })}

@@ -11,6 +11,7 @@ import UploadPodcast from "./pages/UploadPodcast";
 import PodcastDetail from "./pages/PodcastDetail";
 import Activity from "./pages/Activity";
 import Meet from "./pages/Meet";
+import MeetingRoom from "./pages/MeetingRoom";
 import Profile from "./pages/Profile";
 import DirectMessage from "./pages/DirectMessage";
 import Messages from "./pages/Messages";
@@ -74,6 +75,7 @@ export default function App() {
           <Route path="/messages" element={<MainLayout><Messages /></MainLayout>} />
           <Route path="/activity" element={<MainLayout><Activity /></MainLayout>} />
           <Route path="/meet" element={<MainLayout><Meet /></MainLayout>} />
+          <Route path="/meet/:roomId" element={<MeetingRoom />} />
           <Route path="/profile/:id" element={<MainLayout><Profile /></MainLayout>} />
           {/* Direct Messaging (DM) - opened from a user's profile */}
           <Route path="/dm/:userId" element={<MainLayout><DirectMessage /></MainLayout>} />
