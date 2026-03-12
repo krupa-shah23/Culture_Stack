@@ -1,0 +1,26 @@
+﻿
+C:\Users\Krupa Shah\Desktop\College\Projects - Resume\Culture_Stack\frontend\src\pages\Profile.jsx
+   11:19  error    'setPageTab' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                        no-unused-vars
+   20:10  error    'postsLoading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                      no-unused-vars
+   21:10  error    'podcastsLoading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                   no-unused-vars
+   66:9   error    'fetchPosts' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                        no-unused-vars
+  103:6   warning  React Hook useEffect has a missing dependency: 'fetchPodcasts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Krupa Shah\Desktop\College\Projects - Resume\Culture_Stack\frontend\src\pages\ProfileComments.jsx
+   8:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  10:12  error  'profile' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+
+C:\Users\Krupa Shah\Desktop\College\Projects - Resume\Culture_Stack\frontend\src\pages\ProfilePodcasts.jsx
+  10:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  12:12  error  'profile' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+
+C:\Users\Krupa Shah\Desktop\College\Projects - Resume\Culture_Stack\frontend\src\pages\ProfileReactions.jsx
+   8:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  10:12  error  'profile' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+
+C:\Users\Krupa Shah\Desktop\College\Projects - Resume\Culture_Stack\frontend\src\pages\ProfileSettings.jsx
+   8:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  10:12  error  'profile' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+
+Γ£û 13 problems (12 errors, 1 warning)
+

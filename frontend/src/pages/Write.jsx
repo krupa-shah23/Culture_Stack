@@ -8,6 +8,7 @@ import { Shield } from "lucide-react";
 export default function Write() {
   const navigate = useNavigate();
 
+  const [selectedPersona, setSelectedPersona] = useState("innovator");
   const [contentType, setContentType] = useState("Reflection");
   const [safetyLevel, setSafetyLevel] = useState(1);
   const [content, setContent] = useState("");
@@ -28,8 +29,6 @@ export default function Write() {
   const [harshScore, setHarshScore] = useState({ score: 0, intensity: "safe", count: 0, words: [] });
 
   const debounceTimer = useRef(null);
-
-  const [selectedPersona, setSelectedPersona] = useState("innovator");
 
   const personas = [
     { key: "innovator", label: "Innovator" },
@@ -173,54 +172,59 @@ export default function Write() {
       <div className="bg-mesh-gradient fixed inset-0 z-[-1]" />
 
       {/* MASTER CONTAINER (Matching Feed page structure) */}
-      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col md:flex-row gap-8 h-[calc(100vh-120px)] overflow-hidden">
+      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col md:flex-row gap-8">
 
         {/* ================= LEFT COLUMN - EDITOR & AI TOOLS ================= */}
-        <div className="flex-[3] flex flex-col gap-8 overflow-y-auto no-scrollbar pb-12 pr-2">
+        <div className="flex-[3] flex flex-col gap-8 pb-12">
 
-          {/* EDITOR CARD */}
-          <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-10 shadow-sm relative overflow-hidden">
+          {/* PSYCHOLOGICAL SAFETY SLIDER CARD */}
+          <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8 shadow-sm relative overflow-hidden">
+            <p className="text-sm mb-3 text-charcoal font-medium">
+              Psychological Safety Level
+            </p>
 
-            {/* Slider */}
-            <div className="mb-8">
-              <p className="text-sm mb-3 text-charcoal font-medium">
-                Psychological Safety Level
-              </p>
+            <input
+              type="range"
+              min="1"
+              max="3"
+              value={safetyLevel}
+              onChange={(e) => setSafetyLevel(parseInt(e.target.value))}
+              className="w-full accent-[#1A1A1A] hover:accent-black transition cursor-pointer"
+            />
 
-              <input
-                type="range"
-                min="1"
-                max="3"
-                value={safetyLevel}
-                onChange={(e) => setSafetyLevel(parseInt(e.target.value))}
-                className="w-full accent-[#1A1A1A] hover:accent-black transition cursor-pointer"
-              />
-
-              <div className="flex justify-between text-xs text-charcoal/80 mt-3 px-1">
-                <div className="flex flex-col items-center">
-                  <span className={`font-bold text-lg ${safetyLevel === 1 ? 'text-charcoal' : ''}`}>1</span>
-                  <span>Public</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className={`font-bold text-lg ${safetyLevel === 2 ? 'text-charcoal' : ''}`}>2</span>
-                  <span>Team</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className={`font-bold text-lg ${safetyLevel === 3 ? 'text-charcoal' : ''}`}>3</span>
-                  <span>Anonymous</span>
-                </div>
+            <div className="flex justify-between text-xs mt-3 px-1 text-charcoal">
+              <div className="flex flex-col items-center">
+                <span className="font-bold text-lg">1</span>
+                <span>Public</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="font-bold text-lg">2</span>
+                <span>Team</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="font-bold text-lg">3</span>
+                <span>Anonymous</span>
               </div>
             </div>
+          </div>
 
+          {/* EDITOR & BUTTONS MODULE */}
+          <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8 shadow-sm">
             <div className="flex flex-col md:flex-row gap-6">
-              <textarea
-                placeholder="What's on your mind?..."
-                className="flex-[2] min-h-[250px] bg-earth-surface border border-[#d6c6a8] rounded-2xl p-6 text-charcoal placeholder:text-charcoal/80 text-base resize-none focus:outline-none focus:border-charcoal focus:ring-2 focus:ring-charcoal/50 transition leading-relaxed shadow-sm"
-                value={content}
-                onChange={handleContentChange}
-              />
 
+              {/* Left: What's on your mind */}
+              <div className="flex-[2] flex">
+                <textarea
+                  placeholder="Write here what you want to post or publish..."
+                  className="w-full min-h-[250px] bg-earth-surface border border-black/5 rounded-2xl p-6 text-charcoal placeholder:text-charcoal/80 text-base resize-none focus:outline-none focus:border-charcoal focus:ring-2 focus:ring-charcoal/50 transition leading-relaxed shadow-sm"
+                  value={content}
+                  onChange={handleContentChange}
+                />
+              </div>
+
+              {/* Right: 3 Action Buttons */}
               <div className="flex-[1] flex flex-col gap-4 justify-between">
+
                 {/* Media Upload & Preview */}
                 <div className="w-full h-full flex flex-col">
                   <input
@@ -251,7 +255,7 @@ export default function Write() {
                   ) : (
                     <button
                       onClick={() => fileInputRef.current.click()}
-                      className="w-full h-full min-h-[100px] flex items-center justify-center gap-2 py-3 rounded-2xl bg-earth-surface text-charcoal hover:bg-[#d6c6a8] transition text-sm font-bold shadow-sm cursor-pointer border border-[#d6c6a8] border-opacity-50 flex-col text-xs"
+                      className="w-full h-full min-h-[100px] flex items-center justify-center gap-2 py-3 rounded-2xl bg-earth-surface text-charcoal hover:bg-black/5 transition text-sm font-bold shadow-sm cursor-pointer border border-black/5 border-opacity-50 flex-col"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -264,7 +268,7 @@ export default function Write() {
                 <button
                   onClick={handleAiRefine}
                   disabled={isRefining}
-                  className="w-full py-3.5 rounded-2xl font-bold text-white bg-[#1A1A1A] hover:bg-black transition disabled:opacity-50 shadow-sm cursor-pointer text-sm"
+                  className="w-full py-4 rounded-2xl font-bold text-white bg-[#1A1A1A] hover:bg-black transition disabled:opacity-50 shadow-sm cursor-pointer text-sm"
                 >
                   {isRefining ? "Refining..." : "Make Constructive (AI)"}
                 </button>
@@ -272,7 +276,7 @@ export default function Write() {
                 <button
                   onClick={handlePublish}
                   disabled={loading || (harshScore.intensity === "harsh" && harshScore.score > 0.7)}
-                  className={`w-full py-3.5 rounded-2xl font-bold text-white transition disabled:opacity-50 cursor-pointer text-sm ${harshScore.intensity === "harsh" && harshScore.score > 0.7
+                  className={`w-full py-4 rounded-2xl font-bold text-white transition disabled:opacity-50 cursor-pointer text-sm ${harshScore.intensity === "harsh" && harshScore.score > 0.7
                     ? "bg-[#4A4A4A] cursor-not-allowed"
                     : "bg-[#8C7851] hover:bg-[#A39066] shadow-sm"
                     }`}
@@ -344,23 +348,37 @@ export default function Write() {
             <div className="w-full md:w-1/3">
               <h2 className="text-xl font-semibold mb-5 text-charcoal">AI Advisors</h2>
               <div className="flex flex-col gap-3">
-                {personas.map((p, index) => {
+                {personas.map((p) => {
                   const isActive = selectedPersona === p.key;
 
                   return (
                     <button
                       key={p.key}
                       onClick={() => setSelectedPersona(p.key)}
-                      className={`relative flex items-center p-4 rounded-xl transition-all duration-300 bg-[#1A1A1A] hover:bg-black shadow-md w-full`}
+                      className={`flex items-center p-4 rounded-xl w-full transition-all duration-200 border
+      ${isActive
+                          ? "bg-[#8C7851] border-[#8C7851]"
+                          : "bg-black border-black"
+                        }`}
                     >
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shadow-sm bg-white text-[#1A1A1A] ${isActive ? 'mr-4' : ''}`}>
+                      {/* Avatar */}
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg mr-4
+        ${isActive
+                            ? "bg-white text-[#8C7851]"
+                            : "bg-white text-black"
+                          }`}
+                      >
                         {p.label[0]}
                       </div>
-                      {isActive && (
-                        <span className="font-semibold text-left text-white">
-                          {p.label}
-                        </span>
-                      )}
+
+                      {/* Label */}
+                      <span
+                        className={`font-semibold ${isActive ? "text-white" : "text-white"
+                          }`}
+                      >
+                        {p.label}
+                      </span>
                     </button>
                   );
                 })}
@@ -469,6 +487,6 @@ export default function Write() {
         </div>
 
       </div>
-    </div>
+    </div >
   );
 }

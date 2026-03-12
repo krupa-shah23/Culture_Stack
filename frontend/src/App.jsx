@@ -15,6 +15,11 @@ import MeetingRoom from "./pages/MeetingRoom";
 import LiveInsights from "./pages/LiveInsights";
 import PreviousInsights from "./pages/PreviousInsights";
 import Profile from "./pages/Profile";
+import ProfilePosts from "./pages/ProfilePosts";
+import ProfilePodcasts from "./pages/ProfilePodcasts";
+import ProfileComments from "./pages/ProfileComments";
+import ProfileReactions from "./pages/ProfileReactions";
+import ProfileSettings from "./pages/ProfileSettings";
 import DirectMessage from "./pages/DirectMessage";
 import Messages from "./pages/Messages";
 import Auth from "./pages/Auth";
@@ -81,6 +86,11 @@ export default function App() {
           <Route path="/insights/live" element={<MainLayout><LiveInsights /></MainLayout>} />
           <Route path="/insights" element={<MainLayout><PreviousInsights /></MainLayout>} />
           <Route path="/profile/:id" element={<MainLayout><Profile /></MainLayout>} />
+          <Route path="/profile/:id/posts" element={<MainLayout><ProfilePosts /></MainLayout>} />
+          <Route path="/profile/:id/podcasts" element={<MainLayout><ProfilePodcasts /></MainLayout>} />
+          <Route path="/profile/:id/comments" element={<MainLayout><ProfileComments /></MainLayout>} />
+          <Route path="/profile/:id/reactions" element={<MainLayout><ProfileReactions /></MainLayout>} />
+          <Route path="/profile/:id/settings" element={<MainLayout><ProfileSettings /></MainLayout>} />
           {/* Direct Messaging (DM) - opened from a user's profile */}
           <Route path="/dm/:userId" element={<MainLayout><DirectMessage /></MainLayout>} />
         </Routes>

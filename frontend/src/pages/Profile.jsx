@@ -5,19 +5,16 @@ import api from "../api/axios";
 import PostCard from "../components/layout/PostCard";
 import PodcastCard from "../components/layout/PodcastCard";
 import { FileText, Mic, MessageSquare, ThumbsUp } from "lucide-react";
+import ProfileSidebar from "../components/layout/ProfileSidebar";
 
 export default function Profile() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("posts"); // 'posts' | 'podcasts' | 'comments' | 'reactions'
   const [selectedStat, setSelectedStat] = useState(null); // For dropdown panel: 'posts' | 'podcasts' | 'comments' | 'reactions' | null
   const [isExpanded, setIsExpanded] = useState(false); // For dropdown expansion
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [podcasts, setPodcasts] = useState([]);
-  const [postsLoading, setPostsLoading] = useState(false);
-  const [podcastsLoading, setPodcastsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Fetcher with local fallback (so page still renders if server is unreachable)
@@ -62,30 +59,18 @@ export default function Profile() {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const fetchPosts = async () => {
-    if (userPosts.length > 0) return; // avoid refetch
-    setPostsLoading(true);
-    try {
-      const posts = await getUserPosts(id);
-      setUserPosts(posts);
-    } catch (err) {
-      console.error("Failed to fetch user posts", err);
-    } finally {
-      setPostsLoading(false);
-    }
+    // Left empty since Posts are handled on a separate page
   };
 
   const fetchPodcasts = async () => {
-    if (podcasts.length > 0) return; // avoid refetch
-    setPodcastsLoading(true);
     try {
       const res = await api.get(`/podcasts/user/${id}`);
       setPodcasts(res.data);
     } catch (err) {
       console.error("Failed to fetch user podcasts", err);
       setPodcasts([]);
-    } finally {
-      setPodcastsLoading(false);
     }
   };
 
@@ -93,15 +78,6 @@ export default function Profile() {
     fetchProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-
-  // Fetch content based on active tab
-  useEffect(() => {
-    if (activeTab === 'posts') {
-      fetchPosts();
-    } else if (activeTab === 'podcasts') {
-      fetchPodcasts();
-    }
-  }, [activeTab]);
 
   // Fetch data when dropdown stat is selected
   useEffect(() => {
@@ -148,215 +124,166 @@ export default function Profile() {
   const initial = user.fullName ? user.fullName.trim()[0].toUpperCase() : 'U';
 
   return (
-    <div className="flex-1 w-full px-4 md:px-6 pb-12 relative flex flex-col h-[calc(100vh-6rem)] relative bg-[#F5F5F0]">
-      {/* MASTER CONTAINER */}
-      <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col rounded-3xl border border-black/5 bg-white/40 backdrop-blur-xl shadow-sm overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
-        <div className="w-full space-y-10">
-          {error && (
-            <div className="rounded-md bg-yellow-100 border border-yellow-200 px-4 py-2 text-sm text-yellow-800">
-              Showing local profile - server error: {error}
-            </div>
-          )}
+    <div className="flex-1 w-full pb-12 relative flex flex-col pt-6 md:pt-10">
+      {/* Antigravity Mesh Background */}
+      <div className="bg-mesh-gradient fixed inset-0 z-[-1]" />
 
-          {/* PROFILE HEADER */}
-          <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
-            <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
+      {/* MASTER CONTAINER (Full width instead of boxed) */}
+      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10 flex flex-col md:flex-row gap-8">
 
-            <div className="flex flex-col md:flex-row gap-8 items-start md:items-center pl-3">
+        {/* ================= LEFT SIDEBAR ================= */}
+        <div className="flex-[1] space-y-6">
+          <ProfileSidebar activeTab="overview" />
+        </div>
 
-              <div className="w-24 h-24 rounded-full bg-earth-bg flex items-center justify-center text-3xl font-bold ring-1 ring-black/5 text-charcoal shadow-sm">
-                {initial}
+        {/* ================= RIGHT MAIN CONTENT ================= */}
+        <div className="flex-[3] space-y-6">
+          <div className="space-y-6">
+            {error && (
+              <div className="rounded-md bg-yellow-100 border border-yellow-200 px-4 py-2 text-sm text-yellow-800">
+                Showing local profile - server error: {error}
               </div>
+            )}
+            {/* PROFILE HEADER */}
+            <div className="relative bg-white rounded-2xl p-8 border border-black/5 shadow-sm overflow-hidden">
+              <div className="absolute left-0 top-0 h-full w-[6px] bg-charcoal rounded-l-2xl" />
 
-              <div className="flex-1 space-y-2">
-                <h1 className="text-3xl font-bold text-charcoal">{user.fullName}</h1>
-                <p className="text-[#1A1A1A]/80 text-sm">{user.department}</p>
-                <p className="text-[#1A1A1A] italic">{reflectionJourney.aiTheme ? `"${reflectionJourney.aiTheme} - theme detected"` : 'No bio available.'}</p>
+              <div className="flex flex-col md:flex-row gap-8 items-start md:items-center pl-3">
 
-                <div className="flex flex-wrap gap-3 mt-3">
-                  {badges.map((b) => (
-                    <span key={b} className="px-3 py-1 text-xs rounded-full bg-white border border-black/5 shadow-sm text-[#1A1A1A]">{b}</span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <Stat
-                  label="Posts"
-                  value={stats.postsCount}
-                  isActive={selectedStat === 'posts'}
-                  onClick={() => {
-                    if (selectedStat === 'posts') {
-                      setIsExpanded(!isExpanded);
-                    } else {
-                      setSelectedStat('posts');
-                      setIsExpanded(true);
-                    }
-                  }}
-                />
-                <Stat
-                  label="Podcasts"
-                  value={stats.podcastsCount}
-                  isActive={selectedStat === 'podcasts'}
-                  onClick={() => {
-                    if (selectedStat === 'podcasts') {
-                      setIsExpanded(!isExpanded);
-                    } else {
-                      setSelectedStat('podcasts');
-                      setIsExpanded(true);
-                    }
-                  }}
-                />
-                <Stat
-                  label="Comments"
-                  value={stats.commentsCount}
-                  isActive={selectedStat === 'comments'}
-                  onClick={() => {
-                    if (selectedStat === 'comments') {
-                      setIsExpanded(!isExpanded);
-                    } else {
-                      setSelectedStat('comments');
-                      setIsExpanded(true);
-                    }
-                  }}
-                />
-                <Stat
-                  label="Reactions"
-                  value={stats.reactionsCount}
-                  isActive={selectedStat === 'reactions'}
-                  onClick={() => {
-                    if (selectedStat === 'reactions') {
-                      setIsExpanded(!isExpanded);
-                    } else {
-                      setSelectedStat('reactions');
-                      setIsExpanded(true);
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* STATS FILTER DROPDOWN PANEL - Standalone Section Below Profile Card */}
-          {selectedStat && (
-            <StatsFilterDropdown
-              selectedStat={selectedStat}
-              setSelectedStat={setSelectedStat}
-              isExpanded={isExpanded}
-              setIsExpanded={setIsExpanded}
-              stats={stats}
-              userPosts={userPosts}
-              podcasts={podcasts}
-            />
-          )}
-
-          {/* CONTENT AREA */}
-          <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 min-h-[300px]">
-            {activeTab === 'posts' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-charcoal">Posts & Reflections</h3>
-                  <span className="text-sm text-charcoal/80">{stats.postsCount} total</span>
+                <div className="w-24 h-24 rounded-full bg-earth-bg flex items-center justify-center text-3xl font-bold ring-1 ring-black/5 text-charcoal shadow-sm">
+                  {initial}
                 </div>
 
-                {postsLoading ? (
-                  <div className="text-center py-10 text-charcoal/80 animate-pulse">Loading posts...</div>
-                ) : userPosts.length > 0 ? (
-                  <div className="space-y-4">
-                    {userPosts.map(post => (
-                      <PostCard key={post._id} post={post} />
+                <div className="flex-1 space-y-2">
+                  <h1 className="text-3xl font-bold text-charcoal">{user.fullName}</h1>
+                  <p className="text-[#1A1A1A]/80 text-sm">{user.department}</p>
+                  <p className="text-[#1A1A1A] italic">{reflectionJourney.aiTheme ? `"${reflectionJourney.aiTheme} - theme detected"` : 'No bio available.'}</p>
+
+                  <div className="flex flex-wrap gap-3 mt-3">
+                    {badges.map((b) => (
+                      <span key={b} className="px-3 py-1 text-xs rounded-full bg-white border border-black/5 shadow-sm text-[#1A1A1A]">{b}</span>
                     ))}
                   </div>
-                ) : (
-                  <div className="text-center py-12 text-charcoal/80">
-                    <p>No posts visible or available.</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'podcasts' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-charcoal">Podcasts</h3>
-                  <span className="text-sm text-charcoal/80">{stats.podcastsCount} total</span>
                 </div>
 
-                {podcastsLoading ? (
-                  <div className="text-center py-10 text-charcoal/80 animate-pulse">Loading podcasts...</div>
-                ) : podcasts.length > 0 ? (
-                  <div className="space-y-4">
-                    {podcasts.map(podcast => (
-                      <PodcastCard key={podcast._id} podcast={podcast} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12 text-charcoal/80">
-                    <p>No podcasts visible or available.</p>
-                  </div>
-                )}
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <Stat
+                    label="Posts"
+                    value={stats.postsCount}
+                    isActive={selectedStat === 'posts'}
+                    onClick={() => {
+                      if (selectedStat === 'posts') {
+                        setIsExpanded(!isExpanded);
+                      } else {
+                        setSelectedStat('posts');
+                        setIsExpanded(true);
+                      }
+                    }}
+                  />
+                  <Stat
+                    label="Podcasts"
+                    value={stats.podcastsCount}
+                    isActive={selectedStat === 'podcasts'}
+                    onClick={() => {
+                      if (selectedStat === 'podcasts') {
+                        setIsExpanded(!isExpanded);
+                      } else {
+                        setSelectedStat('podcasts');
+                        setIsExpanded(true);
+                      }
+                    }}
+                  />
+                  <Stat
+                    label="Comments"
+                    value={stats.commentsCount}
+                    isActive={selectedStat === 'comments'}
+                    onClick={() => {
+                      if (selectedStat === 'comments') {
+                        setIsExpanded(!isExpanded);
+                      } else {
+                        setSelectedStat('comments');
+                        setIsExpanded(true);
+                      }
+                    }}
+                  />
+                  <Stat
+                    label="Reactions"
+                    value={stats.reactionsCount}
+                    isActive={selectedStat === 'reactions'}
+                    onClick={() => {
+                      if (selectedStat === 'reactions') {
+                        setIsExpanded(!isExpanded);
+                      } else {
+                        setSelectedStat('reactions');
+                        setIsExpanded(true);
+                      }
+                    }}
+                  />
+                </div>
               </div>
-            )}
-
-            {activeTab === 'comments' && (
-              <div className="text-center py-12">
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Comments</h3>
-                <p className="text-charcoal/80">Comment history is private or coming soon...</p>
-              </div>
-            )}
-
-            {activeTab === 'reactions' && (
-              <div className="text-center py-12">
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Reactions</h3>
-                <p className="text-charcoal/80">Reaction history coming soon...</p>
-              </div>
-            )}
-          </div>
-
-          {/* REFLECTION JOURNEY */}
-          <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] rounded-l-2xl" />
-
-            <h2 className="text-lg font-semibold mb-4 pl-3 text-[#1A1A1A]">Reflection Journey</h2>
-
-            <div className="space-y-3 text-sm text-[#1A1A1A]/80 pl-3">
-              <p>Joined Org: {new Date(user.createdAt).toLocaleDateString()}</p>
-              <p>First Reflection Written: {reflectionJourney.firstReflection ? new Date(reflectionJourney.firstReflection).toLocaleDateString() : '-'}</p>
-              <p>Most Discussed Post: {reflectionJourney.topPostTitle || '-'}</p>
-              <p>Top Podcast Episode: {reflectionJourney.topPodcastTitle || '-'}</p>
-              {reflectionJourney.aiTheme && <p className="text-[#1A1A1A] font-bold">AI Theme Detected: {reflectionJourney.aiTheme}</p>}
             </div>
-          </div>
 
-          {/* SAFETY CONTROLS */}
-          <div className="relative bg-white rounded-2xl p-6 border border-black/5 shadow-sm overflow-hidden">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#1A1A1A] rounded-l-2xl" />
+            {/* STATS FILTER DROPDOWN PANEL - Standalone Section Below Profile Card */}
+            {selectedStat && (
+              <StatsFilterDropdown
+                selectedStat={selectedStat}
+                setSelectedStat={setSelectedStat}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+                stats={stats}
+                userPosts={userPosts}
+                podcasts={podcasts}
+              />
+            )}
 
-            <h2 className="text-lg font-semibold mb-5 pl-3 flex items-center gap-2 text-[#1A1A1A]">Psychological Safety Controls</h2>
+            {/* CONTENT AREA */}
+            {/* Reflection Journey and Safety Controls are kept in the Overview page (Profile.jsx itself)*/}
 
-            <div className="space-y-5 pl-3">
-              <div className="flex justify-between items-center border-b border-black/5 pb-4">
-                <p className="text-sm text-charcoal">Default Anonymity Level</p>
-                <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-charcoal/80 shadow-sm">Level {user.defaultAnonymityLevel}</span>
+            {/* REFLECTION JOURNEY */}
+            <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
+              <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] rounded-l-2xl" />
+
+              <h2 className="text-lg font-semibold mb-4 pl-3 text-[#1A1A1A]">Reflection Journey</h2>
+
+              <div className="space-y-3 text-sm text-[#1A1A1A]/80 pl-3">
+                <p>Joined Org: {new Date(user.createdAt).toLocaleDateString()}</p>
+                <p>First Reflection Written: {reflectionJourney.firstReflection ? new Date(reflectionJourney.firstReflection).toLocaleDateString() : '-'}</p>
+                <p>Most Discussed Post: {reflectionJourney.topPostTitle || '-'}</p>
+                <p>Top Podcast Episode: {reflectionJourney.topPodcastTitle || '-'}</p>
+                {reflectionJourney.aiTheme && <p className="text-[#1A1A1A] font-bold">AI Theme Detected: {reflectionJourney.aiTheme}</p>}
               </div>
-
-              <div className="flex justify-between items-center border-b border-black/5 pb-4">
-                <p className="text-sm text-charcoal">Who can see my reflections?</p>
-                <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-charcoal/80 shadow-sm">{user.visibility}</span>
-              </div>
-
-              <ToggleRow label="Allow AI feedback on my posts" defaultOn={user.allowAiFeedback} />
-              <ToggleRow label="Allow comments on anonymous posts" defaultOn={user.allowAnonymousComments} />
             </div>
-          </div>
 
-          {/* AI INSIGHT */}
-          <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
-            <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] rounded-l-2xl" />
+            {/* SAFETY CONTROLS */}
+            <div className="relative bg-white rounded-2xl p-6 border border-black/5 shadow-sm overflow-hidden">
+              <div className="absolute left-0 top-0 h-full w-[5px] bg-[#1A1A1A] rounded-l-2xl" />
 
-            <h2 className="text-lg font-semibold mb-4 pl-3 text-[#1A1A1A]">AI Personality Insight</h2>
+              <h2 className="text-lg font-semibold mb-5 pl-3 flex items-center gap-2 text-[#1A1A1A]">Psychological Safety Controls</h2>
 
-            <p className="text-[#1A1A1A]/80 text-sm leading-relaxed pl-3">{aiPersonalitySummary || 'No AI personality summary available.'}</p>
+              <div className="space-y-5 pl-3">
+                <div className="flex justify-between items-center border-b border-black/5 pb-4">
+                  <p className="text-sm text-charcoal">Default Anonymity Level</p>
+                  <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-charcoal/80 shadow-sm">Level {user.defaultAnonymityLevel}</span>
+                </div>
+
+                <div className="flex justify-between items-center border-b border-black/5 pb-4">
+                  <p className="text-sm text-charcoal">Who can see my reflections?</p>
+                  <span className="px-3 py-1 rounded-full bg-white border border-black/10 text-sm text-charcoal/80 shadow-sm">{user.visibility}</span>
+                </div>
+
+                <ToggleRow label="Allow AI feedback on my posts" defaultOn={user.allowAiFeedback} />
+                <ToggleRow label="Allow comments on anonymous posts" defaultOn={user.allowAnonymousComments} />
+              </div>
+            </div>
+
+            {/* AI INSIGHT */}
+            <div className="relative bg-white rounded-2xl p-7 border border-black/5 shadow-sm overflow-hidden">
+              <div className="absolute left-0 top-0 h-full w-[5px] bg-[#8C7851] rounded-l-2xl" />
+
+              <h2 className="text-lg font-semibold mb-4 pl-3 text-[#1A1A1A]">AI Personality Insight</h2>
+
+              <p className="text-[#1A1A1A]/80 text-sm leading-relaxed pl-3">{aiPersonalitySummary || 'No AI personality summary available.'}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -365,6 +292,7 @@ export default function Profile() {
 }
 
 /* STATS FILTER DROPDOWN PANEL - Appears Below Profile Card */
+// eslint-disable-next-line no-unused-vars
 function StatsFilterDropdown({ selectedStat, setSelectedStat, isExpanded, setIsExpanded, stats, userPosts, podcasts }) {
   const navigate = useNavigate();
 
